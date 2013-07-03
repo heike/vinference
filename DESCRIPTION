@@ -1,0 +1,9 @@
+Package: vinference
+Maintainer: Heike Hofmann <hofmann@iastate.edu>
+Author: Heike Hofmann, Dianne Cook, Mahbub Majumder
+Version: 0.9
+License: MIT
+Title: Inference under the lineup protocol
+Description: Simulation based p value calculation for the lineup protocol
+Collate:
+    'pvalues.r'
