@@ -2,7 +2,8 @@
 \alias{pvisual}
 \title{Bootstrap based p values for visual inference}
 \usage{
-  pvisual(x, K, m = 20, N = 10000, type = "scenario4")
+  pvisual(x, K, m = 20, N = 10000, type = "scenario4",
+    upper.tail = TRUE)
 }
 \arguments{
   \item{x}{number of observed picks of the data plot}
@@ -17,6 +18,11 @@
 
   \item{type}{type of simulation used: scenario 4 assumes
   that the same lineup is shown in all K evaluations}
+
+  \item{upper.tail}{compute probabilities P(X >= x). Be
+  aware that the use of this parameter is not consistent
+  with the other distribution functions in base. There, a
+  value of P(X > x) is computed for upper.tail=TRUE.}
 }
 \value{
   simulation based p value to observe x or more picks of
