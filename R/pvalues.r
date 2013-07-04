@@ -87,5 +87,6 @@ pvisual <- function(x, K, m=20, N=10000, type="scenario4", upper.tail=TRUE) {
 dvisual <- function(x, K, m=20, N=10000, type="scenario4") {
   freq <- get(type)(N=N, K=K, m=m)
   sim <- sapply(x, function(y) freq[as.numeric(names(freq)) %in% y])
+  sim <- lapply(sim, function(x) if (length(x) == 0) 0 else x)
   return(cbind(x=x, "simulated"=sim, "binom"=dbinom(x, size=K, prob=1/m)))
 }
