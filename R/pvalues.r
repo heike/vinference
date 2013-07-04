@@ -84,9 +84,11 @@ pvisual <- function(x, K, m=20, N=10000, type="scenario4", upper.tail=TRUE) {
 #' @export
 #' @examples
 #' dvisual(2, 20, m=3) # triangle test
+#' qplot(x=x, y=simulated, data=data.frame(dvisual(0:6,6,m=2))) + geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
 dvisual <- function(x, K, m=20, N=10000, type="scenario4") {
-  freq <- get(type)(N=N, K=K, m=m)
-  sim <- sapply(x, function(y) freq[as.numeric(names(freq)) %in% y])
-  sim <- lapply(sim, function(x) if (length(x) == 0) 0 else x)
-  return(cbind(x=x, "simulated"=sim, "binom"=dbinom(x, size=K, prob=1/m)))
+  argx <- x
+  freq <- data.frame(get(type)(N=N, K=K, m=m))
+  freq$binom <- dbinom(0:K, size=K, prob=1/m)
+  names(freq)[1:2] <- c("x", "simulated")
+  subset(freq, x %in% argx)
 }
