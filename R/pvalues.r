@@ -132,6 +132,7 @@ hdensity <- function(x, K, m) {
     (-1)^(i-1)/fac(i-1)*Dis[[m]][i] #eval(Dks[[i]])
   }
   Tone_saved <- function(i,m) {
+    if (i == 0) return(1)
     load("data/T1m.RData")
     T1m[[m]][i]
   }
@@ -147,7 +148,8 @@ hdensity <- function(x, K, m) {
   }
   hone <- function (x, K, m) {
     cis <- ci(0:K, K, x)
-    1/m*choose(K, x)*sum(cis*Tim(0:K, m))
+ #   1/m*choose(K, x)*sum(cis*unlist(Tim(0:K, m)))
+    choose(K, x)*sum(cis*unlist(Tim(0:K, m)))
   }
   
   if (m > 3) {
