@@ -125,7 +125,8 @@ hdensity <- function(x, K, m) {
     return(prod(1:i))
   }
   Tone <- function(i, m) {
-    load("data/Dis.RData")
+#    load("data/Dis.RData")
+    data(Dis)
     if (i==0) return(m)
     u <- 1
     if (i==1) return(eval(T1(m)))
@@ -133,7 +134,8 @@ hdensity <- function(x, K, m) {
   }
   Tone_saved <- function(i,m) {
     if (i == 0) return(1)
-    load("data/T1m.RData")
+#    load("data/T1m.RData")
+    data(T1m)
     T1m[[m]][i]
   }
   Tim <- function(i, m) {
@@ -148,8 +150,13 @@ hdensity <- function(x, K, m) {
   }
   hone <- function (x, K, m) {
     cis <- ci(0:K, K, x)
- #   1/m*choose(K, x)*sum(cis*unlist(Tim(0:K, m)))
-    choose(K, x)*sum(cis*unlist(Tim(0:K, m)))
+    
+    #   1/m*choose(K, x)*sum(cis*unlist(Tim(0:K, m)))
+    #sum(choose(K, x)*cis*unlist(Tim(0:K, m)))
+    
+    xs <- choose(K, x)*cis*unlist(Tim(0:K, m))
+    os <- order(abs(xs))
+    sum(xs[os])
   }
   
   if (m > 3) {
@@ -221,3 +228,11 @@ h <- function(x, K) {
 }
 
 
+#' List of coefficients to evaulate hdensity
+#' 
+#' @name T1m
+#' @title List of coefficients in hdensity
+#' @description List of theoretical coefficients to evaluate hdensity in cases m= 2 and 3
+#' @docType data
+#' @usage data(T1m)
+NULL
