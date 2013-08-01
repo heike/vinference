@@ -131,8 +131,12 @@ hdensity <- function(x, K, m) {
     if (i==1) return(eval(T1(m)))
     (-1)^(i-1)/fac(i-1)*Dis[[m]][i] #eval(Dks[[i]])
   }
+  Tone_saved <- function(i,m) {
+    load("data/T1m.RData")
+    T1m[[m]][i]
+  }
   Tim <- function(i, m) {
-    sapply(i, function(j) Tone(j,m))
+    sapply(i, function(j) Tone_saved(j,m))
   }
   Dk <- function(express, name, k) {
     ## returns all k derivatives of express up to k
@@ -149,8 +153,8 @@ hdensity <- function(x, K, m) {
   if (m > 3) {
     stop("Not implemented for lineups of size m > 3, use bootstrap simulation with dvisual instead.")  
   }
-  if (K > 9) {
-    warning("Not advisable for values of K > 9 because of large memory needs. You might want to use dvisual instead.")  
+  if (K > 50) {
+    warning("Not advisable for values of K > 50 because of large memory needs. You might want to use dvisual instead.")  
   }
 #  Dks <- Dk(T1(m), "u", k=K)
   sapply(x, hone, K=K, m=m)
