@@ -24,19 +24,8 @@ scenario2 <- function(N, K, m = 20) {
   }))/N
 }
   
+
 scenario3 <- function(N, K, m=20) {
-  # each data evaluated K times, with the same nulls
-  table(replicate(N,  {
-    dataprob <- runif(1)
-    nulls <- runif(K-1)
-    
-    individual <- sum(replicate(K, lineup(m, dataprob=dataprob, nulls=nulls))==1)
-    individual
-  }))/N
-}
-
-
-scenario4 <- function(N, K, m=20) {
   # each data evaluated K times, with the same nulls
   table(replicate(N/100,  
     replicate(100, {
@@ -55,13 +44,13 @@ scenario4 <- function(N, K, m=20) {
 #' @param K number of evaluations of the same lineup
 #' @param m size of the lineup
 #' @param N MC parameter: number of replicates on which MC probabilities are based. Higher number of replicates will decrease MC variability.
-#' @param type type of simulation used: scenario 4 assumes that the same lineup is shown in all K evaluations
+#' @param type type of simulation used: scenario 3 assumes that the same lineup is shown in all K evaluations
 #' @param upper.tail compute probabilities P(X >= x). Be aware that the use of this parameter is not consistent with the other distribution functions in base. There, a value of P(X > x) is computed for upper.tail=TRUE.
 #' @return simulation based p value to observe x or more picks of the data plot in K evaluation under the assumption that the data plot is consistent with the null hypothesis. For comparison a p value based on a binomial distribution is provided as well.
 #' @export
 #' @examples
 #' pvisual(15, 20, m=3) # triangle test
-pvisual <- function(x, K, m=20, N=10000, type="scenario4", upper.tail=TRUE) {
+pvisual <- function(x, K, m=20, N=10000, type="scenario3", upper.tail=TRUE) {
   freq <- get(type)(N=N, K=K, m=m)
   if (upper.tail) {
     sim <- sapply(x, function(y) sum(freq[as.numeric(names(freq)) >= y]))
@@ -79,14 +68,14 @@ pvisual <- function(x, K, m=20, N=10000, type="scenario4", upper.tail=TRUE) {
 #' @param K number of evaluations of the same lineup
 #' @param m size of the lineup
 #' @param N MC parameter: number of replicates on which MC probabilities are based. Higher number of replicates will decrease MC variability.
-#' @param type type of simulation used: scenario 4 assumes that the same lineup is shown in all K evaluations
+#' @param type type of simulation used: scenario 3 assumes that the same lineup is shown in all K evaluations
 #' @return simulation based density to observe x picks of the data plot in K evaluation under the assumption that the data plot is consistent with the null hypothesis. For comparison a p value based on a binomial distribution is provided as well.
 #' @export
 #' @examples
 #' dvisual(2, 20, m=3) # triangle test
 #' qplot(x=x, y=simulated, data=data.frame(dvisual(0:6,6,m=2))) + geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
 #' qplot(x=x, y=simulated, data=data.frame(dvisual(0:6,6,m=3))) + geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
-dvisual <- function(x, K, m=20, N=10000, type="scenario4") {
+dvisual <- function(x, K, m=20, N=10000, type="scenario3") {
   argx <- x
   freq <- data.frame(get(type)(N=N, K=K, m=m))
   freq <- merge(data.frame(Var1=0:K), freq, by="Var1", all=T)
@@ -96,18 +85,19 @@ dvisual <- function(x, K, m=20, N=10000, type="scenario4") {
   subset(freq, x %in% argx)
 }
 
-#' Theoretical density for lineups under scenario 4 for m = 2,3
+#' Theoretical density for lineups under scenario 3 for m = 2,3
 #' 
 #' Some more details to be written later
 #' @param x vector of the number of picks of the data plot out of K evaluations
 #' @param K number of evaluations
 #' @param m size of the lineup
+#' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
 #' @export
 #' @examples
 #' hdensity(0:5, 5, m=2)
 #' ## compare to 
 #' dvisual(0:5, 5, m=2)
-hdensity <- function(x, K, m) {
+hdensity <- function(x, K, m, type="numeric") {
   T1 <- function(m) {
     if (m==2) return(expression(1/u^2*(log((u+1)/u)*u^2 + u - log(u+1))))
     if (m==3) return(expression(1/u^3*((3*u+1)*log(u) - (u^3-3*u-1)*log((u+1)/u)+ 
@@ -117,12 +107,8 @@ hdensity <- function(x, K, m) {
   ci <- function(i, K, x) {
     res <- rep(0, length=length(i))
     idx <- which(i >= K-x)
-    res[idx] <- ((-1)^(i-K+x) * choose(x, i-K+x))[idx]
+    res[idx] <- ((-1)^(i[idx]-K+x) * choose(x, i[idx]-K+x))
     res
-  }
-  fac <- function(i) {
-    if (i == 0) return(1)
-    return(prod(1:i))
   }
   Tone <- function(i, m) {
 #    load("data/Dis.RData")
@@ -130,7 +116,7 @@ hdensity <- function(x, K, m) {
     if (i==0) return(m)
     u <- 1
     if (i==1) return(eval(T1(m)))
-    (-1)^(i-1)/fac(i-1)*Dis[[m]][i] #eval(Dks[[i]])
+    (-1)^(i-1)/factorial(i-1)*Dis[[m]][i] #eval(Dks[[i]])
   }
   Tone_saved <- function(i,m) {
     if (i == 0) return(1)
@@ -150,13 +136,10 @@ hdensity <- function(x, K, m) {
   }
   hone <- function (x, K, m) {
     cis <- ci(0:K, K, x)
-    
+ #   browser()
     #   1/m*choose(K, x)*sum(cis*unlist(Tim(0:K, m)))
-    #sum(choose(K, x)*cis*unlist(Tim(0:K, m)))
-    
-    xs <- choose(K, x)*cis*unlist(Tim(0:K, m))
-    os <- order(abs(xs))
-    sum(xs[os])
+    xs <- chooseMpfr(K, x)*cis[-1]*T1m[[m]][1:K]
+    sum(xs) + cis[1]
   }
   
   if (m > 3) {
@@ -166,11 +149,37 @@ hdensity <- function(x, K, m) {
     warning("Not advisable for values of K > 50 because of large memory needs. You might want to use dvisual instead.")  
   }
 #  Dks <- Dk(T1(m), "u", k=K)
-  sapply(x, hone, K=K, m=m)
+  xs <- lapply(x, hone, K=K, m=m)
+  ys <- xs[[1]]
+  if (length(xs) > 1)
+    for (i in 2:length(xs)) ys <- c(ys, xs[[i]])
+  if (type == "mpfr") return(ys)
+  else return(as.numeric(ys))
 }
 
+#' Quantile of the analytically derived density for visual inference according to scenario 3
+#' 
+#' @param q (vector) of quantiles
+#' @param K number of evaluations
+#' @param m lineup size, currently only m=2 and 3 are treated analytically. Use simulation within dvisual to get to other values for m
+#' @export
+#' @examples
+#' ## get critical values of visual triangle test:
+#' hquantile(q=c(0.95, 0.99), K=c(5,10,15,20), m=3)
+hquantile <- function(q, K, m) {
+  dframe <- data.frame(expand.grid(q, K))
+  names(dframe) <- c("q", "K")
+  require(plyr)
+  res <- ddply(dframe, .(q, K), function(x) {
+    hs <- cumsum(hdensity(x=0:x$K, K=x$K, m=m))
+    which(hs>=x$q)[1]-1
+  })
+  names(res)[3] <- "x"
+  res
+}
+  
 
-#' Explicit density function of visual inference under scenario 4 for m = 2
+#' Explicit density function of visual inference under scenario 3 for m = 2
 #' 
 #' @param x
 #' @param K

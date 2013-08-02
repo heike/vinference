@@ -1,4 +1,5 @@
 export(dvisual)
 export(h)
 export(hdensity)
+export(hquantile)
 export(pvisual)

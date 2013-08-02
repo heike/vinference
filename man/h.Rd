@@ -1,6 +1,6 @@
 \name{h}
 \alias{h}
-\title{Explicit density function of visual inference under scenario 4 for m = 2}
+\title{Explicit density function of visual inference under scenario 3 for m = 2}
 \usage{
   h(x, K)
 }
@@ -11,7 +11,7 @@
 }
 \description{
   Explicit density function of visual inference under
-  scenario 4 for m = 2
+  scenario 3 for m = 2
 }
 \examples{
 h(0:5, K = 5)

@@ -2,7 +2,7 @@
 \alias{dvisual}
 \title{Bootstrap based density for visual inference}
 \usage{
-  dvisual(x, K, m = 20, N = 10000, type = "scenario4")
+  dvisual(x, K, m = 20, N = 10000, type = "scenario3")
 }
 \arguments{
   \item{x}{number of observed picks of the data plot}
@@ -15,7 +15,7 @@
   probabilities are based. Higher number of replicates will
   decrease MC variability.}
 
-  \item{type}{type of simulation used: scenario 4 assumes
+  \item{type}{type of simulation used: scenario 3 assumes
   that the same lineup is shown in all K evaluations}
 }
 \value{

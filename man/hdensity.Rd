@@ -1,8 +1,8 @@
 \name{hdensity}
 \alias{hdensity}
-\title{Theoretical density for lineups under scenario 4 for m = 2,3}
+\title{Theoretical density for lineups under scenario 3 for m = 2,3}
 \usage{
-  hdensity(x, K, m)
+  hdensity(x, K, m, type = "numeric")
 }
 \arguments{
   \item{x}{vector of the number of picks of the data plot
@@ -11,6 +11,11 @@
   \item{K}{number of evaluations}
 
   \item{m}{size of the lineup}
+
+  \item{type}{one of "mpfr" or "numeric". Should the result
+  be in arbitrary numeric length or be a numeric?
+  Internally the Rmpfr package is used to get maximal
+  precision.}
 }
 \description{
   Some more details to be written later

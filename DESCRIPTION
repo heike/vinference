@@ -5,5 +5,7 @@ Version: 0.9
 License: MIT
 Title: Inference under the lineup protocol
 Description: Simulation based p value calculation for the lineup protocol
+Depends:
+    Rmpfr
 Collate:
     'pvalues.r'

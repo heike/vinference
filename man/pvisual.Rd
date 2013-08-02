@@ -2,7 +2,7 @@
 \alias{pvisual}
 \title{Bootstrap based p values for visual inference}
 \usage{
-  pvisual(x, K, m = 20, N = 10000, type = "scenario4",
+  pvisual(x, K, m = 20, N = 10000, type = "scenario3",
     upper.tail = TRUE)
 }
 \arguments{
@@ -16,7 +16,7 @@
   probabilities are based. Higher number of replicates will
   decrease MC variability.}
 
-  \item{type}{type of simulation used: scenario 4 assumes
+  \item{type}{type of simulation used: scenario 3 assumes
   that the same lineup is shown in all K evaluations}
 
   \item{upper.tail}{compute probabilities P(X >= x). Be
