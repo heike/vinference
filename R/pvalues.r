@@ -97,12 +97,20 @@ dvisual <- function(x, K, m=20, N=10000, type="scenario3") {
 #' hdensity(0:5, 5, m=2)
 #' ## compare to 
 #' dvisual(0:5, 5, m=2)
+#' 
+#' ## test how many K can be computed properly
+#' for (K in 10:50) { 
+#'   print(K); 
+#'   print(qplot(0:K, hdensity(0:K, K, m=20))); 
+#'   print(sum(hdensity(0:K, K, m=20))); 
+#'   scan()
+#' }
 hdensity <- function(x, K, m, type="numeric") {
   T1 <- function(m) {
-    if (m==2) return(expression(1/u^2*(log((u+1)/u)*u^2 + u - log(u+1))))
-    if (m==3) return(expression(1/u^3*((3*u+1)*log(u) - (u^3-3*u-1)*log((u+1)/u)+ 
+    if (m==2) return(expression(1/m*(1/u^2*(log((u+1)/u)*u^2 + u - log(u+1)))))
+    if (m==3) return(expression(1/m*(1/u^3*((3*u+1)*log(u) - (u^3-3*u-1)*log((u+1)/u)+ 
                                          (4*u^3-3*u-1)*log((2*u+1)/(2*u)) + 2*u^2 -
-                                         3*u*log(2*u) + log(u+1) - log(2*u))))
+                                         3*u*log(2*u) + log(u+1) - log(2*u)))))
   }
   ci <- function(i, K, x) {
     res <- rep(0, length=length(i))
@@ -113,7 +121,7 @@ hdensity <- function(x, K, m, type="numeric") {
   Tone <- function(i, m) {
 #    load("data/Dis.RData")
     data(Dis)
-    if (i==0) return(m)
+    if (i==0) return(1)
     u <- 1
     if (i==1) return(eval(T1(m)))
     (-1)^(i-1)/factorial(i-1)*Dis[[m]][i] #eval(Dks[[i]])
@@ -137,13 +145,13 @@ hdensity <- function(x, K, m, type="numeric") {
   hone <- function (x, K, m) {
     cis <- ci(0:K, K, x)
  #   browser()
-    #   1/m*choose(K, x)*sum(cis*unlist(Tim(0:K, m)))
+    #   choose(K, x)*sum(cis*unlist(Tim(0:K, m)))
     xs <- chooseMpfr(K, x)*cis[-1]*T1m[[m]][1:K]
     sum(xs) + cis[1]
   }
   
-  if (m > 3) {
-    stop("Not implemented for lineups of size m > 3, use bootstrap simulation with dvisual instead.")  
+  if (!(m %in% c(2,3,20))) {
+    stop("Not implemented for this lineup size, use bootstrap simulation with dvisual instead.")  
   }
   if (K > 50) {
     warning("Not advisable for values of K > 50 because of large memory needs. You might want to use dvisual instead.")  
