@@ -77,11 +77,16 @@ pvisual <- function(x, K, m=20, N=10000, type="scenario3", upper.tail=TRUE) {
 #' qplot(x=x, y=simulated, data=data.frame(dvisual(0:6,6,m=3))) + geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
 dvisual <- function(x, K, m=20, N=10000, type="scenario3") {
   argx <- x
-  freq <- data.frame(get(type)(N=N, K=K, m=m))
-  freq <- merge(data.frame(Var1=0:K), freq, by="Var1", all=T)
+  freqs <- data.frame(Var1=0:K)
+  for (t in type) {
+    freq <- data.frame(get(t)(N=N, K=K, m=m))
+    names(freq)[2] <- t
+    freqs <- merge(freqs, freq, by="Var1", all=T)
+  }
+  freq <- freqs
   freq[is.na(freq)] <- 0
   freq$binom <- dbinom(0:K, size=K, prob=1/m)
-  names(freq)[1:2] <- c("x", "simulated")
+  names(freq)[1] <- "x"
   subset(freq, x %in% argx)
 }
 
@@ -129,7 +134,7 @@ hdensity <- function(x, K, m, type="numeric") {
   Tone_saved <- function(i,m) {
     if (i == 0) return(1)
 #    load("data/T1m.RData")
-    data(T1m)
+    data(T1m, package="vinference")
     T1m[[m]][i]
   }
   Tim <- function(i, m) {
@@ -143,6 +148,7 @@ hdensity <- function(x, K, m, type="numeric") {
     res
   }
   hone <- function (x, K, m) {
+    data(T1m)
     cis <- ci(0:K, K, x)
  #   browser()
     #   choose(K, x)*sum(cis*unlist(Tim(0:K, m)))
@@ -173,7 +179,7 @@ hdensity <- function(x, K, m, type="numeric") {
 #' @export
 #' @examples
 #' ## get critical values of visual triangle test:
-#' hquantile(q=c(0.95, 0.99), K=c(5,10,15,20), m=3)
+#' hquantile(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=20)
 hquantile <- function(q, K, m) {
   dframe <- data.frame(expand.grid(q, K))
   names(dframe) <- c("q", "K")
