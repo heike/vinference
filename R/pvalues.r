@@ -110,7 +110,7 @@ dvisual <- function(x, K, m=20, N=10000, type="scenario3") {
 #'   print(sum(hdensity(0:K, K, m=20))); 
 #'   scan()
 #' }
-hdensity <- function(x, K, m, type="numeric") {
+hdensity <- function(x, K, m, type="numeric", bits=NULL) {
   T1 <- function(m) {
     if (m==2) return(expression(1/m*(1/u^2*(log((u+1)/u)*u^2 + u - log(u+1)))))
     if (m==3) return(expression(1/m*(1/u^3*((3*u+1)*log(u) - (u^3-3*u-1)*log((u+1)/u)+ 
@@ -150,7 +150,7 @@ hdensity <- function(x, K, m, type="numeric") {
   hone <- function (x, K, m) {
     data(T1m)
     cis <- ci(0:K, K, x)
- #   browser()
+#    browser()
     #   choose(K, x)*sum(cis*unlist(Tim(0:K, m)))
     xs <- chooseMpfr(K, x)*cis[-1]*T1m[[m]][1:K]
     sum(xs) + cis[1]
