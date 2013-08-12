@@ -19,6 +19,9 @@
 }
 \examples{
 ## get critical values of visual triangle test:
+hquantile(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=3)
+
+## get critical values of full lineup test:
 hquantile(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=20)
 }
 

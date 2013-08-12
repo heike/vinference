@@ -161,8 +161,8 @@ hdensity <- function(x, K, m, type="numeric") {
   if (!(m %in% c(2,3,20))) {
     stop("Not implemented for this lineup size, use bootstrap simulation with dvisual instead.")  
   }
-  if (K > 50) {
-    warning("Not advisable for values of K > 50 because of large memory needs. You might want to use dvisual instead.")  
+  if (K > 100) {
+    stop("Not implemented for values of K > 100 because of large memory needs. You might want to use bootstrap simulation with dvisual instead.")  
   }
 #  Dks <- Dk(T1(m), "u", k=K)
   xs <- lapply(x, hone, K=K, m=m)
