@@ -118,9 +118,10 @@ hdensity <- function(x, K, m, type="numeric") {
                                          3*u*log(2*u) + log(u+1) - log(2*u)))))
   }
   ci <- function(i, K, x) {
-    res <- rep(0, length=length(i))
+    res <- mpfr(rep(0, length=length(i)), 120)
     idx <- which(i >= K-x)
-    res[idx] <- ((-1)^(i[idx]-K+x) * choose(x, i[idx]-K+x))
+    res[idx] <- ((-1)^(i[idx]-K+x) * chooseMpfr(x, i[idx]-K+x))
+#    browser()
     res
   }
   Tone <- function(i, m) {
@@ -152,6 +153,7 @@ hdensity <- function(x, K, m, type="numeric") {
     cis <- ci(0:K, K, x)
 
     #   choose(K, x)*sum(cis*unlist(Tim(0:K, m)))
+ #   browser()
     xs <- T1m[[m]][1:K]*chooseMpfr(K, x)*cis[-1]
     sum(xs) + cis[1]
   }
