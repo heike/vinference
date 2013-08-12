@@ -24,5 +24,13 @@
 hdensity(0:5, 5, m=2)
 ## compare to
 dvisual(0:5, 5, m=2)
+
+## test how many K can be computed properly
+for (K in 10:50) {
+  print(K);
+  print(qplot(0:K, hdensity(0:K, K, m=20)));
+  print(sum(hdensity(0:K, K, m=20)));
+  scan()
+}
 }
 

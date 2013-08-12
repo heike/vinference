@@ -103,14 +103,14 @@ dvisual <- function(x, K, m=20, N=10000, type="scenario3") {
 #' ## compare to 
 #' dvisual(0:5, 5, m=2)
 #' 
-#' ## test how many K can be computed properly
+#' ## test how many K can be computed without numeric loss
 #' for (K in 10:50) { 
 #'   print(K); 
 #'   print(qplot(0:K, hdensity(0:K, K, m=20))); 
 #'   print(sum(hdensity(0:K, K, m=20))); 
 #'   scan()
 #' }
-hdensity <- function(x, K, m, type="numeric", bits=NULL) {
+hdensity <- function(x, K, m, type="numeric") {
   T1 <- function(m) {
     if (m==2) return(expression(1/m*(1/u^2*(log((u+1)/u)*u^2 + u - log(u+1)))))
     if (m==3) return(expression(1/m*(1/u^3*((3*u+1)*log(u) - (u^3-3*u-1)*log((u+1)/u)+ 
@@ -150,9 +150,9 @@ hdensity <- function(x, K, m, type="numeric", bits=NULL) {
   hone <- function (x, K, m) {
     data(T1m)
     cis <- ci(0:K, K, x)
-#    browser()
+
     #   choose(K, x)*sum(cis*unlist(Tim(0:K, m)))
-    xs <- chooseMpfr(K, x)*cis[-1]*T1m[[m]][1:K]
+    xs <- T1m[[m]][1:K]*chooseMpfr(K, x)*cis[-1]
     sum(xs) + cis[1]
   }
   
@@ -179,6 +179,9 @@ hdensity <- function(x, K, m, type="numeric", bits=NULL) {
 #' @export
 #' @examples
 #' ## get critical values of visual triangle test:
+#' hquantile(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=3)
+#' 
+#' ## get critical values of full lineup test:
 #' hquantile(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=20)
 hquantile <- function(q, K, m) {
   dframe <- data.frame(expand.grid(q, K))
@@ -251,11 +254,11 @@ h <- function(x, K) {
 }
 
 
-#' List of coefficients to evaulate hdensity
+#' List of coefficients to evaluate hdensity
 #' 
 #' @name T1m
 #' @title List of coefficients in hdensity
-#' @description List of theoretical coefficients to evaluate hdensity in cases m= 2 and 3
+#' @description List of theoretical coefficients to evaluate hdensity in cases m= 2, 3 and 20
 #' @docType data
 #' @usage data(T1m)
 NULL
