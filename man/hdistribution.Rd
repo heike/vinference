@@ -1,8 +1,8 @@
-\name{hdensity}
-\alias{hdensity}
-\title{Theoretical density for lineups under scenario 3 for m = 2, 3, and 20}
+\name{hdistribution}
+\alias{hdistribution}
+\title{Theoretical distribution for lineups under scenario 3 for m = 2, 3, and 20}
 \usage{
-  hdensity(x, K, m, type = "numeric")
+  hdistribution(x, K, m, type = "numeric")
 }
 \arguments{
   \item{x}{vector of the number of picks of the data plot
@@ -21,16 +21,6 @@
   Some more details to be written later
 }
 \examples{
-hdensity(0:5, 5, m=2)
-## compare to
-dvisual(0:5, 5, m=2)
-
-## test how many K can be computed without numeric loss
-for (K in 10:50) {
-  print(K);
-  print(qplot(0:K, hdensity(0:K, K, m=20)));
-  print(sum(hdensity(0:K, K, m=20)));
-  scan()
-}
+hdistribution(0:5, 5, m=3)
 }
 

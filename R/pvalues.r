@@ -90,7 +90,7 @@ dvisual <- function(x, K, m=20, N=10000, type="scenario3") {
   subset(freq, x %in% argx)
 }
 
-#' Theoretical density for lineups under scenario 3 for m = 2,3
+#' Theoretical density for lineups under scenario 3 for m = 2, 3, and 20
 #' 
 #' Some more details to be written later
 #' @param x vector of the number of picks of the data plot out of K evaluations
@@ -264,3 +264,20 @@ h <- function(x, K) {
 #' @docType data
 #' @usage data(T1m)
 NULL
+
+#' Theoretical distribution for lineups under scenario 3 for m = 2, 3, and 20
+#' 
+#' Some more details to be written later
+#' @param x vector of the number of picks of the data plot out of K evaluations
+#' @param K number of evaluations
+#' @param m size of the lineup
+#' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
+#' @export
+#' @examples
+#' hdistribution(0:5, 5, m=3)
+hdistribution <- function(x, K, m, type="numeric") {
+  hdone <- function(x1, K, m) {
+    sum(hdensity(x1:K, K, m))
+  }
+  sapply(x, hdone, K=K, m=m)
+}
