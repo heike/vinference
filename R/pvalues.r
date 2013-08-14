@@ -194,6 +194,7 @@ hquantile <- function(q, K, m) {
     which(hs>=x$q)[1]
   })
   names(res)[3] <- "x"
+  res$x[res$x > res$K] <- NA
   res
 }
   
