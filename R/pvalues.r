@@ -191,7 +191,7 @@ hquantile <- function(q, K, m) {
   require(plyr)
   res <- ddply(dframe, .(q, K), function(x) {
     hs <- cumsum(hdensity(x=0:x$K, K=x$K, m=m))
-    which(hs>=x$q)[1]-1
+    which(hs>=x$q)[1]
   })
   names(res)[3] <- "x"
   res
