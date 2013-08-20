@@ -198,6 +198,27 @@ hquantile <- function(q, K, m) {
   res
 }
   
+#' Explicit density function of visual inference under scenario 2 for m = 3
+#'
+#' more details to follow
+#' @param x number of times data plot was picked
+#' @param K number of  evaluations by independent observers
+#' @param m lineup size. Only implemented for m=3
+#' @export
+dv2 <- function(x,K, m=3) { 
+  dv2one <- function(x, K, m=m) {
+    g <- function(q) {
+      res <- q*((q+2)*log(q+2)-2*(q+1)*log(q+1)+q*log(q))
+      res[q==0] <- 0
+      res
+    }
+    if (m!=3) stop("Function not implemented for lineup sizes <> 3. Use bootstrap based density estimation in dvisual instead.")
+    
+    f <- function(q, K, x) choose(K,x)*g(q)^x*(1-g(q))^(K-x)
+    integrate(f, 0,1,K=K,x=x)$value
+  }
+  unlist(sapply(x, dv2one, K=K, m=m))
+}
 
 #' Explicit density function of visual inference under scenario 3 for m = 2
 #' 
