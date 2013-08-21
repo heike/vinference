@@ -197,7 +197,36 @@ hquantile <- function(q, K, m) {
   res$x[res$x > res$K] <- NA
   res
 }
-  
+ 
+
+#' Quantile of the analytically derived quantiles for visual inference 
+#' 
+#' @param q (vector) of quantiles
+#' @param K number of evaluations
+#' @param m lineup size, currently only m=2 and 3 are treated analytically. Use simulation within dvisual to get to other values for m
+#' @param type which scenario was used? One of scenario1, scenario2, scenario3
+#' @export
+#' @examples
+#' ## get critical values of visual triangle test:
+#' hquantile(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=3)
+#' 
+#' ## get critical values of full lineup test:
+#' vquantile(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=20)
+vquantile <- function(q, K, m, type=c("scenario1", "scenario2", "scenario3")) {
+  dframe <- data.frame(expand.grid(q=q, K=K, type=type))
+  require(plyr)
+  res <- ddply(dframe, .(q, K, type), function(x) {
+    switch(x$type,
+           scenario1 = qbinom(x$q, size=x$K, prob=1/m),
+           scenario2 =which(cumsum(dv2(x=0:x$K, K=x$K, m=m))>= x$q)[1],
+           scenario3 = which(cumsum(hdensity(x=0:x$K, K=x$K, m=m))>= x$q)[1]
+           )
+    })
+  names(res)[ncol(res)] <- "x"
+  res$x[res$x > res$K] <- NA
+  res
+}
+
 #' Explicit density function of visual inference under scenario 2 for m = 3
 #'
 #' more details to follow
@@ -218,6 +247,20 @@ dv2 <- function(x,K, m=3) {
     integrate(f, 0,1,K=K,x=x)$value
   }
   unlist(sapply(x, dv2one, K=K, m=m))
+}
+
+#' Explicit distribution function of visual inference under scenario 2 for m = 3
+#'
+#' more details to follow
+#' @param x number of times data plot was picked
+#' @param K number of  evaluations by independent observers
+#' @param m lineup size. Only implemented for m=3
+#' @export
+pv2 <- function(x,K, m=3) { 
+  hdone <- function(x1, K, m) {
+    sum(dv2(x1:K, K, m))
+  }
+  sapply(x, hdone, K=K, m=m)
 }
 
 #' Explicit density function of visual inference under scenario 3 for m = 2

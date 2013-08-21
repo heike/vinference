@@ -1,0 +1,17 @@
+\name{pv2}
+\alias{pv2}
+\title{Explicit distribution function of visual inference under scenario 2 for m = 3}
+\usage{
+  pv2(x, K, m = 3)
+}
+\arguments{
+  \item{x}{number of times data plot was picked}
+
+  \item{K}{number of evaluations by independent observers}
+
+  \item{m}{lineup size. Only implemented for m=3}
+}
+\description{
+  more details to follow
+}
+
