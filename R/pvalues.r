@@ -90,6 +90,37 @@ dvisual <- function(x, K, m=20, N=10000, type="scenario3") {
   subset(freq, x %in% argx)
 }
 
+#' Theoretical distribution for lineups under different scenarios
+#' 
+#' Some more details to be written later
+#' @param x vector of the number of picks of the data plot out of K evaluations
+#' @param K number of evaluations
+#' @param m size of the lineup
+#' @param scenario which scenario should be used? 1, 2, or 3?
+#' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
+#' @export
+pV <- function(x, K, m, scenario, type="numeric") {
+  if (scenario == 3) return(hdistribution(x, K, m, type=type))
+  if (scenario == 1) return(1-pbinom(x, size=K, prob=1/m)+dbinom(x, size=K, prob=1/m))
+  if (scenario == 2) return(pv2(x, K, m))
+}
+
+
+#' Theoretical density for lineups under different scenarios
+#' 
+#' Some more details to be written later
+#' @param x vector of the number of picks of the data plot out of K evaluations
+#' @param K number of evaluations
+#' @param m size of the lineup
+#' @param scenario which scenario should be used? 1, 2, or 3?
+#' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
+#' @export
+dV <- function(x, K, m, scenario, type="numeric") {
+  if (scenario == 3) return(hdensity(x, K, m, type=type))
+  if (scenario == 1) return(dbinom(x, size=K, prob=1/m))
+  if (scenario == 2) return(dv2(x, K, m))
+}
+
 #' Theoretical density for lineups under scenario 3 for m = 2, 3, and 20
 #' 
 #' Some more details to be written later
