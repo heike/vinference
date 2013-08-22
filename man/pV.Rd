@@ -1,8 +1,8 @@
-\name{dV}
-\alias{dV}
-\title{Theoretical density for lineups under different scenarios}
+\name{pV}
+\alias{pV}
+\title{Theoretical distribution for lineups under different scenarios}
 \usage{
-  dV(x, K, m, scenario, type = "numeric")
+  pV(x, K, m, scenario, type = "numeric")
 }
 \arguments{
   \item{x}{vector of the number of picks of the data plot

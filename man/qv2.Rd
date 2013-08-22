@@ -1,0 +1,20 @@
+\name{qv2}
+\alias{qv2}
+\title{Critical values for quantiles of the lineup density under scenario 2}
+\usage{
+  qv2(q, K, m = 3)
+}
+\arguments{
+  \item{q}{(vector of) quantiles}
+
+  \item{K}{number of independent evaluations}
+
+  \item{m}{size of the lineup}
+}
+\value{
+  critical value(s) corresponding to quantile q
+}
+\description{
+  more details needed
+}
+

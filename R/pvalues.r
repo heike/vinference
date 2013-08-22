@@ -121,6 +121,22 @@ dV <- function(x, K, m, scenario, type="numeric") {
   if (scenario == 2) return(dv2(x, K, m))
 }
 
+
+#' Theoretical quantile for lineups under different scenarios
+#' 
+#' Some more details to be written later
+#' @param q (vector) of the quantiles for picks of the data plot out of K evaluations
+#' @param K number of evaluations
+#' @param m size of the lineup
+#' @param scenario which scenario should be used? 1, 2, or 3?
+#' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
+#' @export
+qV <- function(q, K, m, scenario, type="numeric") {
+  if (scenario == 3) return(hquantile(q, K, m))
+  if (scenario == 1) return(qbinom(q, size=K, prob=1/m))
+  if (scenario == 2) return(qv2(q, K, m))
+}
+
 #' Theoretical density for lineups under scenario 3 for m = 2, 3, and 20
 #' 
 #' Some more details to be written later
@@ -294,6 +310,27 @@ pv2 <- function(x,K, m=3) {
   sapply(x, hdone, K=K, m=m)
 }
 
+#' Critical values for quantiles of the lineup density under scenario 2
+#' 
+#' more details needed
+#' @param q (vector of) quantiles
+#' @param K number of independent evaluations
+#' @param m size of the lineup
+#' @export
+#' @return critical value(s) corresponding to quantile q
+qv2 <- function (q, K, m=3) {
+  dframe <- data.frame(expand.grid(q, K))
+  names(dframe) <- c("q", "K")
+  require(plyr)
+  res <- ddply(dframe, .(q, K), function(x) {
+    hs <- cumsum(dv2(x=0:x$K, K=x$K, m=m))
+    which(hs>=x$q)[1]
+  })
+  names(res)[3] <- "x"
+  res$x[res$x > res$K] <- NA
+  res
+}
+
 #' Explicit density function of visual inference under scenario 3 for m = 2
 #' 
 #' @param x
@@ -302,7 +339,6 @@ pv2 <- function(x,K, m=3) {
 #' @examples
 #' h(0:5, K = 5)
 #' ## compare to 
-#' dvisual(0:5, K=5, m=2)
 h <- function(x, K) {
   hone <- function(x, K) {
     S <- function(m, n, a, b) {

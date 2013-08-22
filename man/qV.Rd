@@ -1,12 +1,12 @@
-\name{dV}
-\alias{dV}
-\title{Theoretical density for lineups under different scenarios}
+\name{qV}
+\alias{qV}
+\title{Theoretical quantile for lineups under different scenarios}
 \usage{
-  dV(x, K, m, scenario, type = "numeric")
+  qV(x, K, m, scenario, type = "numeric")
 }
 \arguments{
-  \item{x}{vector of the number of picks of the data plot
-  out of K evaluations}
+  \item{q}{(vector) of the quantiles for picks of the data
+  plot out of K evaluations}
 
   \item{K}{number of evaluations}
 
