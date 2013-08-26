@@ -37,6 +37,18 @@ scenario3 <- function(N, K, m=20) {
     })))/N
 }
 
+# scenario4 <- function(N, K, m=20, p=5) {
+#   # p lineups shown, each lineup evaluated K times, then lineup's nulls changed 
+#   table(replicate(N/100, {
+#     replicate(100/p, {
+#         dataprob <- runif(1)
+#         replicate(p, {
+#           nulls <- runif(m-1)
+#           individual <- sum(replicate(K, lineup(m, dataprob=dataprob, nulls=nulls))==1)
+#           individual
+#   })})}))/N
+# }
+
 #' Bootstrap based p values for visual inference
 #' 
 #' p value of observing at least x picks of the data plot in K evaluations of the same lineup of size m.
