@@ -75,7 +75,13 @@ pvisual <- function(x, K, m=20, N=10000, type="scenario3", upper.tail=TRUE) {
 
 #' Bootstrap based density for visual inference
 #' 
-#' Probablity of observing exactly x picks of the data plot in K evaluations of the same lineup of size m.
+#' Probablity of observing exactly x picks of the data plot in K evaluations of a lineup of size m.
+#' We distinguish between three different scenarios:
+#' \itemize{
+#' \item Scenario I: in each of K evaluations a different data set and a different set of (m-1) null plots is shown.
+#' \item Scenario II: in each of K evaluations the same data set but a different set of (m-1) null plots is shown.
+#' \item Scenario III: the same lineup, i.e. same data and same set of null plots, is shown to K different observers.
+#' }
 #' @param x number of observed picks of the data plot
 #' @param K number of evaluations of the same lineup
 #' @param m size of the lineup

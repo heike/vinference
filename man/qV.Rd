@@ -2,7 +2,7 @@
 \alias{qV}
 \title{Theoretical quantile for lineups under different scenarios}
 \usage{
-  qV(x, K, m, scenario, type = "numeric")
+  qV(q, K, m, scenario, type = "numeric")
 }
 \arguments{
   \item{q}{(vector) of the quantiles for picks of the data

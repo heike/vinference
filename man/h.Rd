@@ -16,6 +16,5 @@
 \examples{
 h(0:5, K = 5)
 ## compare to
-dvisual(0:5, K=5, m=2)
 }
 
