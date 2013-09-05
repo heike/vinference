@@ -8,7 +8,7 @@
 \arguments{
   \item{x}{number of observed picks of the data plot}
 
-  \item{K}{number of evaluations of the same lineup}
+  \item{K}{number of evaluations}
 
   \item{m}{size of the lineup}
 
@@ -25,15 +25,21 @@
   value of P(X > x) is computed for upper.tail=TRUE.}
 }
 \value{
-  simulation based p value to observe x or more picks of
-  the data plot in K evaluation under the assumption that
-  the data plot is consistent with the null hypothesis. For
-  comparison a p value based on a binomial distribution is
-  provided as well.
+  Vector/data frame. For comparison a p value based on a
+  binomial distribution is provided as well.
 }
 \description{
-  p value of observing at least x picks of the data plot in
-  K evaluations of the same lineup of size m.
+  Simulation based p value to observe x or more picks of
+  the data plot in K evaluations under the assumption that
+  the data plot is consistent with the null hypothesis. We
+  distinguish between three different scenarios: \itemize{
+  \item Scenario I: in each of K evaluations a different
+  data set and a different set of (m-1) null plots is
+  shown. \item Scenario II: in each of K evaluations the
+  same data set but a different set of (m-1) null plots is
+  shown. \item Scenario III: the same lineup, i.e. same
+  data and same set of null plots, is shown to K different
+  observers. }
 }
 \examples{
 pvisual(15, 20, m=3) # triangle test
