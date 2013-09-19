@@ -7,7 +7,7 @@
   cases m= 2, 3 and 20
 }
 \details{
-  List of coefficients to evaluate hdensity
+  List of internally used coefficients to evaluate hdensity
 }
 \keyword{datasets}
 
