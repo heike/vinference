@@ -197,7 +197,7 @@ hdensity <- function(x, K, m, type="numeric") {
   }
   Tone <- function(i, m) {
 #    load("data/Dis.RData")
-    data(Dis)
+#    data(Dis)
     if (i==0) return(1)
     u <- 1
     if (i==1) return(eval(T1(m)))
@@ -206,7 +206,7 @@ hdensity <- function(x, K, m, type="numeric") {
   Tone_saved <- function(i,m) {
     if (i == 0) return(1)
 #    load("data/T1m.RData")
-    data(T1m, package="vinference")
+#    data(T1m, package="vinference")
     T1m[[m]][i]
   }
   Tim <- function(i, m) {
@@ -220,7 +220,7 @@ hdensity <- function(x, K, m, type="numeric") {
     res
   }
   hone <- function (x, K, m) {
-    data(T1m)
+#    data(T1m)
     cis <- ci(0:K, K, x)
 
     #   choose(K, x)*sum(cis*unlist(Tim(0:K, m)))
