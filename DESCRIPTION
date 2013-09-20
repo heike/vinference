@@ -7,7 +7,8 @@ Title: Inference under the lineup protocol
 Description: Simulation based p value calculation for the lineup protocol
 LazyLoad: yes
 Depends:
-    Rmpfr
+    Rmpfr,
+    plyr
 Collate:
     'pvalues.r'
     'multi.r'

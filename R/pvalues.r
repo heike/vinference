@@ -206,7 +206,7 @@ hdensity <- function(x, K, m, type="numeric") {
   Tone_saved <- function(i,m) {
     if (i == 0) return(1)
 #    load("data/T1m.RData")
-#    data(T1m, package="vinference")
+    data(T1m, package="vinference")
     T1m[[m]][i]
   }
   Tim <- function(i, m) {
