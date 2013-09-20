@@ -9,3 +9,4 @@ Depends:
     Rmpfr
 Collate:
     'pvalues.r'
+    'multi.r'
