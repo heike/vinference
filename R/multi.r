@@ -6,7 +6,7 @@ dvismulti1 <- function(K, k, m=20, N=5000) {
     require(plyr)
     success <- ldply(1:K, function(i) {
       lp <- runif(m)
-      sum(sample(1:20, size=k[i], replace=FALSE, prob=lp)==1)
+      sum(sample(1:m, size=k[i], replace=FALSE, prob=lp)==1)
     })
     sum(success)
   })
@@ -23,7 +23,7 @@ dvismulti2 <- function(K, k, m=20, N=5000) {
     first <- runif(1)
     success <- ldply(1:K, function(i) {
       lp <- c(first, runif(m-1))
-      sum(sample(1:20, size=k[i], replace=FALSE, prob=lp)==1)
+      sum(sample(1:m, size=k[i], replace=FALSE, prob=lp)==1)
     })
     sum(success)
   })
@@ -38,7 +38,7 @@ dvismulti3 <- function(K, k, m=20, N=5000) {
     lp <- runif(m)
     require(plyr)
     success <- ldply(1:K, function(i) {
-      sum(sample(1:20, size=k[i], replace=FALSE, prob=lp)==1)
+      sum(sample(1:m, size=k[i], replace=FALSE, prob=lp)==1)
     })
     sum(success)
   })
