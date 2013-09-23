@@ -82,6 +82,26 @@ dvismulti3 <- function(K, k, m=20, N=5000) {
 #' dpoibin(0:5, pp=k/m)
 #' 
 #' qmulti(c(0.95, 0.99), K=5, k=2)
+#' 
+#' (k <- rpois(5, lambda=1.5)+1)
+#' reps1 <- ldply(1:10, function(x) dmulti(0:5, 5, k, type="scenario1")$density)
+#' reps2 <- ldply(1:10, function(x) dmulti(0:5, 5, k, type="scenario2")$density)
+#' reps3 <- ldply(1:10, function(x) dmulti(0:5, 5, k, type="scenario3")$density)
+#' reps1$type <- "I"
+#' reps2$type <- "II"
+#' reps3$type <- "III"
+#' reps <- rbind(reps1, reps2, reps3)
+#' library(reshape2)
+#' cols <- brewer.pal(8, "Paired")
+#' 
+#' mr <- melt(reps, measure.vars=1:6)
+#' mr$variable <- as.numeric(gsub("V", "", mr$variable))
+#' mr$type <- factor(mr$type)
+#' mr$offset <- with(mr, 0.1*c(0,-1,1)[as.numeric(type)])
+#' qplot(variable+offset, value, data=mr, alpha=I(0.75), colour=type) + 
+#'   geom_point(aes(x=1:6, y=dpoibin(0:5, pp=k*1/m)), pch=1, size=4, inherit.aes=FALSE)+
+#'   xlab("x")+ylab("P(X=x)")+ggtitle(paste(k, collapse=",")) + theme_bw() + scale_colour_manual(values=cols[-c(1,3,5,6,7)])
+
 
 NULL
 
