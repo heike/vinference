@@ -275,6 +275,7 @@ hquantile <- function(q, K, m) {
 #' @param K number of evaluations
 #' @param m lineup size, currently only m=2 and 3 are treated analytically. Use simulation within dvisual to get to other values for m
 #' @param type which scenario was used? One of scenario1, scenario2, scenario3
+#' @export
 #' @examples
 #' ## get critical values of visual triangle test:
 #' hquantile(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=3)
@@ -284,6 +285,7 @@ hquantile <- function(q, K, m) {
 vquantile <- function(q, K, m, type=c("scenario1", "scenario2", "scenario3")) {
   dframe <- data.frame(expand.grid(q=q, K=K, type=type))
   require(plyr)
+  dframe$type <- as.character(dframe$type)
   res <- ddply(dframe, .(q, K, type), function(x) {
     switch(x$type,
            scenario1 = qbinom(x$q, size=x$K, prob=1/m),
