@@ -141,9 +141,9 @@ pV <- function(x, K, m, scenario, type="numeric") {
 #' @export
 dV <- function(x, K, m, scenario, type="numeric") {
   res <- x
-  if (3 %in% scenario) res <- cbind(res, scenario3=hdensity(x, K, m, type=type))
+  if (3 %in% scenario) res <- cbind(res, scenario3=vinference:::hdensity(x, K, m, type=type))
   if (1 %in% scenario) res <- cbind(res, scenario1=dbinom(x, size=K, prob=1/m))
-  if (2 %in% scenario) res <- cbind(res, scenario2=dv2(x, K, m))
+  if (2 %in% scenario) res <- cbind(res, scenario2=vinference:::dv2(x, K, m))
 
   if (ncol(res) == 2) {
     res <- as.vector(res[,2])
