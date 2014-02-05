@@ -140,9 +140,17 @@ pV <- function(x, K, m, scenario, type="numeric") {
 #' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
 #' @export
 dV <- function(x, K, m, scenario, type="numeric") {
-  if (scenario == 3) return(hdensity(x, K, m, type=type))
-  if (scenario == 1) return(dbinom(x, size=K, prob=1/m))
-  if (scenario == 2) return(dv2(x, K, m))
+  res <- x
+  if (3 %in% scenario) res <- cbind(res, scenario3=hdensity(x, K, m, type=type))
+  if (1 %in% scenario) res <- cbind(res, scenario1=dbinom(x, size=K, prob=1/m))
+  if (2 %in% scenario) res <- cbind(res, scenario2=dv2(x, K, m))
+
+  if (ncol(res) == 2) {
+    res <- as.vector(res[,2])
+    names(res) <- x
+    return(res)
+  }
+  res
 }
 
 
