@@ -150,6 +150,7 @@ dV <- function(x, K, m, scenario, type="numeric") {
     names(res) <- x
     return(res)
   }
+  names(res)[1] <- "x"
   res
 }
 
