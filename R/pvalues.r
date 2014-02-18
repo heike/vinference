@@ -124,9 +124,18 @@ dvisual <- function(x, K, m=20, N=10000, type="scenario3") {
 #' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
 #' @export
 pV <- function(x, K, m, scenario, type="numeric") {
-  if (scenario == 3) return(hdistribution(x, K, m, type=type))
-  if (scenario == 1) return(1-pbinom(x, size=K, prob=1/m)+dbinom(x, size=K, prob=1/m))
-  if (scenario == 2) return(pv2(x, K, m))
+  res <- x
+  if (3 %in% scenario) res <- cbind(res, scenario3=vinference:::hdistribution(x, K, m, type=type))
+  if (1 %in% scenario) res <- cbind(res, scenario1=1-pbinom(x, size=K, prob=1/m)+dbinom(x, size=K, prob=1/m))
+  if (2 %in% scenario) res <- cbind(res, scenario2=vinference:::pv2(x, K, m))
+
+  if (ncol(res) == 2) {
+    res <- as.vector(res[,2])
+    names(res) <- x
+    return(res)
+  }
+  names(res)[1] <- "x"
+  res
 }
 
 
@@ -242,6 +251,7 @@ hdensity <- function(x, K, m, type="numeric") {
     stop("Not implemented for this lineup size, use bootstrap simulation with dvisual instead.")  
   }
   if (K > 100) {
+    if (m==3) return(p3(x, K))
     stop("Not implemented for values of K > 100 because of large memory needs. You might want to use bootstrap simulation with dvisual instead.")  
   }
 #  Dks <- Dk(T1(m), "u", k=K)
@@ -441,3 +451,5 @@ hdistribution <- function(x, K, m, type="numeric") {
   }
   sapply(x, hdone, K=K, m=m)
 }
+
+
