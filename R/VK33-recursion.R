@@ -17,7 +17,6 @@ h3 <- function(K, x) {
 }
 
 
-
   
 g3 <- function(K, x) {
   if (K < 2) return(NA)
@@ -33,6 +32,8 @@ g3 <- function(K, x) {
   }
   return((f3(K, x) + (K-x)*g3(K-1, x))/(K-2))
 }
+
+
 
 f3 <- function(K, x) {
   if (K < 2) return (NA)

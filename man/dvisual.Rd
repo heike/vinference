@@ -2,7 +2,8 @@
 \alias{dvisual}
 \title{Bootstrap based density for visual inference}
 \usage{
-  dvisual(x, K, m = 20, N = 10000, type = "scenario3")
+  dvisual(x, K, m = 20, N = 10000, type = "scenario3",
+    xp = 1)
 }
 \arguments{
   \item{x}{number of observed picks of the data plot}
@@ -17,6 +18,8 @@
 
   \item{type}{type of simulation used: scenario 3 assumes
   that the same lineup is shown in all K evaluations}
+
+  \item{xp}{exponent used, defaults to 1}
 }
 \value{
   simulation based density to observe x picks of the data
@@ -38,7 +41,7 @@
 }
 \examples{
 dvisual(2, 20, m=3) # triangle test
-qplot(x=x, y=simulated, data=data.frame(dvisual(0:6,6,m=2))) + geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
-qplot(x=x, y=simulated, data=data.frame(dvisual(0:6,6,m=3))) + geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
+qplot(x=x, y=scenario3, data=dvisual(0:6,6,m=2)) + geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
+qplot(x=x, y=scenario3, data=dvisual(0:6,6,m=3)) + geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
 }
 

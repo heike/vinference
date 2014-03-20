@@ -3,7 +3,7 @@
 \title{Bootstrap based p values for visual inference}
 \usage{
   pvisual(x, K, m = 20, N = 10000, type = "scenario3",
-    upper.tail = TRUE)
+    xp = 1, upper.tail = TRUE)
 }
 \arguments{
   \item{x}{number of observed picks of the data plot}
@@ -18,6 +18,8 @@
 
   \item{type}{type of simulation used: scenario 3 assumes
   that the same lineup is shown in all K evaluations}
+
+  \item{xp}{exponent used, defaults to 1}
 
   \item{upper.tail}{compute probabilities P(X >= x). Be
   aware that the use of this parameter is not consistent

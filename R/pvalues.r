@@ -6,33 +6,49 @@ lineup <- function(m, dataprob=NULL, nulls=NULL) {
   sample(m, size=1, prob=1-probs)
 }
 
-scenario1 <- function(N, K, m = 20) {
+pickData <- function(m, xp=1, dataprob=NULL, nulls=NULL) {
+  probs <- runif(m)
+  if (!is.null(dataprob)) probs[1] <- dataprob
+  if (!is.null(nulls)) probs[2:(length(nulls)+1)] <- nulls
+#  sample(m, size=1, prob=1-probs)
+#  rbinom(1, size=1, prob=f(probs))
+  ps <- (1-probs)^xp
+  if (all (ps==0)) ps <- rep(1, length(probs))
+  rbinom(1, size=1, prob=ps[1]/sum(ps))
+}
+
+# too deterministic
+# function(ps) ps[1] < min(ps[-1]))
+# just wrong:
+# function(ps) rbinom(1, size=1, prob=(1-ps[1])/(2-ps[1] - min(ps[-1])))
+
+scenario1 <- function(N, K, m = 20, xp=1) {
 # new lineup in each evaluation: new data, new sample of nulls  
   table(replicate(N,  {
-    individual <- sum(replicate(K, lineup(m, dataprob=NULL)) ==1)
+    individual <- sum(replicate(K, pickData(m, dataprob=NULL, xp=xp)) ==1)
     individual
   }))/N
 }
 
 
-scenario2 <- function(N, K, m = 20) {
+scenario2 <- function(N, K, m = 20, xp=1) {
   # each data evaluated K times, always with different nulls
   table(replicate(N,  {
     dataprob <- runif(1)
-    individual <- sum(replicate(K, lineup(m, dataprob=dataprob))==1)
+    individual <- sum(replicate(K, pickData(m, dataprob=dataprob, xp=xp)==1))
     individual
   }))/N
 }
   
 
-scenario3 <- function(N, K, m=20) {
+scenario3 <- function(N, K, m=20, xp=1) {
   # each data evaluated K times, with the same nulls
   table(replicate(N/100,  
     replicate(100, {
       dataprob <- runif(1)
       nulls <- runif(m-1)
       
-      individual <- sum(replicate(K, lineup(m, dataprob=dataprob, nulls=nulls))==1)
+      individual <- sum(replicate(K, pickData(m, dataprob=dataprob, nulls=nulls, xp=xp))==1)
       individual
     })))/N
 }
@@ -63,13 +79,14 @@ scenario3 <- function(N, K, m=20) {
 #' @param m size of the lineup
 #' @param N MC parameter: number of replicates on which MC probabilities are based. Higher number of replicates will decrease MC variability.
 #' @param type type of simulation used: scenario 3 assumes that the same lineup is shown in all K evaluations
+#' @param xp exponent used, defaults to 1
 #' @param upper.tail compute probabilities P(X >= x). Be aware that the use of this parameter is not consistent with the other distribution functions in base. There, a value of P(X > x) is computed for upper.tail=TRUE.
 #' @return Vector/data frame. For comparison a p value based on a binomial distribution is provided as well.
 #' @export
 #' @examples
 #' pvisual(15, 20, m=3) # triangle test
-pvisual <- function(x, K, m=20, N=10000, type="scenario3", upper.tail=TRUE) {
-  freq <- get(type)(N=N, K=K, m=m)
+pvisual <- function(x, K, m=20, N=10000, type="scenario3", xp=1, upper.tail=TRUE) {
+  freq <- get(type)(N=N, K=K, m=m, xp=xp)
   if (upper.tail) {
     sim <- sapply(x, function(y) sum(freq[as.numeric(names(freq)) >= y]))
     return(cbind(x=x, "simulated"=sim, "binom"=1-pbinom(x-1, size=K, prob=1/m)))
@@ -93,17 +110,18 @@ pvisual <- function(x, K, m=20, N=10000, type="scenario3", upper.tail=TRUE) {
 #' @param m size of the lineup
 #' @param N MC parameter: number of replicates on which MC probabilities are based. Higher number of replicates will decrease MC variability.
 #' @param type type of simulation used: scenario 3 assumes that the same lineup is shown in all K evaluations
+#' @param xp exponent used, defaults to 1
 #' @return simulation based density to observe x picks of the data plot in K evaluation under the assumption that the data plot is consistent with the null hypothesis. For comparison a p value based on a binomial distribution is provided as well.
 #' @export
 #' @examples
 #' dvisual(2, 20, m=3) # triangle test
-#' qplot(x=x, y=simulated, data=data.frame(dvisual(0:6,6,m=2))) + geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
-#' qplot(x=x, y=simulated, data=data.frame(dvisual(0:6,6,m=3))) + geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
-dvisual <- function(x, K, m=20, N=10000, type="scenario3") {
+#' qplot(x=x, y=scenario3, data=dvisual(0:6,6,m=2)) + geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
+#' qplot(x=x, y=scenario3, data=dvisual(0:6,6,m=3)) + geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
+dvisual <- function(x, K, m=20, N=10000, type="scenario3", xp=1) {
   argx <- x
   freqs <- data.frame(Var1=0:K)
   for (t in type) {
-    freq <- data.frame(get(t)(N=N, K=K, m=m))
+    freq <- data.frame(get(t)(N=N, K=K, m=m, xp=xp))
     names(freq)[2] <- t
     freqs <- merge(freqs, freq, by="Var1", all=T)
   }
