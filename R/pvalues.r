@@ -256,7 +256,7 @@ hdensity <- function(x, K, m, type="numeric") {
     res
   }
   hone <- function (x, K, m) {
-    data(T1m)
+    data(T1m, package="vinference")
     cis <- ci(0:K, K, x)
 
     #   choose(K, x)*sum(cis*unlist(Tim(0:K, m)))
