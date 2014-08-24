@@ -53,17 +53,23 @@ scenario3 <- function(N, K, m=20, xp=1) {
     })))/N
 }
 
-# scenario4 <- function(N, K, m=20, p=5) {
-#   # p lineups shown, each lineup evaluated K times, then lineup's nulls changed 
-#   table(replicate(N/100, {
-#     replicate(100/p, {
-#         dataprob <- runif(1)
-#         replicate(p, {
-#           nulls <- runif(m-1)
-#           individual <- sum(replicate(K, lineup(m, dataprob=dataprob, nulls=nulls))==1)
-#           individual
-#   })})}))/N
-# }
+scenario4 <- function(N, K, m=20, xp=1) {
+  # K is vector: length(K) lineups are shown K[i] times to observers
+  # all length(K) lineups show the same data, but have different nulls
+  
+  res <- replicate(N/100,  
+    replicate(100, {
+      dataprob <- runif(1)
+      
+      individual <- rep(NA, length(K))
+      for (i in 1:length(K)) {
+        nulls <- runif(m-1)              
+        individual[i] <- sum(replicate(K[i], pickData(m, dataprob=dataprob, nulls=nulls, xp=xp))==1)
+      }
+      sum(individual)
+    }))
+  table(res)/N
+}
 
 #' Bootstrap based p values for visual inference
 #' 
