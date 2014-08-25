@@ -57,8 +57,7 @@ scenario4 <- function(N, K, m=20, xp=1) {
   # K is vector: length(K) lineups are shown K[i] times to observers
   # all length(K) lineups show the same data, but have different nulls
   
-  res <- replicate(N/100,  
-    replicate(100, {
+  res <- replicate(N, {
       dataprob <- runif(1)
       
       individual <- rep(NA, length(K))
@@ -67,7 +66,7 @@ scenario4 <- function(N, K, m=20, xp=1) {
         individual[i] <- sum(replicate(K[i], pickData(m, dataprob=dataprob, nulls=nulls, xp=xp))==1)
       }
       sum(individual)
-    }))
+    })
   table(res)/N
 }
 
