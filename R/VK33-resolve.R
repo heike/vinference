@@ -1,5 +1,5 @@
 p3r <- function(K, x) {
-  require(plyr)
+#  require(plyr)
   as.vector(choose(K,x)*unlist(plyr::llply(x, function(y) h3r(x=y, K=K))))
 }
 

@@ -314,6 +314,7 @@ hdensity <- function(x, K, m, type="numeric") {
 #' @param q (vector) of quantiles
 #' @param K number of evaluations
 #' @param m lineup size, currently only m=2 and 3 are treated analytically. Use simulation within dvisual to get to other values for m
+#' @export
 #' @examples
 #' ## get critical values of visual triangle test:
 #' hquantile(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=3)
@@ -369,6 +370,7 @@ vquantile <- function(q, K, m, type=c("scenario1", "scenario2", "scenario3")) {
 #' @param x number of times data plot was picked
 #' @param K number of  evaluations by independent observers
 #' @param m lineup size. Only implemented for m=3
+#' @export
 dv2 <- function(x,K, m=3) { 
   dv2one <- function(x, K, m=m) {
     g <- function(q) {
@@ -376,7 +378,7 @@ dv2 <- function(x,K, m=3) {
       res[q==0] <- 0
       res
     }
-    if (m!=3) stop("Function not implemented for lineup sizes <> 3. Use bootstrap based density estimation in dvisual instead.")
+    if (!(m %in% c(3,20))) stop("Function not implemented for lineup sizes <> 3. Use bootstrap based density estimation in dvisual instead.")
     
     f <- function(q, K, x) choose(K,x)*g(q)^x*(1-g(q))^(K-x)
     integrate(f, 0,1,K=K,x=x)$value
@@ -390,6 +392,7 @@ dv2 <- function(x,K, m=3) {
 #' @param x number of times data plot was picked
 #' @param K number of  evaluations by independent observers
 #' @param m lineup size. Only implemented for m=3
+#' @export
 pv2 <- function(x,K, m=3) { 
   hdone <- function(x1, K, m) {
     sum(dv2(x1:K, K, m))
@@ -404,6 +407,7 @@ pv2 <- function(x,K, m=3) {
 #' @param K number of independent evaluations
 #' @param m size of the lineup
 #' @return critical value(s) corresponding to quantile q
+#' @export
 qv2 <- function (q, K, m=3) {
   dframe <- data.frame(expand.grid(q, K))
   names(dframe) <- c("q", "K")

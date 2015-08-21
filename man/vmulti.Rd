@@ -55,6 +55,7 @@ dpoibin(0:5, pp=k/m)
 
 qmulti(c(0.95, 0.99), K=5, k=2)
 
+\dontrun{
 (k <- rpois(5, lambda=1.5)+1)
 reps1 <- plyr::ldply(1:10, function(x) dmulti(0:5, 5, k, type="scenario1")$density)
 reps2 <- plyr::ldply(1:10, function(x) dmulti(0:5, 5, k, type="scenario2")$density)
@@ -76,5 +77,6 @@ qplot(variable+offset, value, data=mr, alpha=I(0.75), colour=type) +
     inherit.aes=FALSE)+
   xlab("x")+ylab("P(X=x)")+ggtitle(paste(k, collapse=",")) +
   theme_bw() + scale_colour_manual(values=cols[-c(1,3,5,6,7)])
+ }
 }
 
