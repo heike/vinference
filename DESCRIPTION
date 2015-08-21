@@ -7,7 +7,7 @@ License: GPL-3
 Title: Inference under the lineup protocol
 Description: Simulation based p value calculation for the lineup protocol
 LazyLoad: yes
-Depends:
+Imports:
     Rmpfr,
     plyr
 Collate:

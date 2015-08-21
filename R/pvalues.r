@@ -129,10 +129,17 @@ pvisual <- function(x, K, m=20, N=10000, type="scenario3", xp=1, target=1, upper
 #' @export
 #' @examples
 #' dvisual(2, 20, m=3) # triangle test
-#' qplot(x=x, y=scenario3, data=dvisual(0:6,6,m=2)) + geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
-#' qplot(x=x, y=scenario3, data=dvisual(0:6,6,m=3)) + geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
+#' 
+#' require(ggplot2)
+#' qplot(x=x, y=scenario3, data=dvisual(0:6,6,m=2)) + 
+#'    geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
+#' qplot(x=x, y=scenario3, data=dvisual(0:6,6,m=3)) + 
+#'    geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
+#'    
 #' # lineup with two targets: what are the probabilities to identify at least one of the targets?
-#' dvisual(0:5, m=20, N=10000, type="scenario3", target=1:2)
+#' dvisual(0:5, K=5, m=20, N=10000, type="scenario3", target=1:2)
+#' # slight difference between this distribution and the distribution for a lineup of size 10 with a single target:
+#' dvisual(0:5, K=5, m=10, N=10000, type="scenario3", target=1)
 dvisual <- function(x, K, m=20, N=10000, type="scenario3", xp=1, target=1) {
   argx <- x
   freqs <- data.frame(Var1=0:K)
@@ -226,6 +233,7 @@ qV <- function(q, K, m, scenario, type="numeric") {
 #' ## compare to 
 #' dvisual(0:5, 5, m=2)
 #' 
+#' require(ggplot2)
 #' ## test how many K can be computed without numeric loss
 #' for (K in 10:50) { 
 #'   print(K); 
@@ -311,7 +319,7 @@ hdensity <- function(x, K, m, type="numeric") {
 hquantile <- function(q, K, m) {
   dframe <- data.frame(expand.grid(q, K))
   names(dframe) <- c("q", "K")
-  require(plyr)
+#  require(plyr)
   res <- ddply(dframe, .(q, K), function(x) {
     hs <- cumsum(hdensity(x=0:x$K, K=x$K, m=m))
     which(hs>=x$q)[1]
@@ -337,7 +345,7 @@ hquantile <- function(q, K, m) {
 #' vquantile(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=20)
 vquantile <- function(q, K, m, type=c("scenario1", "scenario2", "scenario3")) {
   dframe <- data.frame(expand.grid(q=q, K=K, type=type))
-  require(plyr)
+#  require(plyr)
   dframe$type <- as.character(dframe$type)
   res <- ddply(dframe, .(q, K, type), function(x) {
     switch(x$type,
@@ -395,7 +403,7 @@ pv2 <- function(x,K, m=3) {
 qv2 <- function (q, K, m=3) {
   dframe <- data.frame(expand.grid(q, K))
   names(dframe) <- c("q", "K")
-  require(plyr)
+#  require(plyr)
   res <- ddply(dframe, .(q, K), function(x) {
     hs <- cumsum(dv2(x=0:x$K, K=x$K, m=m))
     which(hs>=x$q)[1]
