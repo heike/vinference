@@ -4,7 +4,7 @@ dvismulti1 <- function(K, k, m=20, N=5000) {
   res <- replicate(N, {
     # everybody is shown a different lineup
  #   require(plyr)
-    success <- ldply(1:K, function(i) {
+    success <- plyr::ldply(1:K, function(i) {
       lp <- runif(m)
       sum(sample(1:m, size=k[i], replace=FALSE, prob=lp)==1)
     })
@@ -21,7 +21,7 @@ dvismulti2 <- function(K, k, m=20, N=5000) {
     # same data, different nulls
  #   require(plyr)
     first <- runif(1)
-    success <- ldply(1:K, function(i) {
+    success <- plyr::ldply(1:K, function(i) {
       lp <- c(first, runif(m-1))
       sum(sample(1:m, size=k[i], replace=FALSE, prob=lp)==1)
     })
@@ -37,7 +37,7 @@ dvismulti3 <- function(K, k, m=20, N=5000) {
     # everybody is shown the same lineup
     lp <- runif(m)
  #   require(plyr)
-    success <- ldply(1:K, function(i) {
+    success <- plyr::ldply(1:K, function(i) {
       sum(sample(1:m, size=k[i], replace=FALSE, prob=lp)==1)
     })
     sum(success)
@@ -84,10 +84,9 @@ dvismulti3 <- function(K, k, m=20, N=5000) {
 #' qmulti(c(0.95, 0.99), K=5, k=2)
 #' 
 #' (k <- rpois(5, lambda=1.5)+1)
-#' library(plyr)
-#' reps1 <- ldply(1:10, function(x) dmulti(0:5, 5, k, type="scenario1")$density)
-#' reps2 <- ldply(1:10, function(x) dmulti(0:5, 5, k, type="scenario2")$density)
-#' reps3 <- ldply(1:10, function(x) dmulti(0:5, 5, k, type="scenario3")$density)
+#' reps1 <- plyr::ldply(1:10, function(x) dmulti(0:5, 5, k, type="scenario1")$density)
+#' reps2 <- plyr::ldply(1:10, function(x) dmulti(0:5, 5, k, type="scenario2")$density)
+#' reps3 <- plyr::ldply(1:10, function(x) dmulti(0:5, 5, k, type="scenario3")$density)
 #' reps1$type <- "I"
 #' reps2$type <- "II"
 #' reps3$type <- "III"

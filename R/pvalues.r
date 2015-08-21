@@ -95,6 +95,7 @@ scenario4 <- function(N, K, m=20, xp=1, target=1) {
 #' @param N MC parameter: number of replicates on which MC probabilities are based. Higher number of replicates will decrease MC variability.
 #' @param type type of simulation used: scenario 3 assumes that the same lineup is shown in all K evaluations
 #' @param xp exponent used, defaults to 1
+#' @param target (vector) of integer values between 1 and m indicating the position(s) of the target plots. Only the number of targets will affect the probabilities.
 #' @param upper.tail compute probabilities P(X >= x). Be aware that the use of this parameter is not consistent with the other distribution functions in base. There, a value of P(X > x) is computed for upper.tail=TRUE.
 #' @return Vector/data frame. For comparison a p value based on a binomial distribution is provided as well.
 #' @export
@@ -255,7 +256,7 @@ hdensity <- function(x, K, m, type="numeric") {
   ci <- function(i, K, x) {
     res <- mpfr(rep(0, length=length(i)), 120)
     idx <- which(i >= K-x)
-    res[idx] <- ((-1)^(i[idx]-K+x) * chooseMpfr(x, i[idx]-K+x))
+    res[idx] <- ((-1)^(i[idx]-K+x) * Rmpfr::chooseMpfr(x, i[idx]-K+x))
 #    browser()
     res
   }
@@ -288,7 +289,7 @@ hdensity <- function(x, K, m, type="numeric") {
 
     #   choose(K, x)*sum(cis*unlist(Tim(0:K, m)))
  #   browser()
-    xs <- T1m[[m]][1:K]*chooseMpfr(K, x)*cis[-1]
+    xs <- T1m[[m]][1:K]*Rmpfr::chooseMpfr(K, x)*cis[-1]
     sum(xs) + cis[1]
   }
   
@@ -323,7 +324,7 @@ hquantile <- function(q, K, m) {
   dframe <- data.frame(expand.grid(q, K))
   names(dframe) <- c("q", "K")
 #  require(plyr)
-  res <- ddply(dframe, .(q, K), function(x) {
+  res <- plyr::plyr::ddply(dframe, .(q, K), function(x) {
     hs <- cumsum(hdensity(x=0:x$K, K=x$K, m=m))
     which(hs>=x$q)[1]
   })
@@ -350,7 +351,7 @@ vquantile <- function(q, K, m, type=c("scenario1", "scenario2", "scenario3")) {
   dframe <- data.frame(expand.grid(q=q, K=K, type=type))
 #  require(plyr)
   dframe$type <- as.character(dframe$type)
-  res <- ddply(dframe, .(q, K, type), function(x) {
+  res <- plyr::ddply(dframe, .(q, K, type), function(x) {
     switch(x$type,
            scenario1 = qbinom(x$q, size=x$K, prob=1/m),
            scenario2 =which(cumsum(dv2(x=0:x$K, K=x$K, m=m))>= x$q)[1],
@@ -407,7 +408,7 @@ qv2 <- function (q, K, m=3) {
   dframe <- data.frame(expand.grid(q, K))
   names(dframe) <- c("q", "K")
 #  require(plyr)
-  res <- ddply(dframe, .(q, K), function(x) {
+  res <- plyr::ddply(dframe, .(q, K), function(x) {
     hs <- cumsum(dv2(x=0:x$K, K=x$K, m=m))
     which(hs>=x$q)[1]
   })
