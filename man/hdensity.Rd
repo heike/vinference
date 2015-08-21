@@ -24,12 +24,9 @@ hdensity(0:5, 5, m=2)
 dvisual(0:5, 5, m=2)
 
 require(ggplot2)
-## test how many K can be computed without numeric loss
-for (K in 10:50) {
-  print(K);
-  print(qplot(0:K, hdensity(0:K, K, m=20)));
-  print(sum(hdensity(0:K, K, m=20)));
-  # scan()
-}
+## probabilities can be computed without numeric loss for K=50:
+K <- 50
+print(qplot(0:K, hdensity(0:K, K, m=20)));
+print(sum(hdensity(0:K, K, m=20)));
 }
 

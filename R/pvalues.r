@@ -133,11 +133,15 @@ pvisual <- function(x, K, m=20, N=10000, type="scenario3", xp=1, target=1, upper
 #' @examples
 #' dvisual(2, 20, m=3) # triangle test
 #' 
+#' \dontrun{
+#' ## points in red are binomial distribution, black points are for inference
+#' ## in lineups using scenario 3
 #' require(ggplot2)
 #' qplot(x=x, y=scenario3, data=dvisual(0:6,6,m=2)) + 
 #'    geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
 #' qplot(x=x, y=scenario3, data=dvisual(0:6,6,m=3)) + 
 #'    geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
+#' }
 #'    
 #' # lineup with two targets: what are the probabilities to identify at least 
 #' # one of the targets?
@@ -239,13 +243,10 @@ qV <- function(q, K, m, scenario, type="numeric") {
 #' dvisual(0:5, 5, m=2)
 #' 
 #' require(ggplot2)
-#' ## test how many K can be computed without numeric loss
-#' for (K in 10:50) { 
-#'   print(K); 
-#'   print(qplot(0:K, hdensity(0:K, K, m=20))); 
-#'   print(sum(hdensity(0:K, K, m=20))); 
-#'   # scan()
-#' }
+#' ## probabilities can be computed without numeric loss for K=50:
+#' K <- 50
+#' print(qplot(0:K, hdensity(0:K, K, m=20))); 
+#' print(sum(hdensity(0:K, K, m=20))); 
 hdensity <- function(x, K, m, type="numeric") {
   T1 <- function(m) {
     if (m==2) return(expression(1/m*(1/u^2*(log((u+1)/u)*u^2 + u - log(u+1)))))

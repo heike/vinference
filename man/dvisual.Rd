@@ -37,11 +37,15 @@ We distinguish between three different scenarios:
 \examples{
 dvisual(2, 20, m=3) # triangle test
 
+\dontrun{
+## points in red are binomial distribution, black points are for inference
+## in lineups using scenario 3
 require(ggplot2)
 qplot(x=x, y=scenario3, data=dvisual(0:6,6,m=2)) +
    geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
 qplot(x=x, y=scenario3, data=dvisual(0:6,6,m=3)) +
    geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
+}
 
 # lineup with two targets: what are the probabilities to identify at least
 # one of the targets?
