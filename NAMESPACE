@@ -3,6 +3,7 @@
 export(dV)
 export(dmulti)
 export(dvisual)
+export(h)
 export(hdensity)
 export(pV)
 export(pmulti)

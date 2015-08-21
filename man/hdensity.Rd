@@ -29,7 +29,7 @@ for (K in 10:50) {
   print(K);
   print(qplot(0:K, hdensity(0:K, K, m=20)));
   print(sum(hdensity(0:K, K, m=20)));
-  scan()
+  # scan()
 }
 }
 

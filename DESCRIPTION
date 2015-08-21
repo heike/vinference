@@ -13,10 +13,10 @@ Depends:
     R (>= 2.10.0)
 Imports:
     plyr,
-    poibin,
     Rmpfr
 Suggests:
     ggplot2,
+    poibin,
     reshape2,
     RColorBrewer
 URL: http://github.com/heike/vinference

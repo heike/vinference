@@ -7,12 +7,12 @@
 h(x, K)
 }
 \arguments{
-\item{x}{}
+\item{x}{(vector of) the number of target identifications made}
 
-\item{K}{}
+\item{K}{number of independent evaluations}
 }
 \description{
-Explicit density function of visual inference under scenario 3 for m = 2
+more details needed
 }
 \examples{
 h(0:5, K = 5)

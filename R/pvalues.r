@@ -171,9 +171,9 @@ dvisual <- function(x, K, m=20, N=10000, type="scenario3", xp=1, target=1) {
 #' @export
 pV <- function(x, K, m, scenario, type="numeric") {
   res <- x
-  if (3 %in% scenario) res <- cbind(res, scenario3=vinference:::hdistribution(x, K, m, type=type))
+  if (3 %in% scenario) res <- cbind(res, scenario3=hdistribution(x, K, m, type=type))
   if (1 %in% scenario) res <- cbind(res, scenario1=1-pbinom(x, size=K, prob=1/m)+dbinom(x, size=K, prob=1/m))
-  if (2 %in% scenario) res <- cbind(res, scenario2=vinference:::pv2(x, K, m))
+  if (2 %in% scenario) res <- cbind(res, scenario2=pv2(x, K, m))
 
   if (ncol(res) == 2) {
     res <- as.vector(res[,2])
@@ -196,9 +196,9 @@ pV <- function(x, K, m, scenario, type="numeric") {
 #' @export
 dV <- function(x, K, m, scenario, type="numeric") {
   res <- x
-  if (3 %in% scenario) res <- cbind(res, scenario3=vinference:::hdensity(x, K, m, type=type))
+  if (3 %in% scenario) res <- cbind(res, scenario3=hdensity(x, K, m, type=type))
   if (1 %in% scenario) res <- cbind(res, scenario1=dbinom(x, size=K, prob=1/m))
-  if (2 %in% scenario) res <- cbind(res, scenario2=vinference:::dv2(x, K, m))
+  if (2 %in% scenario) res <- cbind(res, scenario2=dv2(x, K, m))
 
   if (ncol(res) == 2) {
     res <- as.vector(res[,2])
@@ -244,7 +244,7 @@ qV <- function(q, K, m, scenario, type="numeric") {
 #'   print(K); 
 #'   print(qplot(0:K, hdensity(0:K, K, m=20))); 
 #'   print(sum(hdensity(0:K, K, m=20))); 
-#'   scan()
+#'   # scan()
 #' }
 hdensity <- function(x, K, m, type="numeric") {
   T1 <- function(m) {
@@ -254,7 +254,7 @@ hdensity <- function(x, K, m, type="numeric") {
                                          3*u*log(2*u) + log(u+1) - log(2*u)))))
   }
   ci <- function(i, K, x) {
-    res <- mpfr(rep(0, length=length(i)), 120)
+    res <- Rmpfr::mpfr(rep(0, length=length(i)), 120)
     idx <- which(i >= K-x)
     res[idx] <- ((-1)^(i[idx]-K+x) * Rmpfr::chooseMpfr(x, i[idx]-K+x))
 #    browser()
@@ -324,7 +324,7 @@ hquantile <- function(q, K, m) {
   dframe <- data.frame(expand.grid(q, K))
   names(dframe) <- c("q", "K")
 #  require(plyr)
-  res <- plyr::plyr::ddply(dframe, .(q, K), function(x) {
+  res <- plyr::ddply(dframe, c("q", "K"), function(x) {
     hs <- cumsum(hdensity(x=0:x$K, K=x$K, m=m))
     which(hs>=x$q)[1]
   })
@@ -351,7 +351,7 @@ vquantile <- function(q, K, m, type=c("scenario1", "scenario2", "scenario3")) {
   dframe <- data.frame(expand.grid(q=q, K=K, type=type))
 #  require(plyr)
   dframe$type <- as.character(dframe$type)
-  res <- plyr::ddply(dframe, .(q, K, type), function(x) {
+  res <- plyr::ddply(dframe, c("q", "K", "type"), function(x) {
     switch(x$type,
            scenario1 = qbinom(x$q, size=x$K, prob=1/m),
            scenario2 =which(cumsum(dv2(x=0:x$K, K=x$K, m=m))>= x$q)[1],
@@ -408,7 +408,7 @@ qv2 <- function (q, K, m=3) {
   dframe <- data.frame(expand.grid(q, K))
   names(dframe) <- c("q", "K")
 #  require(plyr)
-  res <- plyr::ddply(dframe, .(q, K), function(x) {
+  res <- plyr::ddply(dframe, c("q", "K"), function(x) {
     hs <- cumsum(dv2(x=0:x$K, K=x$K, m=m))
     which(hs>=x$q)[1]
   })
@@ -419,8 +419,10 @@ qv2 <- function (q, K, m=3) {
 
 #' Explicit density function of visual inference under scenario 3 for m = 2
 #' 
-#' @param x
-#' @param K
+#' more details needed
+#' @param x (vector of) the number of target identifications made
+#' @param K number of independent evaluations
+#' @export
 #' @examples
 #' h(0:5, K = 5)
 #' ## compare to 
@@ -473,15 +475,6 @@ h <- function(x, K) {
 }
 
 
-#' List of internally used coefficients to evaluate hdensity
-#' 
-#' @name T1m
-#' @title List of coefficients in hdensity
-#' @description List of theoretical coefficients to evaluate hdensity in cases m= 2, 3 and 20
-#' @docType data
-#' @usage data(T1m)
-NULL
-
 #' Theoretical distribution for lineups under scenario 3 for m = 2, 3, and 20
 #' 
 #' Some more details to be written later
@@ -489,6 +482,7 @@ NULL
 #' @param K number of evaluations
 #' @param m size of the lineup
 #' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
+#' @export
 #' @examples
 #' hdistribution(0:5, 5, m=3)
 hdistribution <- function(x, K, m, type="numeric") {
@@ -499,3 +493,11 @@ hdistribution <- function(x, K, m, type="numeric") {
 }
 
 
+# #' List of internally used coefficients to evaluate hdensity
+# #' 
+# #' @name T1m
+# #' @title List of coefficients in hdensity
+# #' @description List of theoretical coefficients to evaluate hdensity in cases m= 2, 3 and 20
+# #' @docType data
+# #' @usage data(T1m)
+# NULL

@@ -141,7 +141,7 @@ qmulti<- function(q, K, k, m=20, type="scenario3", N=5000) {
                     scenario3 = dvismulti3(K,k,m,N))
 
   res <-list(quantile=cumsum(as.vector(density)), k=k)
-  res$quantile <- laply(q, function(qq) min(which(res$quantile >= qq)-1))
+  res$quantile <- plyr::laply(q, function(qq) min(which(res$quantile >= qq)-1))
   names(res$quantile) <- q
   
   res

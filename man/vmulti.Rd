@@ -56,10 +56,9 @@ dpoibin(0:5, pp=k/m)
 qmulti(c(0.95, 0.99), K=5, k=2)
 
 (k <- rpois(5, lambda=1.5)+1)
-library(plyr)
-reps1 <- ldply(1:10, function(x) dmulti(0:5, 5, k, type="scenario1")$density)
-reps2 <- ldply(1:10, function(x) dmulti(0:5, 5, k, type="scenario2")$density)
-reps3 <- ldply(1:10, function(x) dmulti(0:5, 5, k, type="scenario3")$density)
+reps1 <- plyr::ldply(1:10, function(x) dmulti(0:5, 5, k, type="scenario1")$density)
+reps2 <- plyr::ldply(1:10, function(x) dmulti(0:5, 5, k, type="scenario2")$density)
+reps3 <- plyr::ldply(1:10, function(x) dmulti(0:5, 5, k, type="scenario3")$density)
 reps1$type <- "I"
 reps2$type <- "II"
 reps3$type <- "III"
