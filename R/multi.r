@@ -3,7 +3,7 @@ dvismulti1 <- function(K, k, m=20, N=5000) {
   k <- rep(k, length=K)
   res <- replicate(N, {
     # everybody is shown a different lineup
-    require(plyr)
+ #   require(plyr)
     success <- ldply(1:K, function(i) {
       lp <- runif(m)
       sum(sample(1:m, size=k[i], replace=FALSE, prob=lp)==1)
@@ -19,7 +19,7 @@ dvismulti2 <- function(K, k, m=20, N=5000) {
   k <- rep(k, length=K)
   res <- replicate(N, {
     # same data, different nulls
-    require(plyr)
+ #   require(plyr)
     first <- runif(1)
     success <- ldply(1:K, function(i) {
       lp <- c(first, runif(m-1))
@@ -36,7 +36,7 @@ dvismulti3 <- function(K, k, m=20, N=5000) {
   res <- replicate(N, {
     # everybody is shown the same lineup
     lp <- runif(m)
-    require(plyr)
+ #   require(plyr)
     success <- ldply(1:K, function(i) {
       sum(sample(1:m, size=k[i], replace=FALSE, prob=lp)==1)
     })
@@ -84,6 +84,7 @@ dvismulti3 <- function(K, k, m=20, N=5000) {
 #' qmulti(c(0.95, 0.99), K=5, k=2)
 #' 
 #' (k <- rpois(5, lambda=1.5)+1)
+#' library(plyr)
 #' reps1 <- ldply(1:10, function(x) dmulti(0:5, 5, k, type="scenario1")$density)
 #' reps2 <- ldply(1:10, function(x) dmulti(0:5, 5, k, type="scenario2")$density)
 #' reps3 <- ldply(1:10, function(x) dmulti(0:5, 5, k, type="scenario3")$density)
@@ -92,6 +93,7 @@ dvismulti3 <- function(K, k, m=20, N=5000) {
 #' reps3$type <- "III"
 #' reps <- rbind(reps1, reps2, reps3)
 #' library(reshape2)
+#' library(RColorBrewer)
 #' cols <- brewer.pal(8, "Paired")
 #' 
 #' mr <- melt(reps, measure.vars=1:6)
@@ -99,8 +101,10 @@ dvismulti3 <- function(K, k, m=20, N=5000) {
 #' mr$type <- factor(mr$type)
 #' mr$offset <- with(mr, 0.1*c(0,-1,1)[as.numeric(type)])
 #' qplot(variable+offset, value, data=mr, alpha=I(0.75), colour=type) + 
-#'   geom_point(aes(x=1:6, y=dpoibin(0:5, pp=k*1/m)), pch=1, size=4, inherit.aes=FALSE)+
-#'   xlab("x")+ylab("P(X=x)")+ggtitle(paste(k, collapse=",")) + theme_bw() + scale_colour_manual(values=cols[-c(1,3,5,6,7)])
+#'   geom_point(aes(x=1:6, y=dpoibin(0:5, pp=k*1/m)), pch=1, size=4, 
+#'     inherit.aes=FALSE)+
+#'   xlab("x")+ylab("P(X=x)")+ggtitle(paste(k, collapse=",")) + 
+#'   theme_bw() + scale_colour_manual(values=cols[-c(1,3,5,6,7)])
 
 
 NULL

@@ -2,14 +2,16 @@ Package: vinference
 Maintainer: Heike Hofmann <hofmann@iastate.edu>
 Author: Heike Hofmann
 Published: 2014-02-01
-Version: 0.9
-License: GPL-3
+Version: 0.1.1
+License: MIT + file LICENSE
 Title: Inference under the lineup protocol
-Description: Simulation based p value calculation for the lineup protocol
-LazyLoad: yes
+Description: (Simulation based) p value calculation for different scenarios using the lineup protocol
+Depends:
+    R (>= 2.10.0),
+    Rmpfr
 Imports:
-    Rmpfr,
     plyr
+URL: http://github.com/heike/vinference
 Collate:
     'pvalues.r'
     'multi.r'

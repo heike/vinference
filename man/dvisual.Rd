@@ -43,9 +43,11 @@ qplot(x=x, y=scenario3, data=dvisual(0:6,6,m=2)) +
 qplot(x=x, y=scenario3, data=dvisual(0:6,6,m=3)) +
    geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
 
-# lineup with two targets: what are the probabilities to identify at least one of the targets?
+# lineup with two targets: what are the probabilities to identify at least
+# one of the targets?
 dvisual(0:5, K=5, m=20, N=10000, type="scenario3", target=1:2)
-# slight difference between this distribution and the distribution for a lineup of size 10 with a single target:
+# slight difference between this distribution and the distribution for a
+# lineup of size 10 with a single target:
 dvisual(0:5, K=5, m=10, N=10000, type="scenario3", target=1)
 }
 
