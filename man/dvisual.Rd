@@ -4,8 +4,7 @@
 \alias{dvisual}
 \title{Bootstrap based density for visual inference}
 \usage{
-dvisual(x, K, m = 20, N = 10000, type = "scenario3", xp = 1,
-  target = 1)
+dvisual(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1)
 }
 \arguments{
 \item{x}{number of observed picks of the data plot}
@@ -16,7 +15,7 @@ dvisual(x, K, m = 20, N = 10000, type = "scenario3", xp = 1,
 
 \item{N}{MC parameter: number of replicates on which MC probabilities are based. Higher number of replicates will decrease MC variability.}
 
-\item{type}{type of simulation used: scenario 3 assumes that the same lineup is shown in all K evaluations}
+\item{scenario}{numeric value, one of 1,2, or 3, indicating the type of simulation used: scenario 3 assumes that the same lineup is shown in all K evaluations}
 
 \item{xp}{exponent used, defaults to 1}
 
@@ -49,9 +48,9 @@ qplot(x=x, y=scenario3, data=dvisual(0:6,6,m=3)) +
 
 # lineup with two targets: what are the probabilities to identify at least
 # one of the targets?
-dvisual(0:5, K=5, m=20, N=10000, type="scenario3", target=1:2)
+dvisual(0:5, K=5, m=20, N=10000, scenario=3, target=1:2)
 # slight difference between this distribution and the distribution for a
 # lineup of size 10 with a single target:
-dvisual(0:5, K=5, m=10, N=10000, type="scenario3", target=1)
+dvisual(0:5, K=5, m=10, N=10000, scenario=3, target=1)
 }
 

@@ -93,7 +93,7 @@ scenario4 <- function(N, K, m=20, xp=1, target=1) {
 #' @param K number of evaluations
 #' @param m size of the lineup
 #' @param N MC parameter: number of replicates on which MC probabilities are based. Higher number of replicates will decrease MC variability.
-#' @param type type of simulation used: scenario 3 assumes that the same lineup is shown in all K evaluations
+#' @param scenario numeric value, one of 1,2, or 3, indication the type of simulation used: scenario 3 assumes that the same lineup is shown in all K evaluations
 #' @param xp exponent used, defaults to 1
 #' @param target (vector) of integer values between 1 and m indicating the position(s) of the target plots. Only the number of targets will affect the probabilities.
 #' @param upper.tail compute probabilities P(X >= x). Be aware that the use of this parameter is not consistent with the other distribution functions in base. There, a value of P(X > x) is computed for upper.tail=TRUE.
@@ -101,7 +101,8 @@ scenario4 <- function(N, K, m=20, xp=1, target=1) {
 #' @export
 #' @examples
 #' pvisual(15, 20, m=3) # triangle test
-pvisual <- function(x, K, m=20, N=10000, type="scenario3", xp=1, target=1, upper.tail=TRUE) {
+pvisual <- function(x, K, m=20, N=10000, scenario=3, xp=1, target=1, upper.tail=TRUE) {
+  type <- paste("scenario", scenario, sep="")
   freq <- get(type)(N=N, K=K, m=m, xp=xp, target=target)
   if (upper.tail) {
     sim <- sapply(x, function(y) sum(freq[as.numeric(names(freq)) >= y]))
@@ -125,7 +126,7 @@ pvisual <- function(x, K, m=20, N=10000, type="scenario3", xp=1, target=1, upper
 #' @param K number of evaluations of the same lineup
 #' @param m size of the lineup
 #' @param N MC parameter: number of replicates on which MC probabilities are based. Higher number of replicates will decrease MC variability.
-#' @param type type of simulation used: scenario 3 assumes that the same lineup is shown in all K evaluations
+#' @param scenario numeric value, one of 1,2, or 3, indicating the type of simulation used: scenario 3 assumes that the same lineup is shown in all K evaluations
 #' @param xp exponent used, defaults to 1
 #' @param target location of target plot(s). By default 1. If several targets are present, specify vector of target locations.
 #' @return simulation based density to observe x picks of the data plot in K evaluation under the assumption that the data plot is consistent with the null hypothesis. For comparison a p value based on a binomial distribution is provided as well.
@@ -145,14 +146,15 @@ pvisual <- function(x, K, m=20, N=10000, type="scenario3", xp=1, target=1, upper
 #'    
 #' # lineup with two targets: what are the probabilities to identify at least 
 #' # one of the targets?
-#' dvisual(0:5, K=5, m=20, N=10000, type="scenario3", target=1:2)
+#' dvisual(0:5, K=5, m=20, N=10000, scenario=3, target=1:2)
 #' # slight difference between this distribution and the distribution for a 
 #' # lineup of size 10 with a single target:
-#' dvisual(0:5, K=5, m=10, N=10000, type="scenario3", target=1)
-dvisual <- function(x, K, m=20, N=10000, type="scenario3", xp=1, target=1) {
+#' dvisual(0:5, K=5, m=10, N=10000, scenario=3, target=1)
+dvisual <- function(x, K, m=20, N=10000, scenario=3, xp=1, target=1) {
   argx <- x
   freqs <- data.frame(Var1=0:K)
-  for (t in type) {
+  for (t in scenario) {
+    t <- paste("scenario", t, sep="")
     freq <- data.frame(get(t)(N=N, K=K, m=m, xp=xp, target=target))
     names(freq)[2] <- t
     freqs <- merge(freqs, freq, by="Var1", all=T)

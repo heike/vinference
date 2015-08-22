@@ -4,8 +4,8 @@
 \alias{pvisual}
 \title{Bootstrap based p values for visual inference}
 \usage{
-pvisual(x, K, m = 20, N = 10000, type = "scenario3", xp = 1,
-  target = 1, upper.tail = TRUE)
+pvisual(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1,
+  upper.tail = TRUE)
 }
 \arguments{
 \item{x}{number of observed picks of the data plot}
@@ -16,7 +16,7 @@ pvisual(x, K, m = 20, N = 10000, type = "scenario3", xp = 1,
 
 \item{N}{MC parameter: number of replicates on which MC probabilities are based. Higher number of replicates will decrease MC variability.}
 
-\item{type}{type of simulation used: scenario 3 assumes that the same lineup is shown in all K evaluations}
+\item{scenario}{numeric value, one of 1,2, or 3, indication the type of simulation used: scenario 3 assumes that the same lineup is shown in all K evaluations}
 
 \item{xp}{exponent used, defaults to 1}
 
