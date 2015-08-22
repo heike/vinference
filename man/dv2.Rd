@@ -2,7 +2,7 @@
 % Please edit documentation in R/pvalues.r
 \name{dv2}
 \alias{dv2}
-\title{Explicit density function of visual inference under scenario 2 for m = 3}
+\title{Theoretical density function of visual inference under scenario 2 for m = 3}
 \usage{
 dv2(x, K, m = 3)
 }

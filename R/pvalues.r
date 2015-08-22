@@ -113,7 +113,7 @@ pvisual <- function(x, K, m=20, N=10000, scenario=3, xp=1, target=1, upper.tail=
   }
 }
 
-#' Bootstrap based density for visual inference
+#' Simulation based density for visual inference
 #' 
 #' Probablity of observing exactly x picks of the data plot in K evaluations of a lineup of size m.
 #' We distinguish between three different scenarios:
@@ -126,31 +126,31 @@ pvisual <- function(x, K, m=20, N=10000, scenario=3, xp=1, target=1, upper.tail=
 #' @param K number of evaluations of the same lineup
 #' @param m size of the lineup
 #' @param N MC parameter: number of replicates on which MC probabilities are based. Higher number of replicates will decrease MC variability.
-#' @param scenario numeric value, one of 1,2, or 3, indicating the type of simulation used: scenario 3 assumes that the same lineup is shown in all K evaluations
+#' @param scenario numeric value, one of 1, 2, or 3, indicating the type of simulation used: scenario 3 assumes that the same lineup is shown in all K evaluations
 #' @param xp exponent used, defaults to 1
 #' @param target location of target plot(s). By default 1. If several targets are present, specify vector of target locations.
 #' @return simulation based density to observe x picks of the data plot in K evaluation under the assumption that the data plot is consistent with the null hypothesis. For comparison a p value based on a binomial distribution is provided as well.
 #' @export
 #' @examples
-#' dvisual(2, 20, m=3) # triangle test
+#' simdV(2, 20, m=3) # triangle test
 #' 
 #' \dontrun{
 #' ## points in red are binomial distribution, black points are for inference
 #' ## in lineups using scenario 3
 #' require(ggplot2)
-#' qplot(x=x, y=scenario3, data=dvisual(0:6,6,m=2)) + 
+#' qplot(x=x, y=scenario3, data=simdV(0:6,6,m=2)) + 
 #'    geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
-#' qplot(x=x, y=scenario3, data=dvisual(0:6,6,m=3)) + 
+#' qplot(x=x, y=scenario3, data=simdV(0:6,6,m=3)) + 
 #'    geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
 #' }
 #'    
 #' # lineup with two targets: what are the probabilities to identify at least 
 #' # one of the targets?
-#' dvisual(0:5, K=5, m=20, N=10000, scenario=3, target=1:2)
+#' simdV(0:5, K=5, m=20, N=10000, scenario=3, target=1:2)
 #' # slight difference between this distribution and the distribution for a 
 #' # lineup of size 10 with a single target:
-#' dvisual(0:5, K=5, m=10, N=10000, scenario=3, target=1)
-dvisual <- function(x, K, m=20, N=10000, scenario=3, xp=1, target=1) {
+#' simdV(0:5, K=5, m=10, N=10000, scenario=3, target=1)
+simdV <- function(x, K, m=20, N=10000, scenario=3, xp=1, target=1) {
   argx <- x
   freqs <- data.frame(Var1=0:K)
   for (t in scenario) {
@@ -242,7 +242,7 @@ qV <- function(q, K, m, scenario, type="numeric") {
 #' @examples
 #' dv3(0:5, 5, m=2)
 #' ## compare to 
-#' dvisual(0:5, 5, m=2)
+#' simdV(0:5, 5, m=2, scenario=3)
 #' 
 #' require(ggplot2)
 #' ## probabilities can be computed without numeric loss for K=50:
@@ -297,11 +297,11 @@ dv3 <- function(x, K, m, type="numeric") {
   }
   
   if (!(m %in% c(2,3,20))) {
-    stop("Not implemented for this lineup size, use bootstrap simulation with dvisual instead.")  
+    stop("Not implemented for this lineup size, use bootstrap simulation with simdV instead.")  
   }
   if (K > 100) {
     if (m==3) return(p3(x, K))
-    stop("Not implemented for values of K > 100 because of large memory needs. You might want to use bootstrap simulation with dvisual instead.")  
+    stop("Not implemented for values of K > 100 because of large memory needs. Use bootstrap simulation with simdV instead.")  
   }
 #  Dks <- Dk(T1(m), "u", k=K)
   xs <- lapply(x, hone, K=K, m=m)
@@ -316,7 +316,7 @@ dv3 <- function(x, K, m, type="numeric") {
 #' 
 #' @param q (vector) of quantiles
 #' @param K number of evaluations
-#' @param m lineup size, currently only m=2 and 3 are treated analytically. Use simulation within dvisual to get to other values for m
+#' @param m lineup size, currently only m=2 and 3 are treated analytically. Use simulation within simdV to get to other values for m
 #' @export
 #' @examples
 #' ## get critical values of visual triangle test:
@@ -338,7 +338,7 @@ qv3 <- function(q, K, m) {
 }
  
 
-#' Explicit density function of visual inference under scenario 2 for m = 3
+#' Theoretical density function of visual inference under scenario 2 for m = 3
 #'
 #' more details to follow
 #' @param x number of times data plot was picked
@@ -352,7 +352,7 @@ dv2 <- function(x,K, m=3) {
       res[q==0] <- 0
       res
     }
-    if (!(m %in% c(3,20))) stop("Function not implemented for lineup sizes <> 3. Use bootstrap based density estimation in dvisual instead.")
+    if (!(m %in% c(3,20))) stop("Function not implemented for lineup sizes <> 3. Use bootstrap based density estimation in simdV instead.")
     
     f <- function(q, K, x) choose(K,x)*g(q)^x*(1-g(q))^(K-x)
     integrate(f, 0,1,K=K,x=x)$value
