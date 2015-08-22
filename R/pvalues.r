@@ -1,4 +1,4 @@
-data(sysdata, envir=environment())
+#data(sysdata, envir=environment())
 
 lineup <- function(m, dataprob=NULL, nulls=NULL) {
   # assume first element is data
@@ -415,11 +415,18 @@ pv3 <- function(x, K, m, type="numeric") {
 }
 
 
-## #' List of internally used coefficients to evaluate hdensity
-## #' 
-## #' @name T1m
-## #' @title List of coefficients in hdensity
-## #' @description List of theoretical coefficients to evaluate hdensity in cases m= 2, 3 and 20
-## #' @docType data
-## #' @usage data(T1m)
-## NULL
+#' List of internally used coefficients to evaluate dV
+#' 
+#' @name T1m
+#' @title List of coefficients in dV
+#' @description List of theoretical coefficients to evaluate dV in cases m= 2, 3 and 20
+#' @docType data
+NULL
+
+#' List of internally used coefficients to evaluate dV
+#' 
+#' @name Dis
+#' @title List of coefficients in dV
+#' @description List of theoretical coefficients to evaluate dV in cases m= 2, 3 and 20
+#' @docType data
+NULL
