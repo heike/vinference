@@ -224,7 +224,7 @@ dV <- function(x, K, m, scenario, type="numeric") {
 #' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
 #' @export
 qV <- function(q, K, m, scenario, type="numeric") {
-  if (scenario == 3) return(hquantile(q, K, m))
+  if (scenario == 3) return(qv3(q, K, m))
   if (scenario == 1) return(qbinom(q, size=K, prob=1/m))
   if (scenario == 2) return(qv2(q, K, m))
 }
@@ -318,11 +318,11 @@ dv3 <- function(x, K, m, type="numeric") {
 #' @export
 #' @examples
 #' ## get critical values of visual triangle test:
-#' hquantile(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=3)
+#' qv3(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=3)
 #' 
 #' ## get critical values of full lineup test:
-#' hquantile(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=20)
-hquantile <- function(q, K, m) {
+#' qv3(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=20)
+qv3 <- function(q, K, m) {
   dframe <- data.frame(expand.grid(q, K))
   names(dframe) <- c("q", "K")
 #  require(plyr)
@@ -345,7 +345,7 @@ hquantile <- function(q, K, m) {
 #' @export
 #' @examples
 #' ## get critical values of visual triangle test:
-#' hquantile(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=3)
+#' qv3(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=3)
 #' 
 #' ## get critical values of full lineup test:
 #' vquantile(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=20)
