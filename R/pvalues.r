@@ -175,7 +175,7 @@ dvisual <- function(x, K, m=20, N=10000, type="scenario3", xp=1, target=1) {
 #' @export
 pV <- function(x, K, m, scenario, type="numeric") {
   res <- x
-  if (3 %in% scenario) res <- cbind(res, scenario3=hdistribution(x, K, m, type=type))
+  if (3 %in% scenario) res <- cbind(res, scenario3=pv3(x, K, m, type=type))
   if (1 %in% scenario) res <- cbind(res, scenario1=1-pbinom(x, size=K, prob=1/m)+dbinom(x, size=K, prob=1/m))
   if (2 %in% scenario) res <- cbind(res, scenario2=pv2(x, K, m))
 
@@ -489,8 +489,8 @@ h <- function(x, K) {
 #' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
 #' @export
 #' @examples
-#' hdistribution(0:5, 5, m=3)
-hdistribution <- function(x, K, m, type="numeric") {
+#' pv3(0:5, 5, m=3)
+pv3 <- function(x, K, m, type="numeric") {
   hdone <- function(x1, K, m) {
     sum(dv3(x1:K, K, m))
   }
