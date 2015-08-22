@@ -338,35 +338,6 @@ qv3 <- function(q, K, m) {
 }
  
 
-#' Quantile of the analytically derived quantiles for visual inference 
-#' 
-#' @param q (vector) of quantiles
-#' @param K number of evaluations
-#' @param m lineup size, currently only m=2 and 3 are treated analytically. Use simulation within dvisual to get to other values for m
-#' @param type which scenario was used? One of scenario1, scenario2, scenario3
-#' @export
-#' @examples
-#' ## get critical values of visual triangle test:
-#' qv3(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=3)
-#' 
-#' ## get critical values of full lineup test:
-#' vquantile(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=20)
-vquantile <- function(q, K, m, type=c("scenario1", "scenario2", "scenario3")) {
-  dframe <- data.frame(expand.grid(q=q, K=K, type=type))
-#  require(plyr)
-  dframe$type <- as.character(dframe$type)
-  res <- plyr::ddply(dframe, c("q", "K", "type"), function(x) {
-    switch(x$type,
-           scenario1 = qbinom(x$q, size=x$K, prob=1/m),
-           scenario2 =which(cumsum(dv2(x=0:x$K, K=x$K, m=m))>= x$q)[1],
-           scenario3 = which(cumsum(dv3(x=0:x$K, K=x$K, m=m))>= x$q)[1]
-           )
-    })
-  names(res)[ncol(res)] <- "x"
-  res$x[res$x > res$K] <- NA
-  res
-}
-
 #' Explicit density function of visual inference under scenario 2 for m = 3
 #'
 #' more details to follow
@@ -389,7 +360,7 @@ dv2 <- function(x,K, m=3) {
   unlist(sapply(x, dv2one, K=K, m=m))
 }
 
-#' Explicit distribution function of visual inference under scenario 2 for m = 3
+#' Theoretical distribution function of visual inference under scenario 2 for m = 3
 #'
 #' more details to follow
 #' @param x number of times data plot was picked
@@ -424,62 +395,6 @@ qv2 <- function (q, K, m=3) {
   res
 }
 
-#' Explicit density function of visual inference under scenario 3 for m = 2
-#' 
-#' more details needed
-#' @param x (vector of) the number of target identifications made
-#' @param K number of independent evaluations
-#' @export
-#' @examples
-#' h(0:5, K = 5)
-#' ## compare to 
-h <- function(x, K) {
-  hone <- function(x, K) {
-    S <- function(m, n, a, b) {
- #     print(match.call())
-      C <- function(m, n, i) {
-  #      print(match.call())
-        if (i >= m) return(1)
-        j <- (i+1):m
-        
-   #     print(prod(j/(j+n-m-1)))
-        return(prod(j/(j+n-m-1)))
-      }
-      D <- function(m,n,a,b) {
-    #    print(match.call())
-        db <- b^m/(1+b)^{n-1}
-        da <- a^m/(1+a)^{n-1}
-        if (b == Inf) {
-          db <- 0
-        }
-     #   print(1/(n-1)*(db - da))  
-        return (1/(n-1)*(db - da))
-      }
-      if (m == 0) {
-        if (n == 0) return (b-a)
-        if (n == 1) return (log((1+b)/(1+a)))
-        return(-D(0, n, a, b))
-      }
-      if (m == 1) {
-        if (n == 1) return(b-a - log((1+b)/(1+a)))
-      }
-      
-      if (m == n) {
-        sumD <- 0
-        for (i in 2:m) sumD <- sumD + D(i,i, a, b)*C(m, m, i)
-        return(C(m,m,1)*S(1,1,a,b) - sumD)
-      }
-    
-      sumD <- 0
-      for (i in 1:m) sumD <- sumD + D(i,n+i-m, a, b)*C(m, n, i)
-      return(C(m,n,0)*S(0,n-m,a,b) - sumD)      
-    #  return(-D(m,n,a,b)+m/(n-1)*S(m-1, n-1, a, b))
-    }
-    if (x < 2) x <- K-x
-    choose(K, x) *(0.5*S(x, K, 0, 1) + 0.5*S(x-2, K, 1, Inf))
-  }
-  sapply(x, hone, K=K)
-}
 
 
 #' Theoretical distribution for lineups under scenario 3 for m = 2, 3, and 20
@@ -500,11 +415,11 @@ pv3 <- function(x, K, m, type="numeric") {
 }
 
 
-# #' List of internally used coefficients to evaluate hdensity
-# #' 
-# #' @name T1m
-# #' @title List of coefficients in hdensity
-# #' @description List of theoretical coefficients to evaluate hdensity in cases m= 2, 3 and 20
-# #' @docType data
-# #' @usage data(T1m)
-# NULL
+## #' List of internally used coefficients to evaluate hdensity
+## #' 
+## #' @name T1m
+## #' @title List of coefficients in hdensity
+## #' @description List of theoretical coefficients to evaluate hdensity in cases m= 2, 3 and 20
+## #' @docType data
+## #' @usage data(T1m)
+## NULL

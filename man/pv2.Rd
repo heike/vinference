@@ -2,7 +2,7 @@
 % Please edit documentation in R/pvalues.r
 \name{pv2}
 \alias{pv2}
-\title{Explicit distribution function of visual inference under scenario 2 for m = 3}
+\title{Theoretical distribution function of visual inference under scenario 2 for m = 3}
 \usage{
 pv2(x, K, m = 3)
 }
