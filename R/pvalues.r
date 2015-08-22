@@ -200,7 +200,7 @@ pV <- function(x, K, m, scenario, type="numeric") {
 #' @export
 dV <- function(x, K, m, scenario, type="numeric") {
   res <- x
-  if (3 %in% scenario) res <- cbind(res, scenario3=hdensity(x, K, m, type=type))
+  if (3 %in% scenario) res <- cbind(res, scenario3=dv3(x, K, m, type=type))
   if (1 %in% scenario) res <- cbind(res, scenario1=dbinom(x, size=K, prob=1/m))
   if (2 %in% scenario) res <- cbind(res, scenario2=dv2(x, K, m))
 
@@ -238,16 +238,16 @@ qV <- function(q, K, m, scenario, type="numeric") {
 #' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
 #' @export
 #' @examples
-#' hdensity(0:5, 5, m=2)
+#' dv3(0:5, 5, m=2)
 #' ## compare to 
 #' dvisual(0:5, 5, m=2)
 #' 
 #' require(ggplot2)
 #' ## probabilities can be computed without numeric loss for K=50:
 #' K <- 50
-#' print(qplot(0:K, hdensity(0:K, K, m=20))); 
-#' print(sum(hdensity(0:K, K, m=20))); 
-hdensity <- function(x, K, m, type="numeric") {
+#' print(qplot(0:K, dv3(0:K, K, m=20))); 
+#' print(sum(dv3(0:K, K, m=20))); 
+dv3 <- function(x, K, m, type="numeric") {
   T1 <- function(m) {
     if (m==2) return(expression(1/m*(1/u^2*(log((u+1)/u)*u^2 + u - log(u+1)))))
     if (m==3) return(expression(1/m*(1/u^3*((3*u+1)*log(u) - (u^3-3*u-1)*log((u+1)/u)+ 
@@ -327,7 +327,7 @@ hquantile <- function(q, K, m) {
   names(dframe) <- c("q", "K")
 #  require(plyr)
   res <- plyr::ddply(dframe, c("q", "K"), function(x) {
-    hs <- cumsum(hdensity(x=0:x$K, K=x$K, m=m))
+    hs <- cumsum(dv3(x=0:x$K, K=x$K, m=m))
     which(hs>=x$q)[1]
   })
   names(res)[3] <- "x"
@@ -357,7 +357,7 @@ vquantile <- function(q, K, m, type=c("scenario1", "scenario2", "scenario3")) {
     switch(x$type,
            scenario1 = qbinom(x$q, size=x$K, prob=1/m),
            scenario2 =which(cumsum(dv2(x=0:x$K, K=x$K, m=m))>= x$q)[1],
-           scenario3 = which(cumsum(hdensity(x=0:x$K, K=x$K, m=m))>= x$q)[1]
+           scenario3 = which(cumsum(dv3(x=0:x$K, K=x$K, m=m))>= x$q)[1]
            )
     })
   names(res)[ncol(res)] <- "x"
@@ -492,7 +492,7 @@ h <- function(x, K) {
 #' hdistribution(0:5, 5, m=3)
 hdistribution <- function(x, K, m, type="numeric") {
   hdone <- function(x1, K, m) {
-    sum(hdensity(x1:K, K, m))
+    sum(dv3(x1:K, K, m))
   }
   sapply(x, hdone, K=K, m=m)
 }
