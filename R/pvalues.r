@@ -100,8 +100,8 @@ scenario4 <- function(N, K, m=20, xp=1, target=1) {
 #' @return Vector/data frame. For comparison a p value based on a binomial distribution is provided as well.
 #' @export
 #' @examples
-#' pvisual(15, 20, m=3) # triangle test
-pvisual <- function(x, K, m=20, N=10000, scenario=3, xp=1, target=1, upper.tail=TRUE) {
+#' pVsim(15, 20, m=3) # triangle test
+pVsim <- function(x, K, m=20, N=10000, scenario=3, xp=1, target=1, upper.tail=TRUE) {
   type <- paste("scenario", scenario, sep="")
   freq <- get(type)(N=N, K=K, m=m, xp=xp, target=target)
   if (upper.tail) {
@@ -132,25 +132,25 @@ pvisual <- function(x, K, m=20, N=10000, scenario=3, xp=1, target=1, upper.tail=
 #' @return simulation based density to observe x picks of the data plot in K evaluation under the assumption that the data plot is consistent with the null hypothesis. For comparison a p value based on a binomial distribution is provided as well.
 #' @export
 #' @examples
-#' simdV(2, 20, m=3) # triangle test
+#' dVsim(2, 20, m=3) # triangle test
 #' 
 #' \dontrun{
 #' ## points in red are binomial distribution, black points are for inference
 #' ## in lineups using scenario 3
 #' require(ggplot2)
-#' qplot(x=x, y=scenario3, data=simdV(0:6,6,m=2)) + 
+#' qplot(x=x, y=scenario3, data=dVsim(0:6,6,m=2)) + 
 #'    geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
-#' qplot(x=x, y=scenario3, data=simdV(0:6,6,m=3)) + 
+#' qplot(x=x, y=scenario3, data=dVsim(0:6,6,m=3)) + 
 #'    geom_point(aes(x,y=binom), colour="red") + ylim(c(0,0.5))
 #' }
 #'    
 #' # lineup with two targets: what are the probabilities to identify at least 
 #' # one of the targets?
-#' simdV(0:5, K=5, m=20, N=10000, scenario=3, target=1:2)
+#' dVsim(0:5, K=5, m=20, N=10000, scenario=3, target=1:2)
 #' # slight difference between this distribution and the distribution for a 
 #' # lineup of size 10 with a single target:
-#' simdV(0:5, K=5, m=10, N=10000, scenario=3, target=1)
-simdV <- function(x, K, m=20, N=10000, scenario=3, xp=1, target=1) {
+#' dVsim(0:5, K=5, m=10, N=10000, scenario=3, target=1)
+dVsim <- function(x, K, m=20, N=10000, scenario=3, xp=1, target=1) {
   argx <- x
   freqs <- data.frame(Var1=0:K)
   for (t in scenario) {
@@ -242,7 +242,7 @@ qV <- function(q, K, m, scenario, type="numeric") {
 #' @examples
 #' dv3(0:5, 5, m=2)
 #' ## compare to 
-#' simdV(0:5, 5, m=2, scenario=3)
+#' dVsim(0:5, 5, m=2, scenario=3)
 #' 
 #' require(ggplot2)
 #' ## probabilities can be computed without numeric loss for K=50:
@@ -297,11 +297,11 @@ dv3 <- function(x, K, m, type="numeric") {
   }
   
   if (!(m %in% c(2,3,20))) {
-    stop("Not implemented for this lineup size, use bootstrap simulation with simdV instead.")  
+    stop("Not implemented for this lineup size, use bootstrap simulation with dVsim instead.")  
   }
   if (K > 100) {
     if (m==3) return(p3(x, K))
-    stop("Not implemented for values of K > 100 because of large memory needs. Use bootstrap simulation with simdV instead.")  
+    stop("Not implemented for values of K > 100 because of large memory needs. Use bootstrap simulation with dVsim instead.")  
   }
 #  Dks <- Dk(T1(m), "u", k=K)
   xs <- lapply(x, hone, K=K, m=m)
@@ -316,7 +316,7 @@ dv3 <- function(x, K, m, type="numeric") {
 #' 
 #' @param q (vector) of quantiles
 #' @param K number of evaluations
-#' @param m lineup size, currently only m=2 and 3 are treated analytically. Use simulation within simdV to get to other values for m
+#' @param m lineup size, currently only m=2 and 3 are treated analytically. Use simulation within dVsim to get to other values for m
 #' @export
 #' @examples
 #' ## get critical values of visual triangle test:
@@ -352,7 +352,7 @@ dv2 <- function(x,K, m=3) {
       res[q==0] <- 0
       res
     }
-    if (!(m %in% c(3,20))) stop("Function not implemented for lineup sizes <> 3. Use bootstrap based density estimation in simdV instead.")
+    if (!(m %in% c(3,20))) stop("Function not implemented for lineup sizes <> 3. Use bootstrap based density estimation in dVsim instead.")
     
     f <- function(q, K, x) choose(K,x)*g(q)^x*(1-g(q))^(K-x)
     integrate(f, 0,1,K=K,x=x)$value
