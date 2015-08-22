@@ -414,19 +414,3 @@ pv3 <- function(x, K, m, type="numeric") {
   sapply(x, hdone, K=K, m=m)
 }
 
-
-#' List of internally used coefficients to evaluate dV
-#' 
-#' @name T1m
-#' @title List of coefficients in dV
-#' @description List of theoretical coefficients to evaluate dV in cases m= 2, 3 and 20
-#' @docType data
-NULL
-
-#' List of internally used coefficients to evaluate dV
-#' 
-#' @name Dis
-#' @title List of coefficients in dV
-#' @description List of theoretical coefficients to evaluate dV in cases m= 2, 3 and 20
-#' @docType data
-NULL
