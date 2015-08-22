@@ -238,17 +238,16 @@ qV <- function(q, K, m, scenario, type="numeric") {
 #' @param K number of evaluations
 #' @param m size of the lineup
 #' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
-#' @export
 #' @examples
-#' dv3(0:5, 5, m=2)
+#' dV(0:5, 5, m=2, scenario=3)
 #' ## compare to 
 #' dVsim(0:5, 5, m=2, scenario=3)
 #' 
 #' require(ggplot2)
 #' ## probabilities can be computed without numeric loss for K=50:
 #' K <- 50
-#' print(qplot(0:K, dv3(0:K, K, m=20))); 
-#' print(sum(dv3(0:K, K, m=20))); 
+#' print(qplot(0:K, dV(0:K, K, m=20, scenario=3))); 
+#' print(sum(dV(0:K, K, m=20, scenario=3))); 
 dv3 <- function(x, K, m, type="numeric") {
   T1 <- function(m) {
     if (m==2) return(expression(1/m*(1/u^2*(log((u+1)/u)*u^2 + u - log(u+1)))))
@@ -317,13 +316,12 @@ dv3 <- function(x, K, m, type="numeric") {
 #' @param q (vector) of quantiles
 #' @param K number of evaluations
 #' @param m lineup size, currently only m=2 and 3 are treated analytically. Use simulation within dVsim to get to other values for m
-#' @export
 #' @examples
 #' ## get critical values of visual triangle test:
-#' qv3(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=3)
+#' qV(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=3, scenario=3)
 #' 
 #' ## get critical values of full lineup test:
-#' qv3(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=20)
+#' qV(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=20, scenario=3)
 qv3 <- function(q, K, m) {
   dframe <- data.frame(expand.grid(q, K))
   names(dframe) <- c("q", "K")
@@ -344,7 +342,6 @@ qv3 <- function(q, K, m) {
 #' @param x number of times data plot was picked
 #' @param K number of  evaluations by independent observers
 #' @param m lineup size. Only implemented for m=3
-#' @export
 dv2 <- function(x,K, m=3) { 
   dv2one <- function(x, K, m=m) {
     g <- function(q) {
@@ -366,7 +363,6 @@ dv2 <- function(x,K, m=3) {
 #' @param x number of times data plot was picked
 #' @param K number of  evaluations by independent observers
 #' @param m lineup size. Only implemented for m=3
-#' @export
 pv2 <- function(x,K, m=3) { 
   hdone <- function(x1, K, m) {
     sum(dv2(x1:K, K, m))
@@ -381,7 +377,6 @@ pv2 <- function(x,K, m=3) {
 #' @param K number of independent evaluations
 #' @param m size of the lineup
 #' @return critical value(s) corresponding to quantile q
-#' @export
 qv2 <- function (q, K, m=3) {
   dframe <- data.frame(expand.grid(q, K))
   names(dframe) <- c("q", "K")
@@ -404,9 +399,8 @@ qv2 <- function (q, K, m=3) {
 #' @param K number of evaluations
 #' @param m size of the lineup
 #' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
-#' @export
 #' @examples
-#' pv3(0:5, 5, m=3)
+#' pV(0:5, 5, m=3, scenario=3)
 pv3 <- function(x, K, m, type="numeric") {
   hdone <- function(x1, K, m) {
     sum(dv3(x1:K, K, m))
