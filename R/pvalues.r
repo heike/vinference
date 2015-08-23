@@ -239,22 +239,26 @@ dV <- function(x, K, m, scenario, type="numeric") {
 #' @export
 #' @examples
 #' ## get critical values of visual triangle test:
-#' qV(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=3, scenario=3)
+#' qV(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=3, scenario=1:3)
 #' 
 #' ## get critical values of full lineup test:
 #' qV(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=20, scenario=3)
 qV <- function(q, K, m, scenario, type="numeric") {
-  res <- q
-  if (3 %in% scenario) res <- cbind(res, scenario3=qv3(q, K, m)$x)
-  if (1 %in% scenario) res <- cbind(res, scenario1=qbinom(q, size=K, prob=1/m))
-  if (2 %in% scenario) res <- cbind(res, scenario2=qv2(q, K, m)$x)
-  
-  if (ncol(res) == 2) {
-    res <- as.vector(res[,2])
-    names(res) <- q
-    return(res)
+  res <- data.frame(expand.grid(q=q, K=K))
+  if (1 %in% scenario) {
+    res$scenario1 <- alply(res, .margins=1, function(x) qbinom(x$q, size=x$K, prob=1/m))
   }
-  names(res)[1] <- "q"
+  if (2 %in% scenario) {
+    res2 <- qv2(q, K, m)
+    names(res2)[3] <- "scenario2"
+    res <- merge(res, res2, by=c("q", "K"))
+  }
+  if (3 %in% scenario) {
+    res3 <- qv3(q, K, m)
+    names(res3)[3] <- "scenario3"
+    res <- merge(res, res3, by=c("q", "K"))
+  }
+  
   res
 }
 
