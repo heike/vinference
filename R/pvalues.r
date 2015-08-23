@@ -244,17 +244,17 @@ dV <- function(x, K, m, scenario, type="numeric") {
 #' ## get critical values of full lineup test:
 #' qV(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=20, scenario=3)
 qV <- function(q, K, m, scenario, type="numeric") {
-  res <- x
-  if (3 %in% scenario) res <- cbind(res, scenario3=qv3(q, K, m, type=type))
+  res <- q
+  if (3 %in% scenario) res <- cbind(res, scenario3=qv3(q, K, m)$x)
   if (1 %in% scenario) res <- cbind(res, scenario1=qbinom(q, size=K, prob=1/m))
-  if (2 %in% scenario) res <- cbind(res, scenario2=qv2(x, K, m))
+  if (2 %in% scenario) res <- cbind(res, scenario2=qv2(q, K, m)$x)
   
   if (ncol(res) == 2) {
     res <- as.vector(res[,2])
-    names(res) <- x
+    names(res) <- q
     return(res)
   }
-  names(res)[1] <- "x"
+  names(res)[1] <- "q"
   res
 }
 
