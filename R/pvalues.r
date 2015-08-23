@@ -246,7 +246,7 @@ dV <- function(x, K, m, scenario, type="numeric") {
 qV <- function(q, K, m, scenario, type="numeric") {
   res <- data.frame(expand.grid(q=q, K=K))
   if (1 %in% scenario) {
-    res$scenario1 <- alply(res, .margins=1, function(x) qbinom(x$q, size=x$K, prob=1/m))
+    res$scenario1 <- unlist(plyr::alply(res, .margins=1, function(x) qbinom(x$q, size=x$K, prob=1/m)))
   }
   if (2 %in% scenario) {
     res2 <- qv2(q, K, m)
