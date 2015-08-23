@@ -175,6 +175,8 @@ dVsim <- function(x, K, m=20, N=10000, scenario=3, xp=1, target=1) {
 #' @param scenario which scenario should be used? 1, 2, or 3?
 #' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
 #' @export
+#' @examples 
+#' pV(0:5, 5, m=3, scenario=3)
 pV <- function(x, K, m, scenario, type="numeric") {
   res <- x
   if (3 %in% scenario) res <- cbind(res, scenario3=pv3(x, K, m, type=type))
@@ -200,6 +202,16 @@ pV <- function(x, K, m, scenario, type="numeric") {
 #' @param scenario which scenario should be used? 1, 2, or 3?
 #' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
 #' @export
+#' @examples
+#' dV(0:5, 5, m=2, scenario=3)
+#' ## compare to 
+#' dVsim(0:5, 5, m=2, scenario=3)
+#' 
+#' require(ggplot2)
+#' ## probabilities can be computed without numeric loss for K=50:
+#' K <- 50
+#' print(qplot(0:K, dV(0:K, K, m=20, scenario=3))); 
+#' print(sum(dV(0:K, K, m=20, scenario=3))); 
 dV <- function(x, K, m, scenario, type="numeric") {
   res <- x
   if (3 %in% scenario) res <- cbind(res, scenario3=dv3(x, K, m, type=type))
@@ -225,29 +237,18 @@ dV <- function(x, K, m, scenario, type="numeric") {
 #' @param scenario which scenario should be used? 1, 2, or 3?
 #' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
 #' @export
+#' @examples
+#' ## get critical values of visual triangle test:
+#' qV(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=3, scenario=3)
+#' 
+#' ## get critical values of full lineup test:
+#' qV(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=20, scenario=3)
 qV <- function(q, K, m, scenario, type="numeric") {
   if (scenario == 3) return(qv3(q, K, m))
   if (scenario == 1) return(qbinom(q, size=K, prob=1/m))
   if (scenario == 2) return(qv2(q, K, m))
 }
 
-#' Theoretical density for lineups under scenario 3 for m = 2, 3, and 20
-#' 
-#' Some more details to be written later
-#' @param x vector of the number of picks of the data plot out of K evaluations
-#' @param K number of evaluations
-#' @param m size of the lineup
-#' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
-#' @examples
-#' dV(0:5, 5, m=2, scenario=3)
-#' ## compare to 
-#' dVsim(0:5, 5, m=2, scenario=3)
-#' 
-#' require(ggplot2)
-#' ## probabilities can be computed without numeric loss for K=50:
-#' K <- 50
-#' print(qplot(0:K, dV(0:K, K, m=20, scenario=3))); 
-#' print(sum(dV(0:K, K, m=20, scenario=3))); 
 dv3 <- function(x, K, m, type="numeric") {
   T1 <- function(m) {
     if (m==2) return(expression(1/m*(1/u^2*(log((u+1)/u)*u^2 + u - log(u+1)))))
@@ -311,17 +312,6 @@ dv3 <- function(x, K, m, type="numeric") {
   else return(as.numeric(ys))
 }
 
-#' Quantile of the analytically derived density for visual inference according to scenario 3
-#' 
-#' @param q (vector) of quantiles
-#' @param K number of evaluations
-#' @param m lineup size, currently only m=2 and 3 are treated analytically. Use simulation within dVsim to get to other values for m
-#' @examples
-#' ## get critical values of visual triangle test:
-#' qV(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=3, scenario=3)
-#' 
-#' ## get critical values of full lineup test:
-#' qV(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=20, scenario=3)
 qv3 <- function(q, K, m) {
   dframe <- data.frame(expand.grid(q, K))
   names(dframe) <- c("q", "K")
@@ -336,12 +326,6 @@ qv3 <- function(q, K, m) {
 }
  
 
-#' Theoretical density function of visual inference under scenario 2 for m = 3
-#'
-#' more details to follow
-#' @param x number of times data plot was picked
-#' @param K number of  evaluations by independent observers
-#' @param m lineup size. Only implemented for m=3
 dv2 <- function(x,K, m=3) { 
   dv2one <- function(x, K, m=m) {
     g <- function(q) {
@@ -357,12 +341,6 @@ dv2 <- function(x,K, m=3) {
   unlist(sapply(x, dv2one, K=K, m=m))
 }
 
-#' Theoretical distribution function of visual inference under scenario 2 for m = 3
-#'
-#' more details to follow
-#' @param x number of times data plot was picked
-#' @param K number of  evaluations by independent observers
-#' @param m lineup size. Only implemented for m=3
 pv2 <- function(x,K, m=3) { 
   hdone <- function(x1, K, m) {
     sum(dv2(x1:K, K, m))
@@ -370,13 +348,6 @@ pv2 <- function(x,K, m=3) {
   sapply(x, hdone, K=K, m=m)
 }
 
-#' Critical values for quantiles of the lineup density under scenario 2
-#' 
-#' more details needed
-#' @param q (vector of) quantiles
-#' @param K number of independent evaluations
-#' @param m size of the lineup
-#' @return critical value(s) corresponding to quantile q
 qv2 <- function (q, K, m=3) {
   dframe <- data.frame(expand.grid(q, K))
   names(dframe) <- c("q", "K")
@@ -392,15 +363,6 @@ qv2 <- function (q, K, m=3) {
 
 
 
-#' Theoretical distribution for lineups under scenario 3 for m = 2, 3, and 20
-#' 
-#' Some more details to be written later
-#' @param x vector of the number of picks of the data plot out of K evaluations
-#' @param K number of evaluations
-#' @param m size of the lineup
-#' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
-#' @examples
-#' pV(0:5, 5, m=3, scenario=3)
 pv3 <- function(x, K, m, type="numeric") {
   hdone <- function(x1, K, m) {
     sum(dv3(x1:K, K, m))

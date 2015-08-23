@@ -20,4 +20,15 @@ dV(x, K, m, scenario, type = "numeric")
 \description{
 Some more details to be written later
 }
+\examples{
+dV(0:5, 5, m=2, scenario=3)
+## compare to
+dVsim(0:5, 5, m=2, scenario=3)
+
+require(ggplot2)
+## probabilities can be computed without numeric loss for K=50:
+K <- 50
+print(qplot(0:K, dV(0:K, K, m=20, scenario=3)));
+print(sum(dV(0:K, K, m=20, scenario=3)));
+}
 

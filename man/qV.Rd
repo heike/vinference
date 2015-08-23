@@ -20,4 +20,11 @@ qV(q, K, m, scenario, type = "numeric")
 \description{
 Some more details to be written later
 }
+\examples{
+## get critical values of visual triangle test:
+qV(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=3, scenario=3)
+
+## get critical values of full lineup test:
+qV(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=20, scenario=3)
+}
 
