@@ -244,9 +244,9 @@ dV <- function(x, K, m, scenario, type="numeric") {
 #' ## get critical values of full lineup test:
 #' qV(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=20, scenario=3)
 qV <- function(q, K, m, scenario, type="numeric") {
-  if (scenario == 3) return(qv3(q, K, m))
-  if (scenario == 1) return(qbinom(q, size=K, prob=1/m))
-  if (scenario == 2) return(qv2(q, K, m))
+  if (scenario %in% 3) return(qv3(q, K, m))
+  if (scenario %in% 1) return(qbinom(q, size=K, prob=1/m))
+  if (scenario %in% 2) return(qv2(q, K, m))
 }
 
 dv3 <- function(x, K, m, type="numeric") {
