@@ -5,9 +5,9 @@ Published: 2014-02-01
 Version: 0.1.1
 License: MIT + file LICENSE
 Title: Inference under the lineup protocol
-Description: p-value calculation for different scenarios of the lineup 
-    protocol. For specific lineup sizes (m = 3, 20) theoretical p-values 
-    are computed for up to K=100 evaluations. Other lineup sizes or more 
+Description: p-value calculation for different scenarios of the lineup
+    protocol. For specific lineup sizes (m = 3, 20) theoretical p-values
+    are computed for up to K=100 evaluations. Other lineup sizes or more
     evaluations use a simulation approach.
 Depends:
     R (>= 2.10.0)
@@ -25,3 +25,4 @@ Collate:
     'multi.r'
     'VK33-recursion.R'
     'VK33-resolve.R'
+RoxygenNote: 5.0.1
