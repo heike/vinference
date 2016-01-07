@@ -309,12 +309,14 @@ dv3 <- function(x, K, m, type="numeric") {
     sum(xs) + cis[1]
   }
   
-  if (!(m %in% c(2,3,20))) {
+  if (is.null(T1m[[m]])) {
+#  if (!(m %in% c(2,3,20))) {
     stop("Not implemented for this lineup size, use bootstrap simulation with dVsim instead.")  
   }
-  if (K > 100) {
+  if (K > length(T1m[[m]])) {
     if (m==3) return(p3(x, K))
-    stop("Not implemented for values of K > 100 because of large memory needs. Use bootstrap simulation with dVsim instead.")  
+    msg <- sprintf("Not implemented for values of K > %d because of large memory needs. Use bootstrap simulation with dVsim instead.", length(T1m[[m]]))
+    stop(msg)  
   }
 #  Dks <- Dk(T1(m), "u", k=K)
   xs <- lapply(x, hone, K=K, m=m)
