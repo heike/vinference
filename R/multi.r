@@ -6,7 +6,7 @@ dvismulti1 <- function(K, k, m=20, N=5000) {
     # everybody is shown a different lineup
  #   require(plyr)
     success <- purrr::map_dbl(1:K, function(i) {
-      lp <- runif(m)
+      lp <- stats::runif(m)
       sum(sample(1:m, size=k[i], replace=FALSE, prob=lp)==1)
     })
     # success <- plyr::ldply(1:K, )
@@ -22,9 +22,9 @@ dvismulti2 <- function(K, k, m=20, N=5000) {
   res <- replicate(N, {
     # same data, different nulls
  #   require(plyr)
-    first <- runif(1)
+    first <- stats::runif(1)
     success <- purrr::map_dbl(1:K, function(i) {
-      lp <- c(first, runif(m-1))
+      lp <- c(first, stats::runif(m-1))
       sum(sample(1:m, size=k[i], replace=FALSE, prob=lp)==1)
     })
     # success <- plyr::ldply(1:K, function(i) {
@@ -41,7 +41,7 @@ dvismulti3 <- function(K, k, m=20, N=5000) {
   k <- rep(k, length=K)
   res <- replicate(N, {
     # everybody is shown the same lineup
-    lp <- runif(m)
+    lp <- stats::runif(m)
  #   require(plyr)
     success <- purrr::map_dbl(1:K, function(i) {
       sum(sample(1:m, size=k[i], replace=FALSE, prob=lp)==1)

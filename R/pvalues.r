@@ -2,7 +2,7 @@
 
 lineup <- function(m, dataprob=NULL, nulls=NULL) {
   # assume first element is data
-  probs <- runif(m)
+  probs <- stats::runif(m)
   n.targets <- length(dataprob)
 
   if (!is.null(dataprob)) probs[1:n.targets] <- dataprob
@@ -11,23 +11,23 @@ lineup <- function(m, dataprob=NULL, nulls=NULL) {
 }
 
 pickData <- function(m, xp=1, dataprob=NULL, nulls=NULL) {
-  probs <- runif(m)
+  probs <- stats::runif(m)
   n.targets = length(dataprob)
   if (!is.null(dataprob)) {
     probs[1:n.targets] <- dataprob
   }
   if (!is.null(nulls)) probs[(n.targets+1):m] <- nulls
 #  sample(m, size=1, prob=1-probs)
-#  rbinom(1, size=1, prob=f(probs))
+#  stats::rbinom(1, size=1, prob=f(probs))
   ps <- (1-probs)^xp
   if (all (ps==0)) ps <- rep(1, length(probs))
-  rbinom(1, size=1, prob=sum(ps[1:n.targets])/sum(ps))
+  stats::rbinom(1, size=1, prob=sum(ps[1:n.targets])/sum(ps))
 }
 
 # too deterministic
 # function(ps) ps[1] < min(ps[-1]))
 # just wrong:
-# function(ps) rbinom(1, size=1, prob=(1-ps[1])/(2-ps[1] - min(ps[-1])))
+# function(ps) stats::rbinom(1, size=1, prob=(1-ps[1])/(2-ps[1] - min(ps[-1])))
 
 scenario1 <- function(N, K, m = 20, xp=1, target=1) {
 # new lineup in each evaluation: new data, new sample of nulls  
@@ -42,7 +42,7 @@ scenario2 <- function(N, K, m = 20, xp=1, target=1) {
   # each data evaluated K times, always with different nulls
   table(replicate(N,  {
     n.targets = length(target)
-    dataprob <- runif(n.targets)
+    dataprob <- stats::runif(n.targets)
     individual <- sum(replicate(K, pickData(m, dataprob=dataprob, xp=xp) %in% target))
     individual
   }))/N
@@ -54,8 +54,8 @@ scenario3 <- function(N, K, m=20, xp=1, target=1) {
   table(replicate(N/100,  
     replicate(100, {
       n.targets = length(target)
-      dataprob <- runif(n.targets)
-      nulls <- runif(m-n.targets)
+      dataprob <- stats::runif(n.targets)
+      nulls <- stats::runif(m-n.targets)
       
       individual <- sum(replicate(K, pickData(m, dataprob=dataprob, nulls=nulls, xp=xp)) %in% target)
       individual
@@ -68,11 +68,11 @@ scenario4 <- function(N, K, m=20, xp=1, target=1) {
   
   res <- replicate(N, {
       n.targets = length(target)
-      dataprob <- runif(n.targets)
+      dataprob <- stats::runif(n.targets)
       
       individual <- rep(NA, length(K))
       for (i in 1:length(K)) {
-        nulls <- runif(m-n.targets)              
+        nulls <- stats::runif(m-n.targets)              
         individual[i] <- sum(replicate(K[i], pickData(m, dataprob=dataprob, nulls=nulls, xp=xp)) %in% target)
       }
       sum(individual)
@@ -106,10 +106,10 @@ pVsim <- function(x, K, m=20, N=10000, scenario=3, xp=1, target=1, upper.tail=TR
   freq <- get(type)(N=N, K=K, m=m, xp=xp, target=target)
   if (upper.tail) {
     sim <- sapply(x, function(y) sum(freq[as.numeric(names(freq)) >= y]))
-    return(cbind(x=x, "simulated"=sim, "binom"=1-pbinom(x-1, size=K, prob=1/m)))
+    return(cbind(x=x, "simulated"=sim, "binom"=1-stats::pbinom(x-1, size=K, prob=1/m)))
   } else {
     sim <- sapply(x, function(y) sum(freq[as.numeric(names(freq)) < y]))
-    return(cbind(x=x, "simulated"=sim, "binom"= pbinom(x-1, size=K, prob=1/m)))
+    return(cbind(x=x, "simulated"=sim, "binom"= stats::pbinom(x-1, size=K, prob=1/m)))
   }
 }
 
@@ -161,7 +161,7 @@ dVsim <- function(x, K, m=20, N=10000, scenario=3, xp=1, target=1) {
   }
   freq <- freqs
   freq[is.na(freq)] <- 0
-  freq$binom <- dbinom(0:K, size=K, prob=length(target)/m)
+  freq$binom <- stats::dbinom(0:K, size=K, prob=length(target)/m)
   names(freq)[1] <- "x"
   subset(freq, x %in% argx)
 }
@@ -180,7 +180,7 @@ dVsim <- function(x, K, m=20, N=10000, scenario=3, xp=1, target=1) {
 pV <- function(x, K, m, scenario, type="numeric") {
   res <- x
   if (3 %in% scenario) res <- cbind(res, scenario3=pv3(x, K, m, type=type))
-  if (1 %in% scenario) res <- cbind(res, scenario1=1-pbinom(x, size=K, prob=1/m)+dbinom(x, size=K, prob=1/m))
+  if (1 %in% scenario) res <- cbind(res, scenario1=1-stats::pbinom(x, size=K, prob=1/m)+stats::dbinom(x, size=K, prob=1/m))
   if (2 %in% scenario) res <- cbind(res, scenario2=pv2(x, K, m))
 
   if (ncol(res) == 2) {
@@ -215,7 +215,7 @@ pV <- function(x, K, m, scenario, type="numeric") {
 dV <- function(x, K, m, scenario, type="numeric") {
   res <- x
   if (3 %in% scenario) res <- cbind(res, scenario3=dv3(x, K, m, type=type))
-  if (1 %in% scenario) res <- cbind(res, scenario1=dbinom(x, size=K, prob=1/m))
+  if (1 %in% scenario) res <- cbind(res, scenario1=stats::dbinom(x, size=K, prob=1/m))
   if (2 %in% scenario) res <- cbind(res, scenario2=dv2(x, K, m))
 
   if (ncol(res) == 2) {
@@ -246,8 +246,8 @@ dV <- function(x, K, m, scenario, type="numeric") {
 qV <- function(q, K, m, scenario, type="numeric") {
   res <- data.frame(expand.grid(q=q, K=K))
   if (1 %in% scenario) {
-    # res$scenario1 <- unlist(plyr::alply(res, .margins=1, function(x) qbinom(x$q, size=x$K, prob=1/m)))
-    res$scenario1 <- purrr::pmap_dbl(res, function(q, K) qbinom(q, size=K, prob=1/m))
+    # res$scenario1 <- unlist(plyr::alply(res, .margins=1, function(x) stats::qbinom(x$q, size=x$K, prob=1/m)))
+    res$scenario1 <- purrr::pmap_dbl(res, function(q, K) stats::qbinom(q, size=K, prob=1/m))
   }
   if (2 %in% scenario) {
     res2 <- qv2(q, K, m)
@@ -297,7 +297,7 @@ dv3 <- function(x, K, m, type="numeric") {
     ## returns all k derivatives of express up to k
     res <- list()
     res[[1]] <- express # zeroeth derivative is expression itself
-    for (j in 2:(k+1)) res[[j]] <- D(res[[j-1]], name)
+    for (j in 2:(k+1)) res[[j]] <- stats::D(res[[j-1]], name)
     res
   }
   hone <- function (x, K, m) {
@@ -356,7 +356,7 @@ dv2 <- function(x,K, m=3) {
     if (!(m %in% c(3,20))) stop("Function not implemented for lineup sizes <> 3. Use bootstrap based density estimation in dVsim instead.")
     
     f <- function(q, K, x) choose(K,x)*g(q)^x*(1-g(q))^(K-x)
-    integrate(f, 0,1,K=K,x=x)$value
+    stats::integrate(f, 0,1,K=K,x=x)$value
   }
   unlist(sapply(x, dv2one, K=K, m=m))
 }
