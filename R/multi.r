@@ -1,13 +1,15 @@
+#' @include pvalues.r
 dvismulti1 <- function(K, k, m=20, N=5000) {
   stopifnot((K==length(k)) | (length(k)==1))
   k <- rep(k, length=K)
   res <- replicate(N, {
     # everybody is shown a different lineup
  #   require(plyr)
-    success <- plyr::ldply(1:K, function(i) {
+    success <- purrr::map_dbl(1:K, function(i) {
       lp <- runif(m)
       sum(sample(1:m, size=k[i], replace=FALSE, prob=lp)==1)
     })
+    # success <- plyr::ldply(1:K, )
     sum(success)
   })
   res <- factor(res, levels=0:K)
@@ -21,10 +23,14 @@ dvismulti2 <- function(K, k, m=20, N=5000) {
     # same data, different nulls
  #   require(plyr)
     first <- runif(1)
-    success <- plyr::ldply(1:K, function(i) {
+    success <- purrr::map_dbl(1:K, function(i) {
       lp <- c(first, runif(m-1))
       sum(sample(1:m, size=k[i], replace=FALSE, prob=lp)==1)
     })
+    # success <- plyr::ldply(1:K, function(i) {
+    #   lp <- c(first, runif(m-1))
+    #   sum(sample(1:m, size=k[i], replace=FALSE, prob=lp)==1)
+    # })
     sum(success)
   })
   res <- factor(res, levels=0:K)
@@ -37,9 +43,12 @@ dvismulti3 <- function(K, k, m=20, N=5000) {
     # everybody is shown the same lineup
     lp <- runif(m)
  #   require(plyr)
-    success <- plyr::ldply(1:K, function(i) {
+    success <- purrr::map_dbl(1:K, function(i) {
       sum(sample(1:m, size=k[i], replace=FALSE, prob=lp)==1)
     })
+    # success <- plyr::ldply(1:K, function(i) {
+    #   sum(sample(1:m, size=k[i], replace=FALSE, prob=lp)==1)
+    # })
     sum(success)
   })
   res <- factor(res, levels=0:K)
@@ -143,7 +152,8 @@ qmulti<- function(q, K, k, m=20, type="scenario3", N=5000) {
                     scenario3 = dvismulti3(K,k,m,N))
 
   res <-list(quantile=cumsum(as.vector(density)), k=k)
-  res$quantile <- plyr::laply(q, function(qq) min(which(res$quantile >= qq)-1))
+  # res$quantile <- plyr::laply(q, function(qq) min(which(res$quantile >= qq)-1))
+  res$quantile <- purrr::map_dbl(q, function(qq) min(which(res$quantile >= qq)-1))
   names(res$quantile) <- q
   
   res

@@ -12,7 +12,9 @@ Description: p-value calculation for different scenarios of the lineup
 Depends:
     R (>= 2.10.0)
 Imports:
-    plyr,
+    purrr,
+    dplyr,
+    stats,
     Rmpfr
 Suggests:
     ggplot2,
@@ -20,9 +22,9 @@ Suggests:
     reshape2,
     RColorBrewer
 URL: http://github.com/heike/vinference
-Collate:
+RoxygenNote: 6.1.0
+Collate: 
     'pvalues.r'
     'multi.r'
     'VK33-recursion.R'
     'VK33-resolve.R'
-RoxygenNote: 5.0.1

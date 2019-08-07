@@ -1,6 +1,8 @@
+#' @include multi.r
 p3 <- function(K, x) {
 #  require(plyr)
-  as.vector(choose(K,x)*unlist(plyr::llply(x, function(y) h3(x=y, K=K))))
+  # as.vector(choose(K,x)*unlist(plyr::llply(x, function(y) h3(x=y, K=K))))
+  as.vector(choose(K,x)*purrr::map_dbl(x, function(y) h3(x=y, K=K)))
 }
 
 h3 <- function(K, x) {

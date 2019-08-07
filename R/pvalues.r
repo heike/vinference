@@ -246,7 +246,8 @@ dV <- function(x, K, m, scenario, type="numeric") {
 qV <- function(q, K, m, scenario, type="numeric") {
   res <- data.frame(expand.grid(q=q, K=K))
   if (1 %in% scenario) {
-    res$scenario1 <- unlist(plyr::alply(res, .margins=1, function(x) qbinom(x$q, size=x$K, prob=1/m)))
+    # res$scenario1 <- unlist(plyr::alply(res, .margins=1, function(x) qbinom(x$q, size=x$K, prob=1/m)))
+    res$scenario1 <- purrr::pmap_dbl(res, function(q, K) qbinom(q, size=K, prob=1/m))
   }
   if (2 %in% scenario) {
     res2 <- qv2(q, K, m)
@@ -331,9 +332,13 @@ qv3 <- function(q, K, m) {
   dframe <- data.frame(expand.grid(q, K))
   names(dframe) <- c("q", "K")
 #  require(plyr)
-  res <- plyr::ddply(dframe, c("q", "K"), function(x) {
-    hs <- cumsum(dv3(x=0:x$K, K=x$K, m=m))
-    which(hs>=x$q)[1]
+  # res <- plyr::ddply(dframe, c("q", "K"), function(x) {
+  #   hs <- cumsum(dv3(x=0:x$K, K=x$K, m=m))
+  #   which(hs>=x$q)[1]
+  # })
+  res <- purrr::pmap_df(dframe, function(q, K) {
+    hs <- cumsum(dv3(x=0:K, K=K, m=m))
+    data.frame(q = q, K = K, x = which(hs>=q)[1])
   })
   names(res)[3] <- "x"
   res$x[res$x > res$K] <- NA
@@ -367,9 +372,13 @@ qv2 <- function (q, K, m=3) {
   dframe <- data.frame(expand.grid(q, K))
   names(dframe) <- c("q", "K")
 #  require(plyr)
-  res <- plyr::ddply(dframe, c("q", "K"), function(x) {
-    hs <- cumsum(dv2(x=0:x$K, K=x$K, m=m))
-    which(hs>=x$q)[1]
+  # res <- plyr::ddply(dframe, c("q", "K"), function(x) {
+  #   hs <- cumsum(dv2(x=0:x$K, K=x$K, m=m))
+  #   which(hs>=x$q)[1]
+  # })
+  res <- purrr::pmap_df(dframe, function(q, K) {
+    hs <- cumsum(dv2(x=0:K, K=K, m=m))
+    data.frame(q = q, K = K, x = which(hs>=q)[1])
   })
   names(res)[3] <- "x"
   res$x[res$x > res$K] <- NA

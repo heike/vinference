@@ -1,6 +1,8 @@
+#' @include VK33-recursion.R
 p3r <- function(K, x) {
 #  require(plyr)
-  as.vector(choose(K,x)*unlist(plyr::llply(x, function(y) h3r(x=y, K=K))))
+  # as.vector(choose(K,x)*unlist(plyr::llply(x, function(y) h3r(x=y, K=K))))
+  as.vector(choose(K,x)*purrr::map_dbl(x, function(y) h3r(x=y, K=K)))
 }
 
 h3r <- function(K, x) {
