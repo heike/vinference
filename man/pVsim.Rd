@@ -39,4 +39,3 @@ We distinguish between three different scenarios:
 \examples{
 pVsim(15, 20, m=3) # triangle test
 }
-

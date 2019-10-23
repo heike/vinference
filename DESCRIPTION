@@ -22,9 +22,10 @@ Suggests:
     reshape2,
     RColorBrewer
 URL: http://github.com/heike/vinference
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Collate: 
     'pvalues.r'
     'multi.r'
     'VK33-recursion.R'
     'VK33-resolve.R'
+Encoding: UTF-8

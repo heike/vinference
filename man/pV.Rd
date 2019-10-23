@@ -23,4 +23,3 @@ Some more details to be written later
 \examples{
 pV(0:5, 5, m=3, scenario=3)
 }
-
