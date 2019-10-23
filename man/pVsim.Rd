@@ -4,8 +4,8 @@
 \alias{pVsim}
 \title{Bootstrap based p values for visual inference}
 \usage{
-pVsim(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1,
-  upper.tail = TRUE)
+pVsim(x, K, m = 20, N = 10000, scenario = 3, alpha = 1,
+  target = 1, upper.tail = TRUE)
 }
 \arguments{
 \item{x}{number of observed picks of the data plot}
@@ -18,7 +18,7 @@ pVsim(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1,
 
 \item{scenario}{numeric value, one of 1,2, or 3, indication the type of simulation used: scenario 3 assumes that the same lineup is shown in all K evaluations}
 
-\item{xp}{exponent used, defaults to 1}
+\item{alpha}{positive value, indicates rate parameter used in dirichlet distribution}
 
 \item{target}{(vector) of integer values between 1 and m indicating the position(s) of the target plots. Only the number of targets will affect the probabilities.}
 

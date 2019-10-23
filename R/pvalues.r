@@ -1,27 +1,34 @@
 # data(sysdata, envir=environment())
 
-lineup <- function(m, dataprob = NULL, nulls = NULL) {
+lineup <- function(m, alpha=1, dataprob = NULL, nulls = NULL) {
   # assume first element is data
-  probs <- stats::runif(m)
+ # probs <- stats::runif(m)
+  probs <- rgamma(m, shape=alpha)
   n.targets <- length(dataprob)
 
   if (!is.null(dataprob)) probs[1:n.targets] <- dataprob
   if (!is.null(nulls)) probs[(1 + n.targets):m] <- nulls
+  
+  probs <- probs/sum(probs)
   sample(m, size = 1, prob = 1 - probs)
 }
 
-pickData <- function(m, xp = 1, dataprob = NULL, nulls = NULL) {
-  probs <- stats::runif(m)
+pickData <- function(m, alpha=1, dataprob = NULL, nulls = NULL) {
+ # probs <- stats::runif(m)
+  probs <- rgamma(m, shape=alpha)
+
   n.targets <- length(dataprob)
   if (!is.null(dataprob)) {
     probs[1:n.targets] <- dataprob
   }
   if (!is.null(nulls)) probs[(n.targets + 1):m] <- nulls
-  #  sample(m, size=1, prob=1-probs)
-  #  stats::rbinom(1, size=1, prob=f(probs))
-  ps <- (1 - probs)^xp
-  if (all(ps == 0)) ps <- rep(1, length(probs))
-  stats::rbinom(1, size = 1, prob = sum(ps[1:n.targets]) / sum(ps))
+  
+#  ps <- (1 - probs)^xp
+#  if (all(ps == 0)) ps <- rep(1, length(probs))
+#  stats::rbinom(1, size = 1, prob = sum(ps[1:n.targets]) / sum(ps))
+  probs <- probs/sum(probs)
+  sample(m, size=1, prob=probs)
+  stats::rbinom(1, size=1, prob=probs)
 }
 
 # too deterministic
@@ -29,53 +36,58 @@ pickData <- function(m, xp = 1, dataprob = NULL, nulls = NULL) {
 # just wrong:
 # function(ps) stats::rbinom(1, size=1, prob=(1-ps[1])/(2-ps[1] - min(ps[-1])))
 
-scenario1 <- function(N, K, m = 20, xp = 1, target = 1) {
+scenario1 <- function(N, K, m = 20, alpha = 1, target = 1) {
   # new lineup in each evaluation: new data, new sample of nulls
   table(replicate(N, {
-    individual <- sum(replicate(K, pickData(m, dataprob = NULL, xp = xp)) %in% target)
+    individual <- sum(replicate(K, pickData(m, dataprob = NULL, alpha=alpha)) %in% target)
     individual
   })) / N
 }
 
 
-scenario2 <- function(N, K, m = 20, xp = 1, target = 1) {
+scenario2 <- function(N, K, m = 20, alpha = 1, target = 1) {
   # each data evaluated K times, always with different nulls
   table(replicate(N, {
     n.targets <- length(target)
-    dataprob <- stats::runif(n.targets)
-    individual <- sum(replicate(K, pickData(m, dataprob = dataprob, xp = xp) %in% target))
+#    dataprob <- stats::runif(n.targets)
+    dataprob <- rgamma(n.targets, shape=alpha)
+    individual <- sum(replicate(K, pickData(m, dataprob = dataprob, alpha = alpha) %in% target))
     individual
   })) / N
 }
 
 
-scenario3 <- function(N, K, m = 20, xp = 1, target = 1) {
+scenario3 <- function(N, K, m = 20, alpha = 1, target = 1) {
   # each data evaluated K times, with the same nulls
   table(replicate(
     N / 100,
     replicate(100, {
       n.targets <- length(target)
-      dataprob <- stats::runif(n.targets)
-      nulls <- stats::runif(m - n.targets)
-
-      individual <- sum(replicate(K, pickData(m, dataprob = dataprob, nulls = nulls, xp = xp)) %in% target)
+#      dataprob <- stats::runif(n.targets)
+#      nulls <- stats::runif(m - n.targets)
+      dataprob <- rgamma(n.targets, shape=alpha)
+      nulls <- rgamma(m - n.targets, shape=alpha)
+      
+      individual <- sum(replicate(K, pickData(m, dataprob = dataprob, nulls = nulls, alpha = alpha)) %in% target)
       individual
     })
   )) / N
 }
 
-scenario4 <- function(N, K, m = 20, xp = 1, target = 1) {
+scenario4 <- function(N, K, m = 20, alpha = 1, target = 1) {
   # K is vector: length(K) lineups are shown K[i] times to observers
   # all length(K) lineups show the same data, but have different nulls
 
   res <- replicate(N, {
     n.targets <- length(target)
-    dataprob <- stats::runif(n.targets)
+  #  dataprob <- stats::runif(n.targets)
+    dataprob <- rgamma(n.targets, shape = alpha)
 
     individual <- rep(NA, length(K))
     for (i in 1:length(K)) {
-      nulls <- stats::runif(m - n.targets)
-      individual[i] <- sum(replicate(K[i], pickData(m, dataprob = dataprob, nulls = nulls, xp = xp)) %in% target)
+   #   nulls <- stats::runif(m - n.targets)
+      nulls <- rgamma(m-n.targets, shape=alpha)
+      individual[i] <- sum(replicate(K[i], pickData(m, dataprob = dataprob, nulls = nulls, alpha=alpha)) %in% target)
     }
     sum(individual)
   })
@@ -96,16 +108,16 @@ scenario4 <- function(N, K, m = 20, xp = 1, target = 1) {
 #' @param m size of the lineup
 #' @param N MC parameter: number of replicates on which MC probabilities are based. Higher number of replicates will decrease MC variability.
 #' @param scenario numeric value, one of 1,2, or 3, indication the type of simulation used: scenario 3 assumes that the same lineup is shown in all K evaluations
-#' @param xp exponent used, defaults to 1
+#' @param alpha positive value, indicates rate parameter used in dirichlet distribution
 #' @param target (vector) of integer values between 1 and m indicating the position(s) of the target plots. Only the number of targets will affect the probabilities.
 #' @param upper.tail compute probabilities P(X >= x). Be aware that the use of this parameter is not consistent with the other distribution functions in base. There, a value of P(X > x) is computed for upper.tail=TRUE.
 #' @return Vector/data frame. For comparison a p value based on a binomial distribution is provided as well.
 #' @export
 #' @examples
 #' pVsim(15, 20, m=3) # triangle test
-pVsim <- function(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1, upper.tail = TRUE) {
+pVsim <- function(x, K, m = 20, N = 10000, scenario = 3, alpha = 1, target = 1, upper.tail = TRUE) {
   type <- paste("scenario", scenario, sep = "")
-  freq <- get(type)(N = N, K = K, m = m, xp = xp, target = target)
+  freq <- get(type)(N = N, K = K, m = m, alpha = alpha, target = target)
   if (upper.tail) {
     sim <- sapply(x, function(y) sum(freq[as.numeric(names(freq)) >= y]))
     return(cbind(x = x, "simulated" = sim, "binom" = 1 - stats::pbinom(x - 1, size = K, prob = 1 / m)))
@@ -129,7 +141,7 @@ pVsim <- function(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1, upp
 #' @param m size of the lineup
 #' @param N MC parameter: number of replicates on which MC probabilities are based. Higher number of replicates will decrease MC variability.
 #' @param scenario numeric value, one of 1, 2, or 3, indicating the type of simulation used: scenario 3 assumes that the same lineup is shown in all K evaluations
-#' @param xp exponent used, defaults to 1
+#' @param alpha positive value, indicates rate parameter used in dirichlet distribution
 #' @param target location of target plot(s). By default 1. If several targets are present, specify vector of target locations.
 #' @return simulation based density to observe x picks of the data plot in K evaluation under the assumption that the data plot is consistent with the null hypothesis. For comparison a p value based on a binomial distribution is provided as well.
 #' @export
@@ -152,12 +164,12 @@ pVsim <- function(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1, upp
 #' # slight difference between this distribution and the distribution for a
 #' # lineup of size 10 with a single target:
 #' dVsim(0:5, K=5, m=10, N=10000, scenario=3, target=1)
-dVsim <- function(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1) {
+dVsim <- function(x, K, m = 20, N = 10000, scenario = 3, alpha = 1, target = 1) {
   argx <- x
   freqs <- data.frame(Var1 = 0:K)
   for (t in scenario) {
     t <- paste("scenario", t, sep = "")
-    freq <- data.frame(get(t)(N = N, K = K, m = m, xp = xp, target = target))
+    freq <- data.frame(get(t)(N = N, K = K, m = m, alpha = alpha, target = target))
     names(freq)[2] <- t
     freqs <- merge(freqs, freq, by = "Var1", all = T)
   }

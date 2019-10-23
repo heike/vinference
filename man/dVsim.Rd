@@ -4,7 +4,8 @@
 \alias{dVsim}
 \title{Simulation based density for visual inference}
 \usage{
-dVsim(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1)
+dVsim(x, K, m = 20, N = 10000, scenario = 3, alpha = 1,
+  target = 1)
 }
 \arguments{
 \item{x}{number of observed picks of the data plot}
@@ -17,7 +18,7 @@ dVsim(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1)
 
 \item{scenario}{numeric value, one of 1, 2, or 3, indicating the type of simulation used: scenario 3 assumes that the same lineup is shown in all K evaluations}
 
-\item{xp}{exponent used, defaults to 1}
+\item{alpha}{positive value, indicates rate parameter used in dirichlet distribution}
 
 \item{target}{location of target plot(s). By default 1. If several targets are present, specify vector of target locations.}
 }

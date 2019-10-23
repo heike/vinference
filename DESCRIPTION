@@ -28,4 +28,5 @@ Collate:
     'multi.r'
     'VK33-recursion.R'
     'VK33-resolve.R'
+    'alpha_ml.R'
 Encoding: UTF-8
