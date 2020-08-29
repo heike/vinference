@@ -14,18 +14,22 @@ Depends:
 Imports:
     purrr,
     dplyr,
+    tidyr,
+    ggplot2,
+    gtools,
+    tibble,
     stats,
     Rmpfr
 Suggests:
-    ggplot2,
     poibin,
     reshape2,
     RColorBrewer
 URL: http://github.com/heike/vinference
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 Collate: 
     'pvalues.r'
     'multi.r'
     'VK33-recursion.R'
     'VK33-resolve.R'
+    'estimate_alpha.R'
 Encoding: UTF-8
