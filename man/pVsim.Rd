@@ -4,8 +4,16 @@
 \alias{pVsim}
 \title{Bootstrap based p values for visual inference}
 \usage{
-pVsim(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1,
-  upper.tail = TRUE)
+pVsim(
+  x,
+  K,
+  m = 20,
+  N = 10000,
+  scenario = 3,
+  xp = 1,
+  target = 1,
+  upper.tail = TRUE
+)
 }
 \arguments{
 \item{x}{number of observed picks of the data plot}
