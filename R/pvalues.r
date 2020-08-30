@@ -1,6 +1,20 @@
 # data(sysdata, envir=environment())
 
-lineup <- function(m, alpha=1, dataprob = NULL, nulls = NULL) {
+#' Simulate a lineup evaluation
+#' 
+#' @param m size of the lineup, typically m=20
+#' @param K number of independent lineup evaluations
+#' @param alpha strictly positive numeric value, rate parameter of the corresponding Dirichlet distribution
+#' @param dataprob positive value describing the interestingness of the data plot. If not specified, a Gamma distributed value is generated
+#' @param nulls vector of length m (Rorschach) or m-1 (if dataprob is specified) describing the interestingness of the null plots. Simulated from independent Gamma distributions with shape parameter alpha if not specified.
+#' @export
+#' @examples
+#' # typical Rorschach plot, evaluated 15 times
+#' x <- lineup(K=15, alpha = 0.15, dataprob=2) 
+#' x
+#' table(x)
+#' alpha_ml(as.numeric(table(x))) # should be close to specified alpha
+lineup <- function(m=20, K=1, alpha=1, dataprob = NULL, nulls = NULL) {
   # assume first element is data
  # probs <- stats::runif(m)
   probs <- rgamma(m, shape=alpha)
@@ -10,7 +24,7 @@ lineup <- function(m, alpha=1, dataprob = NULL, nulls = NULL) {
   if (!is.null(nulls)) probs[(1 + n.targets):m] <- nulls
   
   probs <- probs/sum(probs)
-  sample(m, size = 1, prob = 1 - probs)
+  factor(sample(m, size = K, prob = probs, replace=TRUE), levels=1:m)
 }
 
 pickData <- function(m, alpha=1, dataprob = NULL, nulls = NULL) {
@@ -26,7 +40,7 @@ pickData <- function(m, alpha=1, dataprob = NULL, nulls = NULL) {
 #  ps <- (1 - probs)^xp
 #  if (all(ps == 0)) ps <- rep(1, length(probs))
 #  stats::rbinom(1, size = 1, prob = sum(ps[1:n.targets]) / sum(ps))
-  probs <- probs/sum(probs)
+#  probs <- probs/sum(probs)
   sample(m, size=1, prob=probs)
   stats::rbinom(1, size=1, prob=probs)
 }

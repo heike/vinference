@@ -6,16 +6,19 @@
 #' @param weight vector
 #' @param eps error allowed in finding root
 #' @return rate parameter alpha of symmetric (flat) Dirichlet distribution
+#' @export
 #' @examples
-#' x <- matrix(rgamma(n=2000, shape=.5), ncol=20)
+#' x <- matrix(rgamma(n=2000, shape=.1), ncol=20)
+#' plot(density(x[,1]))
 #' x <- x/rowSums(x)
 #' alpha_ml(x)
 #' shapes <- seq(0.01, 0.75, by = 0.01)
 #' ests <- sapply(shapes, function(s) {
 #'   x <- matrix(rgamma(n=2000, shape=s), ncol=20)
-#'   alpha_ml(x)
+#'   alpha_ml(x, eps=10^-20)
 #' })
 #' plot(shapes,ests)
+#' abline(a=0,b=1)
 alpha_ml <- function(p, weight=NULL, eps=10^(-7)) {
   # matrix p
   if (is.null(dim(p))) {
@@ -39,6 +42,7 @@ alpha_ml <- function(p, weight=NULL, eps=10^(-7)) {
   }
   # find alpha such that digamma(alpha) - digamma(alpha*m) = logp
   alpha <- uniroot(f=ml, interval=c(eps,10))
+  
   
   alpha$root
 }

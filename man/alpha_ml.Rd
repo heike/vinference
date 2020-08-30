@@ -21,7 +21,8 @@ rate parameter alpha of symmetric (flat) Dirichlet distribution
 The estimation of the rate parameter alpha is done with Maximum Likelihood Estimation.
 }
 \examples{
-x <- matrix(rgamma(n=2000, shape=.5), ncol=20)
+x <- matrix(rgamma(n=2000, shape=.1), ncol=20)
+plot(density(x[,1]))
 x <- x/rowSums(x)
 alpha_ml(x)
 shapes <- seq(0.01, 0.75, by = 0.01)
