@@ -1,6 +1,21 @@
 Package: vinference
 Maintainer: Heike Hofmann <hofmann@iastate.edu>
-Author: Heike Hofmann and Christian R\"ottger
+Authors@R: c(
+    person(given = "Heike",
+           family = "Hofmann",
+           role = c("aut", "cre"),
+           email = "hofmann@iastate.com",
+           comment = c(ORCID = "0000-0001-6216-5183")),
+    person(given = "Röttger",
+           family = "Christian",
+           role = c("aut"),
+           email = "roettger@iastate.com"),           
+    person(given = "Susan",
+           family = "VanderPlas",
+           role = c("ctb"),
+           email = "srvanderplas@unl.com",
+           comment = c(ORCID = "0000-0002-3803-0972"))
+           )
 Published: 2014-02-01
 Version: 0.1.1
 License: MIT + file LICENSE
@@ -22,7 +37,7 @@ Suggests:
     reshape2,
     RColorBrewer
 URL: http://github.com/heike/vinference
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.1
 Collate: 
     'pvalues.r'
     'multi.r'

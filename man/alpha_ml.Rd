@@ -28,7 +28,8 @@ alpha_ml(x)
 shapes <- seq(0.01, 0.75, by = 0.01)
 ests <- sapply(shapes, function(s) {
   x <- matrix(rgamma(n=2000, shape=s), ncol=20)
-  alpha_ml(x)
+  alpha_ml(x, eps=10^-20)
 })
 plot(shapes,ests)
+abline(a=0,b=1)
 }

@@ -6,6 +6,7 @@
 #' @param weight vector
 #' @param eps error allowed in finding root
 #' @return rate parameter alpha of symmetric (flat) Dirichlet distribution
+#' @importFrom stats rgamma uniroot
 #' @export
 #' @examples
 #' x <- matrix(rgamma(n=2000, shape=.1), ncol=20)

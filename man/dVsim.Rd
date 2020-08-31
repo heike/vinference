@@ -4,8 +4,7 @@
 \alias{dVsim}
 \title{Simulation based density for visual inference}
 \usage{
-dVsim(x, K, m = 20, N = 10000, scenario = 3, alpha = 1,
-  target = 1)
+dVsim(x, K, m = 20, N = 10000, scenario = 3, alpha = 1, target = 1)
 }
 \arguments{
 \item{x}{number of observed picks of the data plot}
