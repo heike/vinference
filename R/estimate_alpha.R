@@ -122,6 +122,7 @@ estimate_alpha_visual <- function(c = m0/K, m0 = 19, K = 30, alphas = 10^seq(-3,
   
 }
 
+
 #' Numerically estimate alpha using the average number of c-interesting panels
 #' 
 #' @param Zc Average number of panels with at least c selections
@@ -135,20 +136,22 @@ estimate_alpha_numeric <- function(Zc, c = m0/K, m0 = 19, K = 30) {
   stopifnot(Zc < K, Zc > 0)
   stopifnot(c > 0, m0 > 1, K > 1)
   
-  optfun <- function(alpha, X, c, m, K) {
+  
+  inv_exp_panels <- function(alpha, X, c, m0, K) {
+    # Internal function, not documented
     if (alpha <= 0) return(Inf)
     
-    (X - expected_number_panels(alpha = alpha, c = c, m = m, K = K))^2
+    (X - expected_number_panels(alpha = alpha, c = c, m0 = m0, K = K))^2
   }
   
   # Get good initialization values
   df <- data.frame(alpha = 10^seq(-2, 2, .5)) %>%
-    dplyr::mutate(objval = purrr::map_dbl(.data$alpha, optfun, X = Zc, c = c, m = m0, K = K)) %>%
+    dplyr::mutate(objval = purrr::map_dbl(.data$alpha, inv_exp_panels, X = Zc, c = c, m0 = m0, K = K)) %>%
     dplyr::filter(.data$objval == min(.data$objval))
 
   
-  res <- optim(list(alpha = df$alpha), optfun, 
-               X = Zc, c = c, m = m0, K = K, 
+  res <- optim(list(alpha = df$alpha), inv_exp_panels, 
+               X = Zc, c = c, m0 = m0, K = K, 
                method = "Brent", lower = 1e-4, upper = 100)
   
   names(res) <- c("alpha", "sum_sq_error", "counts", "convergence", "message")
@@ -157,3 +160,4 @@ estimate_alpha_numeric <- function(Zc, c = m0/K, m0 = 19, K = 30) {
   
   res
 }
+
