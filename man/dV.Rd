@@ -18,7 +18,7 @@ dV(x, K, m, scenario, type = "numeric")
 \item{type}{one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.}
 }
 \description{
-Some more details to be written later
+Theoretical density for lineups under different scenarios
 }
 \examples{
 dV(0:5, 5, m=2, scenario=3)

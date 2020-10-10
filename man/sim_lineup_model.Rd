@@ -5,12 +5,12 @@
 \title{Functions to produce visual estimate of alpha
 Simulate data from a lineup evaluation experiment using the Dirichlet-Multinomial model}
 \usage{
-sim_lineup_model(alpha, m = 19, K = 22, N = 50)
+sim_lineup_model(alpha, m0 = 19, K = 22, N = 50)
 }
 \arguments{
 \item{alpha}{The Dirichlet parameter which is related to the number of interesting panels}
 
-\item{m}{The number of null panels in the lineup}
+\item{m0}{The number of null panels in the lineup}
 
 \item{K}{The total number of null panel selections (or, in a Rorschach lineup, the total number of evaluations)}
 
