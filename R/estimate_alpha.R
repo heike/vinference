@@ -222,8 +222,7 @@ observed_band <- function(obs, limits, c = m0/K, m0 = 19, K = 30) {
   }
   
   obs_band <- if (!any(is.na(limits))) {
-    limits_alph <- estimate_alpha_numeric(limits, c = c, m0 = m0, K = K) %>%
-      purrr::map_dbl(purrr::pluck, "alpha")
+    limits_alph <- estimate_alpha_numeric(limits, c = c, m0 = m0, K = K)$alpha
     
     # Construct polygon coords for shading
     bands <- rbind(
