@@ -23,5 +23,6 @@ This function adds a band to assist in the visual estimation of alpha from evalu
 \examples{
 estimate_alpha_visual() + observed_band(obs = NA, limits = c(5, 7))
 estimate_alpha_visual() + observed_band(obs = 6, limits = NA)
-estimate_alpha_visual(c = 1, m0 = 19, K = 50) + observed_band(obs = 6, limits = c(4, 8), c = 1, m0 = 19, K = 50)
+estimate_alpha_visual(c = 1, m0 = 19, K = 50) + 
+  observed_band(obs = 6, limits = c(4, 8), c = 1, m0 = 19, K = 50)
 }

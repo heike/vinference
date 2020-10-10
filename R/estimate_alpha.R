@@ -3,14 +3,20 @@
 
 #' Simulate data from a lineup evaluation experiment using the Dirichlet-Multinomial model
 #' 
-#' @param alpha The Dirichlet parameter which is related to the number of interesting panels
-#' @param m0 The number of null panels in the lineup
+#' This function returns panel selection counts simulated from the Dirichlet-
+#' Multinomial model; that is, the result is a \eqn{m \times N} matrix of panel selection counts.
+#' 
+#' @param alpha The (scalar) symmetric Dirichlet parameter which is related to the number of interesting panels
+#' @param m The number of panels in the lineup
 #' @param K The total number of null panel selections (or, in a Rorschach lineup, the total number of evaluations)
 #' @param N Number of lineups to simulate
 #' @importFrom gtools rdirichlet
 #' @importFrom stats rmultinom
-sim_lineup_model <- function(alpha, m0 = 19, K = 22, N = 50) {
-  theta <- gtools::rdirichlet(1, rep(alpha, m0))
+#' @export
+#' @examples 
+#' rVis(alpha = .5, m = 20, K = 30, N = 5)
+rVis <- function(alpha, m = 20, K = 22, N = 50) {
+  theta <- gtools::rdirichlet(1, rep(alpha, m))
   sels <- stats::rmultinom(N, size = K, prob = theta)
   sels
 }
@@ -22,6 +28,8 @@ sim_lineup_model <- function(alpha, m0 = 19, K = 22, N = 50) {
 #' @param m0 The number of null panels in the lineup
 #' @param K The total number of null panel selections (or, in a Rorschach lineup, the total number of evaluations)
 #' @export
+#' @examples 
+#' expected_number_panels(alpha = 1, m0 = 19, K = 30)
 expected_number_panels <- function(alpha, c=m0/K, m0 = 19, K=30) {
   x <- ceiling(c):K
   summation <- choose(K, x) * beta(x + alpha, K - x + (m0 - 1)*alpha)
@@ -52,7 +60,7 @@ sim_interesting_panels <- function(alphas = 10^seq(-2, 2, .05), c = m0/K, m0 = 1
   # First, generate all of the lineups and count the number of interesting panels
   df <- tibble::tibble(
     alpha = alphas,
-    plot_sels = purrr::map(.data$alpha, sim_lineup_model, N = N_points*avg_n_sims, K = K),
+    plot_sels = purrr::map(.data$alpha, rVis, N = N_points*avg_n_sims, K = K, m = m0),
     interesting_panels = purrr::map(.data$plot_sels,
       ~tibble::tibble(n_interesting = colSums(.x >= c),
                       rep = 1:ncol(.x) - 1))
@@ -145,6 +153,7 @@ estimate_alpha_visual <- function(c = m0/K, m0 = 19, K = 30, alphas = 10^seq(-3,
 #' res <- estimate_alpha_numeric(5, c = 1, m0 = 19, K = 30)
 #' res$alpha
 estimate_alpha_numeric <- function(Zc, c = m0/K, m0 = 19, K = 30) {
+  . <- NULL
   # Just a wrapper
   purrr::map(Zc, estimate_alpha_num_scalar, c = c, m0 = m0, K = K) %>% {
     tibble(
@@ -203,7 +212,8 @@ estimate_alpha_num_scalar <- function(Zc, c = m0/K, m0 = 19, K = 30) {
 #' @examples
 #' estimate_alpha_visual() + observed_band(obs = NA, limits = c(5, 7))
 #' estimate_alpha_visual() + observed_band(obs = 6, limits = NA)
-#' estimate_alpha_visual(c = 1, m0 = 19, K = 50) + observed_band(obs = 6, limits = c(4, 8), c = 1, m0 = 19, K = 50)
+#' estimate_alpha_visual(c = 1, m0 = 19, K = 50) + 
+#'   observed_band(obs = 6, limits = c(4, 8), c = 1, m0 = 19, K = 50)
 observed_band <- function(obs, limits, c = m0/K, m0 = 19, K = 30) {
 
   # get alpha values for critical y values

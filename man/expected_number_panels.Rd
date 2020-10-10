@@ -18,3 +18,6 @@ expected_number_panels(alpha, c = m0/K, m0 = 19, K = 30)
 \description{
 Compute the expected number of c-interesting panels for a lineup experiment
 }
+\examples{
+expected_number_panels(alpha = 1, m0 = 19, K = 30)
+}
