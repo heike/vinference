@@ -89,11 +89,11 @@ estimate_alpha_visual <- function(c = m0/K, m0 = 19, K = 30, alphas = 10^seq(-3,
   # Get theoretical function
   model_df <- tibble::tibble(alpha = alphas,
                              n_sel_plots = alphas %>% 
-                               purrr::map_dbl(expected_number_panels, c = c, m=m0, K=K)
+                               purrr::map_dbl(expected_number_panels, c = c, m0=m0, K=K)
   )
   
   # Get simulated data
-  prior_pred_mean <- sim_interesting_panels(c = c, m = m0, K = K, alphas = alphas, ...) %>%
+  prior_pred_mean <- sim_interesting_panels(c = c, m0= m0, K = K, alphas = alphas, ...) %>%
     dplyr::arrange(.data$alpha) %>%
     dplyr::mutate(label = sprintf("alpha == %f", .data$alpha) %>%
                     factor(levels = sprintf("alpha == %f", alphas), ordered = T))
