@@ -161,3 +161,32 @@ estimate_alpha_numeric <- function(Zc, c = m0/K, m0 = 19, K = 30) {
   res
 }
 
+observed_band <- function(obs, limits, c = m0/K, m0 = 19, K = 30) {
+  # get alpha values for critical y values
+  tmp <- tibble(type = c("line","bands", "bands"),
+                y = c(obs, limits),
+                alpha = purrr::map(y, estimate_alpha_numeric, c = c, m0 = m0, K = K) %>%
+                  purrr::map_dbl(purrr::pluck, "alpha"))
+  
+  # Construct polygon coords for shading
+  bands <- rbind(
+    tibble(x = c(1/Inf, tmp$alpha[2:3], 1/Inf, 1/Inf),
+           y = limits[c(1, 1, 2, 2, 1)],
+           type = "horiz"),
+    tibble(x = tmp$alpha[c(2, 2, 3, 3, 2)],
+           y = c(-Inf, limits, -Inf, -Inf),
+           type = "vert")
+    )
+  
+  # Construct lines for center/observed
+  segs <- rbind(
+    tibble(x = c(1/Inf, tmp$alpha[1]), y = obs, type = "horiz"),
+    tibble(x = tmp$alpha[1], y = c(obs, -Inf), type = "vert")
+  )
+  
+  list(
+    geom_polygon(aes(x = x, y = y, group = type), data = bands, fill = "grey", alpha = 0.5),
+    geom_line(aes(x = x, y = y, group = type), data = segs, color = "blue", size = 0.5)
+  )
+}
+
