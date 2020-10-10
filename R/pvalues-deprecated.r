@@ -105,7 +105,7 @@ scenario4 <- function(N, K, m = 20, xp = 1, target = 1) {
 #' @examples
 #' pVsim(15, 20, m=3) # triangle test
 pVsim <- function(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1, upper.tail = TRUE) {
-  deprecate_warn("1.0.0", "vinference::pVsim()", "new()")
+  deprecate_warn("1.0.0", "vinference::pVsim()", "pVis()")
   
   type <- paste("scenario", scenario, sep = "")
   freq <- get(type)(N = N, K = K, m = m, xp = xp, target = target)
@@ -157,7 +157,7 @@ pVsim <- function(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1, upp
 #' # lineup of size 10 with a single target:
 #' dVsim(0:5, K=5, m=10, N=10000, scenario=3, target=1)
 dVsim <- function(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1) {
-  deprecate_warn("1.0.0", "vinference::dVsim()", "new()")
+  deprecate_warn("1.0.0", "vinference::dVsim()", "dVis()")
   argx <- x
   freqs <- data.frame(Var1 = 0:K)
   for (t in scenario) {
@@ -185,7 +185,7 @@ dVsim <- function(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1) {
 #' @examples
 #' pV(0:5, 5, m=3, scenario=3)
 pV <- function(x, K, m, scenario, type = "numeric") {
-  deprecate_warn("1.0.0", "vinference::pV()", "new()")
+  deprecate_warn("1.0.0", "vinference::pV()", "pVis()")
   res <- x
   if (3 %in% scenario) res <- cbind(res, scenario3 = pv3(x, K, m, type = type))
   if (1 %in% scenario) res <- cbind(res, scenario1 = 1 - stats::pbinom(x, size = K, prob = 1 / m) + stats::dbinom(x, size = K, prob = 1 / m))
@@ -222,7 +222,7 @@ pV <- function(x, K, m, scenario, type = "numeric") {
 #' print(qplot(0:K, dV(0:K, K, m=20, scenario=3)));
 #' print(sum(dV(0:K, K, m=20, scenario=3)));
 dV <- function(x, K, m, scenario, type = "numeric") {
-  deprecate_warn("1.0.0", "vinference::dV()", "new()")
+  deprecate_warn("1.0.0", "vinference::dV()", "dVis()")
   res <- x
   if (3 %in% scenario) res <- cbind(res, scenario3 = dv3(x, K, m, type = type))
   if (1 %in% scenario) res <- cbind(res, scenario1 = stats::dbinom(x, size = K, prob = 1 / m))
@@ -254,7 +254,7 @@ dV <- function(x, K, m, scenario, type = "numeric") {
 #' ## get critical values of full lineup test:
 #' qV(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=20, scenario=3)
 qV <- function(q, K, m, scenario, type = "numeric") {
-  deprecate_warn("1.0.0", "vinference::qV()", "new()")
+  deprecate_warn("1.0.0", "vinference::qV()", "qVis()")
   res <- data.frame(expand.grid(q = q, K = K))
   if (1 %in% scenario) {
     # res$scenario1 <- unlist(plyr::alply(res, .margins=1, function(x) stats::qbinom(x$q, size=x$K, prob=1/m)))

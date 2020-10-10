@@ -1,6 +1,6 @@
-#' Visual Inference
+#' Visual Inference for different Lineup Scenarios
 #' 
-#' Density and distribution function for visual inference scenarios.
+#' Density, distribution function and quantiles for visual inference scenarios.
 #' XXX intro sentence for Visual inference
 #' 
 #' We distinguish between three different scenarios:
@@ -22,6 +22,7 @@
 #' 
 #' For large values of alpha, scenario 3 converges to scenario 1. 
 #' @param x vector, number of data identifications,
+#' @param p (vector of) probabilities,
 #' @param K positive value, number of evaluations of the lineup,
 #' @param m number of panels in the lineup,
 #' @param alpha positive value, rate parameter of the flat Dirichlet distribution,
@@ -30,7 +31,7 @@
 #' Note that the second probability is a deviation from R standard: usually \eqn{P(X > x)} is returned. 
 #' However, here, returning \eqn{P(X ≥ x)} is more useful in an inference setting, as it corresponds to the 
 #' p value.
-#' @importFrom stats dbinom pbinom
+#' @importFrom stats dbinom pbinom qbinom
 #' @return (vector) of probabilities for \eqn{P(X = x)} and, correspondingly for 
 #' pVis the probabilities \eqn{P(X \le x)} are returned.
 #' @export
@@ -50,6 +51,11 @@
 #' library(ggplot2)
 #' ggplot(data = dframe, aes(x = x, y = probabilities, colour = alpha)) +
 #'   geom_point() 
+#'   
+#'  # how many data picks do we need in a lineup of size m
+#'  # with K = 30 evaluations and alpha = 0.1 to achieve a 
+#'  # significance at 10%, 5% or 1%?
+#'  qVis(p = c(0.9, 0.95, 0.99), K = 30, m=20, alpha = 0.1)
 dVis <- function(x, K, m = 20, alpha, scenario = 3) {
   if (scenario == 3) {
     return(choose(K, x) * beta(x+alpha, K-x+(m-1)*alpha)/beta(alpha, (m-1)*alpha))
@@ -61,11 +67,11 @@ dVis <- function(x, K, m = 20, alpha, scenario = 3) {
 
 
 #' @rdname dVis
+#' @export
 pVis <- function(x, K, m = 20, alpha, scenario = 3, lower.tail = TRUE) {
   if (scenario == 1) { # binomial distribution
-    delta <- 0
-    if (lower.tail == FALSE) delta <- dbinom(x, size = K, prob = 1/m)
-    return(pbinom(x, size = K, prob = 1/m, lower.tail = lower.tail)+ delta)
+    if (lower.tail == FALSE) x <- x-1
+    return(pbinom(x, size = K, prob = 1/m, lower.tail = lower.tail))
   }
   
   if (scenario == 3) {
@@ -82,5 +88,29 @@ pVis <- function(x, K, m = 20, alpha, scenario = 3, lower.tail = TRUE) {
     return(cum[x+1])
   }
 }
+
+#' @rdname dVis
+#' @export
+qVis <- function(p, K, m = 20, alpha, scenario = 3) {
+  if (scenario == 1) { # binomial distribution
+    return(qbinom(p=p, size = K, prob = 1/m))
+  }
+  
+  if (scenario == 3) {
+    xs <- seq(0, K)
+    # x should be single value now, or we need to be a bit inventive
+    
+    dvis <- dVis(x = xs, K =K, m=m, alpha = alpha, scenario=scenario)
+    cum <- cumsum(dvis)
+    idx <- sapply(p, FUN=function(pp) {
+        wh <- which(pp >= cum)
+        if (length(wh)!=0) max(wh)
+        else 0
+      })
+    
+    return(idx)
+  }
+}
+
 
 
