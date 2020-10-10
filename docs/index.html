@@ -89,7 +89,12 @@
 <a href="#example" class="anchor"></a>Example</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://github.com/heike/vinference">vinference</a></span><span class="op">)</span></pre></div>
-<p>In visual inference, we can run experiments under 3 scenarios: 1. Scenario 1: in each of K evaluations a different data set and a different set of (m-1) null plots is shown. 2. Scenario 2: in each of K evaluations the same data set but a different set of (m-1) null plots is shown. 3. Scenario 3: the same lineup, i.e. same data and same set of null plots, is shown to K different observers.</p>
+<p>In visual inference, we can run experiments under 3 scenarios:</p>
+<ol>
+<li>Scenario 1: in each of K evaluations a different data set and a different set of (m-1) null plots is shown.</li>
+<li>Scenario 2: in each of K evaluations the same data set but a different set of (m-1) null plots is shown.</li>
+<li>Scenario 3: the same lineup, i.e. same data and same set of null plots, is shown to K different observers.</li>
+</ol>
 <p>To calculate a p-value for a set of 20-panel single-target lineups generated under Scenario 1 where the data plot was selected 25 times out of 30 observations,</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="fu"><a href="reference/dVis.html">dVis</a></span><span class="op">(</span><span class="fl">25</span>, K <span class="op">=</span> <span class="fl">30</span>, m <span class="op">=</span> <span class="fl">20</span>, scenario <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
