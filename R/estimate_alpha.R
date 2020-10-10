@@ -22,7 +22,7 @@ sim_lineup_model <- function(alpha, m0 = 19, K = 22, N = 50) {
 #' @param m0 The number of null panels in the lineup
 #' @param K The total number of null panel selections (or, in a Rorschach lineup, the total number of evaluations)
 #' @export
-expected_number_panels <- function(alpha, c=m0/K, m0 = 20, K=30) {
+expected_number_panels <- function(alpha, c=m0/K, m0 = 19, K=30) {
   x <- ceiling(c):K
   summation <- choose(K, x) * beta(x + alpha, K - x + (m0 - 1)*alpha)
   

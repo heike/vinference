@@ -6,8 +6,8 @@
 \usage{
 sim_interesting_panels(
   alphas = 10^seq(-2, 2, 0.05),
-  c = m/K,
-  m = 19,
+  c = m0/K,
+  m0 = 19,
   K = 30,
   N_points = 10,
   avg_n_sims = 10
@@ -18,7 +18,7 @@ sim_interesting_panels(
 
 \item{c}{The number of selections a panel must have to be interesting (can be non-integer)}
 
-\item{m}{The number of null panels in the lineup}
+\item{m0}{The number of null panels in the lineup}
 
 \item{K}{The total number of null panel selections (or, in a Rorschach lineup, the total number of evaluations)}
 

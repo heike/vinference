@@ -101,6 +101,7 @@ scenario4 <- function(N, K, m = 20, xp = 1, target = 1) {
 #' @param upper.tail compute probabilities P(X >= x). Be aware that the use of this parameter is not consistent with the other distribution functions in base. There, a value of P(X > x) is computed for upper.tail=TRUE.
 #' @return Vector/data frame. For comparison a p value based on a binomial distribution is provided as well.
 #' @export
+#' \lifecycle{deprecated}
 #' @examples
 #' pVsim(15, 20, m=3) # triangle test
 pVsim <- function(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1, upper.tail = TRUE) {
@@ -135,7 +136,7 @@ pVsim <- function(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1, upp
 #' @param target location of target plot(s). By default 1. If several targets are present, specify vector of target locations.
 #' @return simulation based density to observe x picks of the data plot in K evaluation under the assumption that the data plot is consistent with the null hypothesis. For comparison a p value based on a binomial distribution is provided as well.
 #' @export
-#' \lifecycle{soft-deprecated}
+#' \lifecycle{deprecated}
 #' @examples
 #' dVsim(2, 20, m=3) # triangle test
 #'
@@ -180,6 +181,7 @@ dVsim <- function(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1) {
 #' @param scenario which scenario should be used? 1, 2, or 3?
 #' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
 #' @export
+#' \lifecycle{deprecated}
 #' @examples
 #' pV(0:5, 5, m=3, scenario=3)
 pV <- function(x, K, m, scenario, type = "numeric") {
@@ -207,6 +209,7 @@ pV <- function(x, K, m, scenario, type = "numeric") {
 #' @param scenario which scenario should be used? 1, 2, or 3?
 #' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
 #' @export
+#' \lifecycle{deprecated}
 #' @importFrom lifecycle deprecate_warn
 #' @examples
 #' dV(0:5, 5, m=2, scenario=3)
@@ -244,6 +247,7 @@ dV <- function(x, K, m, scenario, type = "numeric") {
 #' @param scenario which scenario should be used? 1, 2, or 3?
 #' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
 #' @export
+#' \lifecycle{deprecated}
 #' @examples
 #' ## get critical values of visual triangle test:
 #' qV(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=3, scenario=1:3)
