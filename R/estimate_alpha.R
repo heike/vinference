@@ -216,14 +216,13 @@ observed_band <- function(obs, limits, c = m0/K, m0 = 19, K = 30) {
       tibble(x = obs_alph[1], y = c(obs, -Inf), type = "vert")
     )
     
-    geom_line(aes(x = x, y = y, group = type), data = segs, color = "grey30", size = 0.5)
+    geom_line(aes(x = .data$x, y = .data$y, group = .data$type), data = segs, color = "grey30", size = 0.5)
   } else {
     NULL
   }
   
   obs_band <- if (!any(is.na(limits))) {
-    limits_alph <- estimate_alpha_numeric(limits, c = c, m0 = m0, K = K) %>%
-      purrr::map_dbl(purrr::pluck, "alpha")
+    limits_alph <- estimate_alpha_numeric(limits, c = c, m0 = m0, K = K)$alpha
     
     # Construct polygon coords for shading
     bands <- rbind(
@@ -235,7 +234,7 @@ observed_band <- function(obs, limits, c = m0/K, m0 = 19, K = 30) {
              type = "vert")
     )
     
-    geom_polygon(aes(x = x, y = y, group = type), data = bands, fill = "grey", alpha = 0.5)
+    geom_polygon(aes(x = .data$x, y = .data$y, group = .data$type), data = bands, fill = "grey", alpha = 0.5)
   } else {
     NULL
   }
