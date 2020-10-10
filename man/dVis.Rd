@@ -2,9 +2,12 @@
 % Please edit documentation in R/pvalues.r
 \name{dVis}
 \alias{dVis}
+\alias{pVis}
 \title{Visual Inference}
 \usage{
 dVis(x, K, m = 20, alpha, scenario = 3)
+
+pVis(x, K, m = 20, alpha, scenario = 3, lower.tail = TRUE)
 }
 \arguments{
 \item{x}{vector, number of data identifications,}
@@ -16,9 +19,21 @@ dVis(x, K, m = 20, alpha, scenario = 3)
 \item{alpha}{positive value, rate parameter of the flat Dirichlet distribution,}
 
 \item{scenario}{integer value.}
+
+\item{lower.tail}{defaults to TRUE, if TRUE probabilities are \eqn{P(X ≤ x)}, otherwise, \eqn{P(X ≥ x)}. 
+Note that the second probability is a deviation from R standard: usually \eqn{P(X > x)} is returned. 
+However, here, returning \eqn{P(X ≥ x)} is more useful in an inference setting, as it corresponds to the 
+p value.}
+}
+\value{
+(vector) of probabilities for \eqn{P(X = x)} and, correspondingly for 
+pVis the probabilities \eqn{P(X \le x)} are returned.
 }
 \description{
+Density and distribution function for visual inference scenarios.
 XXX intro sentence for Visual inference
+}
+\details{
 We distinguish between three different scenarios:
 \itemize{
 \item Scenario 1: in each of K evaluations a different data set and a different set of (m-1) null plots is shown.
@@ -35,6 +50,7 @@ where
 \eqn{K} is the number of times the lineup has been evaluated, 
 \eqn{x} number of times the data plot has been picked as the visually most interesting,
 \eqn{m} is the number of panels in a lineup (the lineup size).
+
 For large values of alpha, scenario 3 converges to scenario 1.
 }
 \examples{

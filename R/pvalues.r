@@ -1,6 +1,8 @@
 #' Visual Inference
 #' 
+#' Density and distribution function for visual inference scenarios.
 #' XXX intro sentence for Visual inference
+#' 
 #' We distinguish between three different scenarios:
 #' \itemize{
 #' \item Scenario 1: in each of K evaluations a different data set and a different set of (m-1) null plots is shown.
@@ -17,13 +19,20 @@
 #' \eqn{K} is the number of times the lineup has been evaluated, 
 #' \eqn{x} number of times the data plot has been picked as the visually most interesting,
 #' \eqn{m} is the number of panels in a lineup (the lineup size).
+#' 
 #' For large values of alpha, scenario 3 converges to scenario 1. 
 #' @param x vector, number of data identifications,
 #' @param K positive value, number of evaluations of the lineup,
 #' @param m number of panels in the lineup,
 #' @param alpha positive value, rate parameter of the flat Dirichlet distribution,
 #' @param scenario integer value.
-#' @importFrom stats dbinom
+#' @param lower.tail defaults to TRUE, if TRUE probabilities are \eqn{P(X ≤ x)}, otherwise, \eqn{P(X ≥ x)}. 
+#' Note that the second probability is a deviation from R standard: usually \eqn{P(X > x)} is returned. 
+#' However, here, returning \eqn{P(X ≥ x)} is more useful in an inference setting, as it corresponds to the 
+#' p value.
+#' @importFrom stats dbinom pbinom
+#' @return (vector) of probabilities for \eqn{P(X = x)} and, correspondingly for 
+#' pVis the probabilities \eqn{P(X \le x)} are returned.
 #' @export
 #' @examples 
 #' # Probabilities to see between 5 and 10 data identifications
@@ -49,3 +58,29 @@ dVis <- function(x, K, m = 20, alpha, scenario = 3) {
     return(dbinom(x, K, prob = 1/m))
   }
 }
+
+
+#' @rdname dVis
+pVis <- function(x, K, m = 20, alpha, scenario = 3, lower.tail = TRUE) {
+  if (scenario == 1) { # binomial distribution
+    delta <- 0
+    if (lower.tail == FALSE) delta <- dbinom(x, size = K, prob = 1/m)
+    return(pbinom(x, size = K, prob = 1/m, lower.tail = lower.tail)+ delta)
+  }
+  
+  if (scenario == 3) {
+    # x should be single value now, or we need to be a bit inventive
+    if (lower.tail) {
+      xs <- seq(0, max(x, na.rm=TRUE))
+    } else (
+      xs <- seq(K:min(x, na.rm=TRUE))
+    )
+    dvis <- dVis(x = xs, K =K, m=m, alpha = alpha, scenario=scenario)
+    cum <- cumsum(dvis)
+    if (!lower.tail) cum <- rev(cum)
+      
+    return(cum[x+1])
+  }
+}
+
+
