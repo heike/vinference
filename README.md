@@ -37,12 +37,14 @@ devtools::install_github("heike/vinference")
 library(vinference)
 ```
 
-In visual inference, we can run experiments under 3 scenarios: 1.
-Scenario 1: in each of K evaluations a different data set and a
-different set of (m-1) null plots is shown. 2. Scenario 2: in each of K
-evaluations the same data set but a different set of (m-1) null plots is
-shown. 3. Scenario 3: the same lineup, i.e. same data and same set of
-null plots, is shown to K different observers.
+In visual inference, we can run experiments under 3 scenarios:
+
+1.  Scenario 1: in each of K evaluations a different data set and a
+    different set of (m-1) null plots is shown.
+2.  Scenario 2: in each of K evaluations the same data set but a
+    different set of (m-1) null plots is shown.
+3.  Scenario 3: the same lineup, i.e. same data and same set of null
+    plots, is shown to K different observers.
 
 To calculate a p-value for a set of 20-panel single-target lineups
 generated under Scenario 1 where the data plot was selected 25 times out
