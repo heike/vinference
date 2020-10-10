@@ -2,9 +2,5 @@ pandoc: 2.7.3
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles: {}
-<<<<<<< HEAD
-last_built: 2020-10-10T20:58Z
-=======
-last_built: 2020-10-10T22:28Z
->>>>>>> 28c94ac959e95ccf4eb18e248d209dada3c8969d
+last_built: 2020-10-10T22:33Z
 

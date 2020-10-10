@@ -70,7 +70,7 @@ estimate_alpha_visual(m0 = 19, K = 30, c = 1)
 If you have experimental data available, there is an additional function which may assist you with visual estimation: `observed_band`. The observed band function leverages an average number of panels or a range of panels to add additional cues to the plot. Suppose that we have several lineups which have $K\approx30$  evaluations; between 4 and 7 panels were selected in each lineup, with an average of 4.75 panels selected.
 
 ```{r}
-estimate_alpha_visual(m0 = 19, K = 30, c = 1) + observed_band(4.75, c(4, 7))
+estimate_alpha_visual(m0 = 19, K = 30, c = 1) + observed_band(5.5, c(4, 7))
 ```
 Using this cue, values of $\alpha$ between 0.075 and 0.12 might be most appropriate, with the best numerical estimate around $\alpha=0.1$.
 
