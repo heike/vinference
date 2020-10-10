@@ -133,6 +133,11 @@ estimate_alpha_visual <- function(c = m0/K, m0 = 19, K = 30, alphas = 10^seq(-3,
 #' @importFrom dplyr mutate filter
 #' @importFrom stats optim
 estimate_alpha_numeric <- function(Zc, c = m0/K, m0 = 19, K = 30) {
+  # Just a wrapper
+  map(Zc, estimate_alpha_num_scalar, c = c, m0 = m0, K = K)
+}
+
+estimate_alpha_num_scalar <- function(Zc, c = m0/K, m0 = 19, K = 30) {
   stopifnot(Zc < K, Zc > 0)
   stopifnot(c > 0, m0 > 1, K > 1)
   
@@ -159,5 +164,58 @@ estimate_alpha_numeric <- function(Zc, c = m0/K, m0 = 19, K = 30) {
   if (res$alpha < 0.01) warning("Warning: alpha estimate is too low to be reliable. Null panel generation method may produce null plots which are too visually distinct.")
   
   res
+}
+
+#' Add a band corresponding to the observed number of interesting panels to the visual estimation plot
+#' 
+#' This function adds a band to assist in the visual estimation of alpha from evaluated lineups. 
+#' 
+#' @param obs Observed number of "c-interesting" panels (panels with at least c selections). If NA, the line is omitted.
+#' @param limits Lower and upper bounds for number of panels. If NA, the bands are omitted.
+#' @param c The number of selections a panel must have to be interesting (can be non-integer)
+#' @param m0 The number of null panels in the lineup
+#' @param K The total number of null panel selections (or, in a Rorschach lineup, the total number of evaluations)
+#' @examples
+#' estimate_alpha_visual() + observed_band(obs = NA, limits = c(5, 7))
+#' estimate_alpha_visual() + observed_band(obs = 6, limits = NA)
+#' estimate_alpha_visual(c = 1, m0 = 19, K = 50) + observed_band(obs = 6, limits = c(4, 8), c = 1, m0 = 19, K = 50)
+observed_band <- function(obs, limits, c = m0/K, m0 = 19, K = 30) {
+
+  # get alpha values for critical y values
+  obs_line <- if (!is.na(obs)) {
+    obs_alph <- estimate_alpha_num_scalar(obs, c = c, m0 = m0, K = K)$alpha
+    
+    # Construct lines for center/observed
+    segs <- rbind(
+      tibble(x = c(1/Inf, obs_alph[1]), y = obs, type = "horiz"),
+      tibble(x = obs_alph[1], y = c(obs, -Inf), type = "vert")
+    )
+    
+    geom_line(aes(x = x, y = y, group = type), data = segs, color = "grey30", size = 0.5)
+  } else {
+    NULL
+  }
+  
+  obs_band <- if (!any(is.na(limits))) {
+    limits_alph <- estimate_alpha_numeric(limits, c = c, m0 = m0, K = K) %>%
+      purrr::map_dbl(purrr::pluck, "alpha")
+    
+    # Construct polygon coords for shading
+    bands <- rbind(
+      tibble(x = c(1/Inf, limits_alph, 1/Inf, 1/Inf),
+             y = limits[c(1, 1, 2, 2, 1)],
+             type = "horiz"),
+      tibble(x = limits_alph[c(1, 1, 2, 2, 1)],
+             y = c(-Inf, limits, -Inf, -Inf),
+             type = "vert")
+    )
+    print(bands)
+    geom_polygon(aes(x = x, y = y, group = type), data = bands, fill = "grey", alpha = 0.5)
+  } else {
+    NULL
+  }
+  
+  return(list(obs_line, obs_band))
+
 }
 
