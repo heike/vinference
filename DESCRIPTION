@@ -49,4 +49,3 @@ Collate:
     'VK33-recursion.R'
     'VK33-resolve.R'
     'estimate_alpha.R'
-    'pvalues-deprecated.r'
