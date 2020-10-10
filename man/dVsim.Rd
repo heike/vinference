@@ -35,9 +35,9 @@ We distinguish between three different scenarios:
 }
 }
 \examples{
+\dontrun{
 dVsim(2, 20, m=3) # triangle test
 
-\dontrun{
 ## points in red are binomial distribution, black points are for inference
 ## in lineups using scenario 3
 require(ggplot2)
