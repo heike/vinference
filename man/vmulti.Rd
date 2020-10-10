@@ -50,7 +50,7 @@ k=rpois(5,lambda=1)+1
 m=20
 dmulti(0:5,K=5,k=k, type="scenario1", m)
 ## compare to Poisson Binomial:
-require(poibin)
+library(poibin)
 dpoibin(0:5, pp=k/m)
 
 qmulti(c(0.95, 0.99), K=5, k=2)

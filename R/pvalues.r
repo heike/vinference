@@ -104,6 +104,8 @@ scenario4 <- function(N, K, m = 20, xp = 1, target = 1) {
 #' @examples
 #' pVsim(15, 20, m=3) # triangle test
 pVsim <- function(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1, upper.tail = TRUE) {
+  deprecate_warn("1.0.0", "vinference::pVsim()", "new()")
+  
   type <- paste("scenario", scenario, sep = "")
   freq <- get(type)(N = N, K = K, m = m, xp = xp, target = target)
   if (upper.tail) {
@@ -133,6 +135,7 @@ pVsim <- function(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1, upp
 #' @param target location of target plot(s). By default 1. If several targets are present, specify vector of target locations.
 #' @return simulation based density to observe x picks of the data plot in K evaluation under the assumption that the data plot is consistent with the null hypothesis. For comparison a p value based on a binomial distribution is provided as well.
 #' @export
+#' \lifecycle{soft-deprecated}
 #' @examples
 #' dVsim(2, 20, m=3) # triangle test
 #'
@@ -153,6 +156,7 @@ pVsim <- function(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1, upp
 #' # lineup of size 10 with a single target:
 #' dVsim(0:5, K=5, m=10, N=10000, scenario=3, target=1)
 dVsim <- function(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1) {
+  deprecate_warn("1.0.0", "vinference::dVsim()", "new()")
   argx <- x
   freqs <- data.frame(Var1 = 0:K)
   for (t in scenario) {
@@ -170,7 +174,6 @@ dVsim <- function(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1) {
 
 #' Theoretical distribution for lineups under different scenarios
 #'
-#' Some more details to be written later
 #' @param x vector of the number of picks of the data plot out of K evaluations
 #' @param K number of evaluations
 #' @param m size of the lineup
@@ -180,6 +183,7 @@ dVsim <- function(x, K, m = 20, N = 10000, scenario = 3, xp = 1, target = 1) {
 #' @examples
 #' pV(0:5, 5, m=3, scenario=3)
 pV <- function(x, K, m, scenario, type = "numeric") {
+  deprecate_warn("1.0.0", "vinference::pV()", "new()")
   res <- x
   if (3 %in% scenario) res <- cbind(res, scenario3 = pv3(x, K, m, type = type))
   if (1 %in% scenario) res <- cbind(res, scenario1 = 1 - stats::pbinom(x, size = K, prob = 1 / m) + stats::dbinom(x, size = K, prob = 1 / m))
@@ -197,13 +201,13 @@ pV <- function(x, K, m, scenario, type = "numeric") {
 
 #' Theoretical density for lineups under different scenarios
 #'
-#' Some more details to be written later
 #' @param x vector of the number of picks of the data plot out of K evaluations
 #' @param K number of evaluations
 #' @param m size of the lineup
 #' @param scenario which scenario should be used? 1, 2, or 3?
 #' @param type one of "mpfr" or "numeric". Should the result be in arbitrary numeric length or be a numeric? Internally the Rmpfr package is used to get maximal precision.
 #' @export
+#' @importFrom lifecycle deprecate_warn
 #' @examples
 #' dV(0:5, 5, m=2, scenario=3)
 #' ## compare to
@@ -215,6 +219,7 @@ pV <- function(x, K, m, scenario, type = "numeric") {
 #' print(qplot(0:K, dV(0:K, K, m=20, scenario=3)));
 #' print(sum(dV(0:K, K, m=20, scenario=3)));
 dV <- function(x, K, m, scenario, type = "numeric") {
+  deprecate_warn("1.0.0", "vinference::dV()", "new()")
   res <- x
   if (3 %in% scenario) res <- cbind(res, scenario3 = dv3(x, K, m, type = type))
   if (1 %in% scenario) res <- cbind(res, scenario1 = stats::dbinom(x, size = K, prob = 1 / m))
@@ -246,6 +251,7 @@ dV <- function(x, K, m, scenario, type = "numeric") {
 #' ## get critical values of full lineup test:
 #' qV(q=c(0.95, 0.99), K=c(5,10,15,20, 25, 30), m=20, scenario=3)
 qV <- function(q, K, m, scenario, type = "numeric") {
+  deprecate_warn("1.0.0", "vinference::qV()", "new()")
   res <- data.frame(expand.grid(q = q, K = K))
   if (1 %in% scenario) {
     # res$scenario1 <- unlist(plyr::alply(res, .margins=1, function(x) stats::qbinom(x$q, size=x$K, prob=1/m)))
