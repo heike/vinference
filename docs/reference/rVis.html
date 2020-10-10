@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • vinference</title>
+<title>Functions to produce visual estimate of alpha
+Simulate data from a lineup evaluation experiment using the Dirichlet-Multinomial model — rVis • vinference</title>
 
 
 <!-- jquery -->
@@ -39,7 +40,10 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Functions to produce visual estimate of alpha
+Simulate data from a lineup evaluation experiment using the Dirichlet-Multinomial model — rVis" />
+<meta property="og:description" content="This function returns panel selection counts simulated from the Dirichlet-
+Multinomial model; that is, the result is a \(m \times N\) matrix of panel selection counts." />
 
 
 
@@ -58,7 +62,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -105,115 +109,67 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Functions to produce visual estimate of alpha
+Simulate data from a lineup evaluation experiment using the Dirichlet-Multinomial model</h1>
+    <small class="dont-index">Source: <a href='http://github.com/heike/vinference/blob/master/R/estimate_alpha.R'><code>R/estimate_alpha.R</code></a></small>
+    <div class="hidden name"><code>rVis.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>This function returns panel selection counts simulated from the Dirichlet-
+Multinomial model; that is, the result is a \(m \times N\) matrix of panel selection counts.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>rVis</span><span class='op'>(</span><span class='va'>alpha</span>, m <span class='op'>=</span> <span class='fl'>20</span>, K <span class='op'>=</span> <span class='fl'>22</span>, N <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="dV.html">dV()</a></code> </p>
-        </td>
-        <td><p>Theoretical density for lineups under different scenarios</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dVis.html">dVis()</a></code> <code><a href="dVis.html">pVis()</a></code> <code><a href="dVis.html">qVis()</a></code> </p>
-        </td>
-        <td><p>Visual Inference for different Lineup Scenarios under a Dirichlet Model</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dVsim.html">dVsim()</a></code> </p>
-        </td>
-        <td><p>Simulation based density for visual inference</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_alpha_numeric.html">estimate_alpha_numeric()</a></code> </p>
-        </td>
-        <td><p>Numerically estimate alpha using the average number of c-interesting panels</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_alpha_visual.html">estimate_alpha_visual()</a></code> </p>
-        </td>
-        <td><p>Create a plot for visual estimation of alpha</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="expected_number_panels.html">expected_number_panels()</a></code> </p>
-        </td>
-        <td><p>Compute the expected number of c-interesting panels for a lineup experiment</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="observed_band.html">observed_band()</a></code> </p>
-        </td>
-        <td><p>Add a band corresponding to the observed number of interesting panels to the visual estimation plot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="pV.html">pV()</a></code> </p>
-        </td>
-        <td><p>Theoretical distribution for lineups under different scenarios</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="pVsim.html">pVsim()</a></code> </p>
-        </td>
-        <td><p>Bootstrap based p values for visual inference</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="qV.html">qV()</a></code> </p>
-        </td>
-        <td><p>Theoretical quantile for lineups under different scenarios</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rVis.html">rVis()</a></code> </p>
-        </td>
-        <td><p>Functions to produce visual estimate of alpha
-Simulate data from a lineup evaluation experiment using the Dirichlet-Multinomial model</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="sim_interesting_panels.html">sim_interesting_panels()</a></code> </p>
-        </td>
-        <td><p>Simulate the number of c-interesting panels for a lineup experiment</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="vmulti.html">dmulti()</a></code> <code><a href="vmulti.html">pmulti()</a></code> <code><a href="vmulti.html">qmulti()</a></code> </p>
-        </td>
-        <td><p>Simulation based density and distribution functions of visual inference under a multiple choice lineup</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>alpha</th>
+      <td><p>The (scalar) symmetric Dirichlet parameter which is related to the number of interesting panels</p></td>
+    </tr>
+    <tr>
+      <th>m</th>
+      <td><p>The number of panels in the lineup</p></td>
+    </tr>
+    <tr>
+      <th>K</th>
+      <td><p>The total number of null panel selections (or, in a Rorschach lineup, the total number of evaluations)</p></td>
+    </tr>
+    <tr>
+      <th>N</th>
+      <td><p>Number of lineups to simulate</p></td>
+    </tr>
     </table>
-  </div>
 
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>rVis</span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='fl'>.5</span>, m <span class='op'>=</span> <span class='fl'>20</span>, K <span class='op'>=</span> <span class='fl'>30</span>, N <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;       [,1] [,2] [,3] [,4] [,5]
+#&gt;  [1,]    0    0    0    0    0
+#&gt;  [2,]    4    5    6    4    5
+#&gt;  [3,]    0    0    0    0    0
+#&gt;  [4,]    3    4    4    2    5
+#&gt;  [5,]    2    1    2    0    1
+#&gt;  [6,]    0    0    0    0    0
+#&gt;  [7,]    1    0    0    0    0
+#&gt;  [8,]    0    0    0    0    0
+#&gt;  [9,]    2    2    1    2    3
+#&gt; [10,]    5    4    1    0    5
+#&gt; [11,]    0    0    1    0    0
+#&gt; [12,]    2    0    2    2    1
+#&gt; [13,]    1    1    1    1    1
+#&gt; [14,]    1    1    1    2    1
+#&gt; [15,]    0    0    0    0    0
+#&gt; [16,]    2    4    3    0    2
+#&gt; [17,]    0    0    1    0    1
+#&gt; [18,]    4    3    3    7    1
+#&gt; [19,]    1    2    1    4    3
+#&gt; [20,]    2    3    3    6    1</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>

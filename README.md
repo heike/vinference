@@ -7,8 +7,6 @@
 
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![Travis-CI Build
-Status](https://travis-ci.org/heike/vinference?branch=master)](https://travis-ci.org/heike/vinference)
 [![Last-changedate](https://img.shields.io/badge/last%20change-2020--10--10-yellowgreen.svg)](/commits/master)
 [![Travis build
 status](https://travis-ci.com/heike/vinference.svg?branch=master)](https://travis-ci.com/heike/vinference)
