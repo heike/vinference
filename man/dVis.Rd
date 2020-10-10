@@ -3,11 +3,14 @@
 \name{dVis}
 \alias{dVis}
 \alias{pVis}
-\title{Visual Inference}
+\alias{qVis}
+\title{Visual Inference for different Lineup Scenarios}
 \usage{
 dVis(x, K, m = 20, alpha, scenario = 3)
 
 pVis(x, K, m = 20, alpha, scenario = 3, lower.tail = TRUE)
+
+qVis(p, K, m = 20, alpha, scenario = 3)
 }
 \arguments{
 \item{x}{vector, number of data identifications,}
@@ -24,13 +27,15 @@ pVis(x, K, m = 20, alpha, scenario = 3, lower.tail = TRUE)
 Note that the second probability is a deviation from R standard: usually \eqn{P(X > x)} is returned. 
 However, here, returning \eqn{P(X ≥ x)} is more useful in an inference setting, as it corresponds to the 
 p value.}
+
+\item{p}{(vector of) probabilities,}
 }
 \value{
 (vector) of probabilities for \eqn{P(X = x)} and, correspondingly for 
 pVis the probabilities \eqn{P(X \le x)} are returned.
 }
 \description{
-Density and distribution function for visual inference scenarios.
+Density, distribution function and quantiles for visual inference scenarios.
 XXX intro sentence for Visual inference
 }
 \details{
@@ -69,4 +74,9 @@ dframe <- data.frame(
 library(ggplot2)
 ggplot(data = dframe, aes(x = x, y = probabilities, colour = alpha)) +
   geom_point() 
+  
+ # how many data picks do we need in a lineup of size m
+ # with K = 30 evaluations and alpha = 0.1 to achieve a 
+ # significance at 10\%, 5\% or 1\%?
+ qVis(p = c(0.9, 0.95, 0.99), K = 30, m=20, alpha = 0.1)
 }
