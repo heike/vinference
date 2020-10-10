@@ -123,14 +123,6 @@ estimate_alpha_visual <- function(c = m0/K, m0 = 19, K = 30, alphas = 10^seq(-3,
 }
 
 
-inv_exp_panels <- function(alpha, X, c, m0, K) {
-  # Internal function, not documented
-  if (alpha <= 0) return(Inf)
-  
-  (X - expected_number_panels(alpha = alpha, c = c, m0 = m0, K = K))^2
-}
-
-
 #' Numerically estimate alpha using the average number of c-interesting panels
 #' 
 #' @param Zc Average number of panels with at least c selections
@@ -143,6 +135,14 @@ inv_exp_panels <- function(alpha, X, c, m0, K) {
 estimate_alpha_numeric <- function(Zc, c = m0/K, m0 = 19, K = 30) {
   stopifnot(Zc < K, Zc > 0)
   stopifnot(c > 0, m0 > 1, K > 1)
+  
+  
+  inv_exp_panels <- function(alpha, X, c, m0, K) {
+    # Internal function, not documented
+    if (alpha <= 0) return(Inf)
+    
+    (X - expected_number_panels(alpha = alpha, c = c, m0 = m0, K = K))^2
+  }
   
   # Get good initialization values
   df <- data.frame(alpha = 10^seq(-2, 2, .5)) %>%
