@@ -133,6 +133,11 @@ estimate_alpha_visual <- function(c = m0/K, m0 = 19, K = 30, alphas = 10^seq(-3,
 #' @importFrom dplyr mutate filter
 #' @importFrom stats optim
 estimate_alpha_numeric <- function(Zc, c = m0/K, m0 = 19, K = 30) {
+  # Just a wrapper
+  map(Zc, estimate_alpha_num_scalar, c = c, m0 = m0, K = K)
+}
+
+estimate_alpha_num_scalar <- function(Zc, c = m0/K, m0 = 19, K = 30) {
   stopifnot(Zc < K, Zc > 0)
   stopifnot(c > 0, m0 > 1, K > 1)
   
