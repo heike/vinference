@@ -4,13 +4,13 @@
 #' Simulate data from a lineup evaluation experiment using the Dirichlet-Multinomial model
 #' 
 #' @param alpha The Dirichlet parameter which is related to the number of interesting panels
-#' @param m The number of null panels in the lineup
+#' @param m0 The number of null panels in the lineup
 #' @param K The total number of null panel selections (or, in a Rorschach lineup, the total number of evaluations)
 #' @param N Number of lineups to simulate
 #' @importFrom gtools rdirichlet
 #' @importFrom stats rmultinom
-sim_lineup_model <- function(alpha, m = 19, K = 22, N = 50) {
-  theta <- gtools::rdirichlet(1, rep(alpha, m))
+sim_lineup_model <- function(alpha, m0 = 19, K = 22, N = 50) {
+  theta <- gtools::rdirichlet(1, rep(alpha, m0))
   sels <- stats::rmultinom(N, size = K, prob = theta)
   sels
 }
@@ -19,21 +19,21 @@ sim_lineup_model <- function(alpha, m = 19, K = 22, N = 50) {
 #' 
 #' @param alpha The Dirichlet parameter which is related to the number of interesting panels
 #' @param c The number of selections a panel must have to be interesting (can be non-integer)
-#' @param m The number of null panels in the lineup
+#' @param m0 The number of null panels in the lineup
 #' @param K The total number of null panel selections (or, in a Rorschach lineup, the total number of evaluations)
 #' @export
-expected_number_panels <- function(alpha, c=m/K, m = 20, K=30) {
+expected_number_panels <- function(alpha, c=m0/K, m0 = 20, K=30) {
   x <- ceiling(c):K
-  summation <- choose(K, x) * beta(x + alpha, K - x + (m - 1)*alpha)
+  summation <- choose(K, x) * beta(x + alpha, K - x + (m0 - 1)*alpha)
   
-  m/beta(alpha, (m - 1)*alpha)*sum(summation)
+  m0/beta(alpha, (m0 - 1)*alpha)*sum(summation)
 }
 
 #' Simulate the number of c-interesting panels for a lineup experiment
 #' 
 #' @param alphas Numeric vector of alpha values to conduct simulations for
 #' @param c The number of selections a panel must have to be interesting (can be non-integer)
-#' @param m The number of null panels in the lineup
+#' @param m0 The number of null panels in the lineup
 #' @param K The total number of null panel selections (or, in a Rorschach lineup, the total number of evaluations)
 #' @param N_points The number of points to simulate for each value of alpha
 #' @param avg_n_sims The number of simulations to average to get a single point value.
@@ -46,7 +46,7 @@ expected_number_panels <- function(alpha, c=m/K, m = 20, K=30) {
 #' @importFrom dplyr mutate group_by summarize
 #' @examples 
 #' sim_interesting_panels()
-sim_interesting_panels <- function(alphas = 10^seq(-2, 2, .05), c = m/K, m = 19, K = 30, 
+sim_interesting_panels <- function(alphas = 10^seq(-2, 2, .05), c = m0/K, m0 = 19, K = 30, 
                                    N_points = 10, avg_n_sims = 10) {
   # Each point (of N_points) is an average of avg_n_sims separate lineups
   # First, generate all of the lineups and count the number of interesting panels
@@ -71,7 +71,7 @@ sim_interesting_panels <- function(alphas = 10^seq(-2, 2, .05), c = m/K, m = 19,
 #' Create a plot for visual estimation of alpha
 #' 
 #' @param c The number of selections a panel must have to be interesting (can be non-integer)
-#' @param m The number of null panels in the lineup
+#' @param m0 The number of null panels in the lineup
 #' @param K The total number of null panel selections (or, in a Rorschach lineup, the total number of evaluations)
 #' @param alphas Numeric vector of alpha values to conduct simulations for
 #' @param ... additional arguments to sim_interesting_panels
@@ -83,17 +83,17 @@ sim_interesting_panels <- function(alphas = 10^seq(-2, 2, .05), c = m/K, m = 19,
 #' @import ggplot2
 #' @examples 
 #' alpha_from_data_lineup()
-alpha_from_data_lineup <- function(c = m/K, m = 19, K = 30, alphas = 10^seq(-3, 2, .05), ...) {
+estimate_alpha_visual <- function(c = m0/K, m0 = 19, K = 30, alphas = 10^seq(-3, 2, .05), ...) {
   n <- z <- NULL
   
   # Get theoretical function
   model_df <- tibble::tibble(alpha = alphas,
                              n_sel_plots = alphas %>% 
-                               purrr::map_dbl(expected_number_panels, c = c, m=m, K=K)
+                               purrr::map_dbl(expected_number_panels, c = c, m=m0, K=K)
   )
   
   # Get simulated data
-  prior_pred_mean <- sim_interesting_panels(c = c, m = m, K = K, alphas = alphas, ...) %>%
+  prior_pred_mean <- sim_interesting_panels(c = c, m = m0, K = K, alphas = alphas, ...) %>%
     dplyr::arrange(.data$alpha) %>%
     dplyr::mutate(label = sprintf("alpha == %f", .data$alpha) %>%
                     factor(levels = sprintf("alpha == %f", alphas), ordered = T))
@@ -126,14 +126,14 @@ alpha_from_data_lineup <- function(c = m/K, m = 19, K = 30, alphas = 10^seq(-3, 
 #' 
 #' @param Zc Average number of panels with at least c selections
 #' @param c The number of selections a panel must have to be interesting (can be non-integer)
-#' @param m The number of null panels in the lineup
+#' @param m0 The number of null panels in the lineup
 #' @param K The total number of null panel selections (or, in a Rorschach lineup, the total number of evaluations)
 #' @export
 #' @importFrom dplyr mutate filter
 #' @importFrom stats optim
-alpha_from_null_lineup <- function(Zc, c = m/K, m = 20, K = 30) {
+estimage_alpha_numeric <- function(Zc, c = m0/K, m0 = 20, K = 30) {
   stopifnot(Zc < K, Zc > 0)
-  stopifnot(c > 0, m > 1, K > 1)
+  stopifnot(c > 0, m0 > 1, K > 1)
   
   optfun <- function(alpha, X, c, m, K) {
     if (alpha <= 0) return(Inf)
@@ -143,12 +143,12 @@ alpha_from_null_lineup <- function(Zc, c = m/K, m = 20, K = 30) {
   
   # Get good initialization values
   df <- data.frame(alpha = 10^seq(-2, 2, .5)) %>%
-    dplyr::mutate(objval = purrr::map_dbl(.data$alpha, optfun, X = Zc, c = c, m = m, K = K)) %>%
+    dplyr::mutate(objval = purrr::map_dbl(.data$alpha, optfun, X = Zc, c = c, m = m0, K = K)) %>%
     dplyr::filter(.data$objval == min(.data$objval))
 
   
   res <- optim(list(alpha = df$alpha), optfun, 
-               X = Zc, c = c, m = m, K = K, 
+               X = Zc, c = c, m = m0, K = K, 
                method = "Brent", lower = 1e-4, upper = 100)
   
   names(res) <- c("alpha", "sum_sq_error", "counts", "convergence", "message")
