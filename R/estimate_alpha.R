@@ -216,7 +216,7 @@ observed_band <- function(obs, limits, c = m0/K, m0 = 19, K = 30) {
       tibble(x = obs_alph[1], y = c(obs, -Inf), type = "vert")
     )
     
-    geom_line(aes(x = x, y = y, group = type), data = segs, color = "grey30", size = 0.5)
+    geom_line(aes(x = .data$x, y = .data$y, group = .data$type), data = segs, color = "grey30", size = 0.5)
   } else {
     NULL
   }
@@ -234,7 +234,7 @@ observed_band <- function(obs, limits, c = m0/K, m0 = 19, K = 30) {
              type = "vert")
     )
     
-    geom_polygon(aes(x = x, y = y, group = type), data = bands, fill = "grey", alpha = 0.5)
+    geom_polygon(aes(x = .data$x, y = .data$y, group = .data$type), data = bands, fill = "grey", alpha = 0.5)
   } else {
     NULL
   }
