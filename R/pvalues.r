@@ -1,9 +1,13 @@
-#' Visual Inference for different Lineup Scenarios
+#' Visual Inference for different Lineup Scenarios under a Dirichlet Model
 #' 
 #' Density, distribution function and quantiles for visual inference scenarios.
-#' XXX intro sentence for Visual inference
+#' Visual inference is used to determine significance of a visual finding. 
+#' The lineup protocol (Buja et al., 2009) establishes a formal framework for 
+#' testing graphical findings. The package \code{nullabor} helps with the creation 
+#' of lineups using various null generation models.
+#' Here, we provide functions to evaluate results.
 #' 
-#' We distinguish between three different scenarios:
+#' When administering visual tests, we distinguish between three different scenarios:
 #' \itemize{
 #' \item Scenario 1: in each of K evaluations a different data set and a different set of (m-1) null plots is shown.
 #' \item Scenario 2: in each of K evaluations the same data set but a different set of (m-1) null plots is shown.
@@ -32,9 +36,11 @@
 #' However, here, returning \eqn{P(X ≥ x)} is more useful in an inference setting, as it corresponds to the 
 #' p value.
 #' @importFrom stats dbinom pbinom qbinom
-#' @return (vector) of probabilities for \eqn{P(X = x)} and, correspondingly for 
-#' pVis the probabilities \eqn{P(X \le x)} are returned.
+#' @return The functions return (vector) of probabilities for \eqn{P(X = x)}, \eqn{P(X ≤ x)}, or quantiles.  
 #' @export
+#' @references 
+#' Andreas Buja, Dianne Cook, Heike Hofmann, Michael Lawrence, Eun-Kyung Lee, Deborah F. Swayne and Hadley Wickham, Statistical inference for exploratory data analysis and model diagnostics.
+#' Phil. Trans. R. Soc. A. 367: 4361-4383, 2009, \url{https://doi.org/10.1098/rsta.2009.0120}
 #' @examples 
 #' # Probabilities to see between 5 and 10 data identifications
 #' # in lineup of size 20, with 15 evaluations, and an estimated 
