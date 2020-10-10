@@ -89,7 +89,7 @@ alpha_from_data_lineup <- function(c = m/K, m = 19, K = 30, alphas = 10^seq(-3, 
   # Get theoretical function
   model_df <- tibble::tibble(alpha = alphas,
                              n_sel_plots = alphas %>% 
-                               purrr::map_dbl(expected_number_panels, c = c)
+                               purrr::map_dbl(expected_number_panels, c = c, m=m, K=K)
   )
   
   # Get simulated data
