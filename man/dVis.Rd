@@ -4,7 +4,7 @@
 \alias{dVis}
 \alias{pVis}
 \alias{qVis}
-\title{Visual Inference for different Lineup Scenarios}
+\title{Visual Inference for different Lineup Scenarios under a Dirichlet Model}
 \usage{
 dVis(x, K, m = 20, alpha, scenario = 3)
 
@@ -31,15 +31,18 @@ p value.}
 \item{p}{(vector of) probabilities,}
 }
 \value{
-(vector) of probabilities for \eqn{P(X = x)} and, correspondingly for 
-pVis the probabilities \eqn{P(X \le x)} are returned.
+The functions return (vector) of probabilities for \eqn{P(X = x)}, \eqn{P(X ≤ x)}, or quantiles.
 }
 \description{
 Density, distribution function and quantiles for visual inference scenarios.
-XXX intro sentence for Visual inference
+Visual inference is used to determine significance of a visual finding. 
+The lineup protocol (Buja et al., 2009) establishes a formal framework for 
+testing graphical findings. The package \code{nullabor} helps with the creation 
+of lineups using various null generation models.
+Here, we provide functions to evaluate results.
 }
 \details{
-We distinguish between three different scenarios:
+When administering visual tests, we distinguish between three different scenarios:
 \itemize{
 \item Scenario 1: in each of K evaluations a different data set and a different set of (m-1) null plots is shown.
 \item Scenario 2: in each of K evaluations the same data set but a different set of (m-1) null plots is shown.
@@ -79,4 +82,8 @@ ggplot(data = dframe, aes(x = x, y = probabilities, colour = alpha)) +
  # with K = 30 evaluations and alpha = 0.1 to achieve a 
  # significance at 10\%, 5\% or 1\%?
  qVis(p = c(0.9, 0.95, 0.99), K = 30, m=20, alpha = 0.1)
+}
+\references{
+Andreas Buja, Dianne Cook, Heike Hofmann, Michael Lawrence, Eun-Kyung Lee, Deborah F. Swayne and Hadley Wickham, Statistical inference for exploratory data analysis and model diagnostics.
+Phil. Trans. R. Soc. A. 367: 4361-4383, 2009, \url{https://doi.org/10.1098/rsta.2009.0120}
 }
