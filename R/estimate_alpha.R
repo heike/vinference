@@ -1,23 +1,33 @@
 #' Functions to produce visual estimate of alpha
 
 
-#' Simulate data from a lineup evaluation experiment using the Dirichlet-Multinomial model
+#' Simulate results from a lineup evaluation experiment using the Dirichlet-Multinomial model
 #' 
 #' This function returns panel selection counts simulated from the Dirichlet-
 #' Multinomial model; that is, the result is a \eqn{m \times N} matrix of panel selection counts.
 #' 
-#' @param alpha The (scalar) symmetric Dirichlet parameter which is related to the number of interesting panels
-#' @param m The number of panels in the lineup
-#' @param K The total number of null panel selections (or, in a Rorschach lineup, the total number of evaluations)
 #' @param N Number of lineups to simulate
+#' @param K The total number of null panel selections (or, in a Rorschach lineup, the total number of evaluations)
+#' @param m The number of panels in the lineup
+#' @param alpha The (scalar) symmetric Dirichlet parameter which is related to the number of interesting panels
+#' @param scenario which lineup administration is used? scenario 1 and 3 are implemented
 #' @importFrom gtools rdirichlet
 #' @importFrom stats rmultinom
 #' @export
+#' @return Matrix of dimension m by N
 #' @examples 
-#' rVis(alpha = .5, m = 20, K = 30, N = 5)
-rVis <- function(alpha, m = 20, K = 22, N = 50) {
-  theta <- gtools::rdirichlet(1, rep(alpha, m))
-  sels <- stats::rmultinom(N, size = K, prob = theta)
+#' rVis(alpha = .5, m = 20, K = 30, N = 5, scenario = 3)
+#' rVis(alpha = .5, m = 20, K = 30, N = 5, scenario = 1)
+rVis <- function(N = 50, K = 22,  m = 20, alpha, scenario = 3) {
+  if (scenario == 3) {
+    theta <- gtools::rdirichlet(1, rep(alpha, m))
+    sels <- stats::rmultinom(N, size = K, prob = theta)
+  } 
+  if (scenario == 1) {
+    theta <-  t(gtools::rdirichlet(N, rep(0.1, 20)))
+    sels <- mapply(1:N, FUN = function(i) stats::rmultinom(1, size = K, prob = theta[,i]))
+  }
+  
   sels
 }
 
