@@ -42,10 +42,11 @@ Suggests:
 URL: http://github.com/heike/vinference
 RoxygenNote: 7.1.1
 Encoding: UTF-8
+RdMacros: lifecycle
 Collate: 
     'pvalues.r'
     'multi.r'
     'VK33-recursion.R'
     'VK33-resolve.R'
     'estimate_alpha.R'
-RdMacros: lifecycle
+    'pvalues-deprecated.r'

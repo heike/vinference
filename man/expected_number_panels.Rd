@@ -4,7 +4,7 @@
 \alias{expected_number_panels}
 \title{Compute the expected number of c-interesting panels for a lineup experiment}
 \usage{
-expected_number_panels(alpha, c = m0/K, m0 = 20, K = 30)
+expected_number_panels(alpha, c = m0/K, m0 = 19, K = 30)
 }
 \arguments{
 \item{alpha}{The Dirichlet parameter which is related to the number of interesting panels}
