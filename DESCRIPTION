@@ -1,7 +1,21 @@
 Package: vinference
 Maintainer: Heike Hofmann <hofmann@iastate.edu>
-Author: Heike Hofmann and Christian R\"ottger
-Published: 2014-02-01
+Authors@R: c(
+      person("Heike", "Hofmann", role = c("aut", "cre"),
+            email = "hofmann@iastate.edu",
+            comment = c(ORCID = "0000-0001-6216-5183")),
+    person("Susan", "Vanderplas", email = "susan.vanderplas@unl.edu", 
+            role = "aut",
+            comment = c(ORCID = "0000-0002-3803-0972")),   
+    person(given = "Christian",
+             family = "Röttger",
+             role = "aut",
+             email = "roettger@iastate.edu"),        
+      person(given = "Di",
+             family = "Cook",
+             role = "aut",
+             email = "dicook@monash.edu"))
+Published: 2020-10-01
 Version: 0.1.1
 License: MIT + file LICENSE
 Title: Inference under the lineup protocol
@@ -25,11 +39,11 @@ Suggests:
     reshape2,
     RColorBrewer
 URL: http://github.com/heike/vinference
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
+Encoding: UTF-8
 Collate: 
     'pvalues.r'
     'multi.r'
     'VK33-recursion.R'
     'VK33-resolve.R'
     'estimate_alpha.R'
-Encoding: UTF-8

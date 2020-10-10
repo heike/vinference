@@ -87,7 +87,7 @@ dvismulti3 <- function(K, k, m = 20, N = 5000) {
 #' m=20
 #' dmulti(0:5,K=5,k=k, type="scenario1", m)
 #' ## compare to Poisson Binomial:
-#' require(poibin)
+#' library(poibin)
 #' dpoibin(0:5, pp=k/m)
 #'
 #' qmulti(c(0.95, 0.99), K=5, k=2)
