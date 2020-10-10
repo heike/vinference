@@ -70,6 +70,11 @@ sim_interesting_panels <- function(alphas = 10^seq(-2, 2, .05), c = m0/K, m0 = 1
 
 #' Create a plot for visual estimation of alpha
 #' 
+#' The visual estimation plot contains the expected number of interesting 
+#' panels for each alpha value under the specified experimental conditions and
+#' simulated lineup experiments under each scenario which provide some 
+#' information about the expected variability. 
+#' 
 #' @param c The number of selections a panel must have to be interesting (can be non-integer)
 #' @param m0 The number of null panels in the lineup
 #' @param K The total number of null panel selections (or, in a Rorschach lineup, the total number of evaluations)
@@ -125,32 +130,48 @@ estimate_alpha_visual <- function(c = m0/K, m0 = 19, K = 30, alphas = 10^seq(-3,
 
 #' Numerically estimate alpha using the average number of c-interesting panels
 #' 
+#' This function calculates a precise numerical estimate of alpha based by matching 
+#' the number of observed interesting panels to the corresponding value of alpha.
+#' 
 #' @param Zc Average number of panels with at least c selections
 #' @param c The number of selections a panel must have to be interesting (can be non-integer)
 #' @param m0 The number of null panels in the lineup
 #' @param K The total number of null panel selections (or, in a Rorschach lineup, the total number of evaluations)
+#' @return a data frame with list-columns for alpha, optimized sum of squared error, counts (as returned from optim), convergence, 
 #' @export
-#' @importFrom dplyr mutate filter
-#' @importFrom stats optim
+#' @importFrom purrr map map_dbl map_int map_chr
+#' @importFrom tibble tibble
+#' @examples 
+#' res <- estimate_alpha_numeric(5, c = 1, m0 = 19, K = 30)
+#' res$alpha
 estimate_alpha_numeric <- function(Zc, c = m0/K, m0 = 19, K = 30) {
   # Just a wrapper
-  map(Zc, estimate_alpha_num_scalar, c = c, m0 = m0, K = K)
+  purrr::map(Zc, estimate_alpha_num_scalar, c = c, m0 = m0, K = K) %>% {
+    tibble(
+      alpha = purrr::map_dbl(., "alpha"),
+      sum_sq_error = purrr::map_dbl(., "sum_sq_error"),
+      counts = purrr::map(., "counts"),
+      convergence = purrr::map_int(., "convergence"),
+      message = purrr::map_chr(., ~ifelse(length(.$message) == 0, NA, .$message))
+    )}
 }
 
+#' @importFrom tibble tibble
+#' @importFrom dplyr mutate filter
+#' @importFrom stats optim
 estimate_alpha_num_scalar <- function(Zc, c = m0/K, m0 = 19, K = 30) {
   stopifnot(Zc < K, Zc > 0)
   stopifnot(c > 0, m0 > 1, K > 1)
   
   
   inv_exp_panels <- function(alpha, X, c, m0, K) {
-    # Internal function, not documented
     if (alpha <= 0) return(Inf)
     
     (X - expected_number_panels(alpha = alpha, c = c, m0 = m0, K = K))^2
   }
   
   # Get good initialization values
-  df <- data.frame(alpha = 10^seq(-2, 2, .5)) %>%
+  df <- tibble(alpha = 10^seq(-2, 2, .5)) %>%
     dplyr::mutate(objval = purrr::map_dbl(.data$alpha, inv_exp_panels, X = Zc, c = c, m0 = m0, K = K)) %>%
     dplyr::filter(.data$objval == min(.data$objval))
 
@@ -175,6 +196,10 @@ estimate_alpha_num_scalar <- function(Zc, c = m0/K, m0 = 19, K = 30) {
 #' @param c The number of selections a panel must have to be interesting (can be non-integer)
 #' @param m0 The number of null panels in the lineup
 #' @param K The total number of null panel selections (or, in a Rorschach lineup, the total number of evaluations)
+#' @export
+#' @importFrom tibble tibble
+#' @importFrom ggplot2 geom_line geom_polygon
+#' @importFrom purrr map_dbl
 #' @examples
 #' estimate_alpha_visual() + observed_band(obs = NA, limits = c(5, 7))
 #' estimate_alpha_visual() + observed_band(obs = 6, limits = NA)
@@ -209,13 +234,11 @@ observed_band <- function(obs, limits, c = m0/K, m0 = 19, K = 30) {
              y = c(-Inf, limits, -Inf, -Inf),
              type = "vert")
     )
-    print(bands)
+    
     geom_polygon(aes(x = x, y = y, group = type), data = bands, fill = "grey", alpha = 0.5)
   } else {
     NULL
   }
-  
   return(list(obs_line, obs_band))
-
 }
 

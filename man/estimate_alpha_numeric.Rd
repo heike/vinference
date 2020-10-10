@@ -15,6 +15,14 @@ estimate_alpha_numeric(Zc, c = m0/K, m0 = 19, K = 30)
 
 \item{K}{The total number of null panel selections (or, in a Rorschach lineup, the total number of evaluations)}
 }
+\value{
+a data frame with list-columns for alpha, optimized sum of squared error, counts (as returned from optim), convergence,
+}
 \description{
-Numerically estimate alpha using the average number of c-interesting panels
+This function calculates a precise numerical estimate of alpha based by matching 
+the number of observed interesting panels to the corresponding value of alpha.
+}
+\examples{
+res <- estimate_alpha_numeric(5, c = 1, m0 = 19, K = 30)
+res$alpha
 }

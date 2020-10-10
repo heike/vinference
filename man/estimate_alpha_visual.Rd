@@ -24,7 +24,10 @@ estimate_alpha_visual(
 \item{...}{additional arguments to sim_interesting_panels}
 }
 \description{
-Create a plot for visual estimation of alpha
+The visual estimation plot contains the expected number of interesting 
+panels for each alpha value under the specified experimental conditions and
+simulated lineup experiments under each scenario which provide some 
+information about the expected variability.
 }
 \examples{
 estimate_alpha_visual()
