@@ -38,14 +38,14 @@
 #'                     dVis(0:15, K=15, alpha = 5)),
 #'   alpha = factor(rep(c(0.1, 1, 5), each = 16))                  
 #' )
-#' dframe %>% 
-#'   ggplot(aes(x = x, y = probabilities, colour = alpha)) +
+#' library(ggplot2)
+#' ggplot(data = dframe, aes(x = x, y = probabilities, colour = alpha)) +
 #'   geom_point() 
 dVis <- function(x, K, m = 20, alpha, scenario = 3) {
   if (scenario == 3) {
-    choose(K, x) * beta(x+alpha, K-x+(m-1)*alpha)/beta(alpha, (m-1)*alpha)
+    return(choose(K, x) * beta(x+alpha, K-x+(m-1)*alpha)/beta(alpha, (m-1)*alpha))
   }
   if (scenario == 1) { # binomial distribution
-    dbinom(x, K, prob = 1/m)
+    return(dbinom(x, K, prob = 1/m))
   }
 }

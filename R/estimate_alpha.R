@@ -82,7 +82,7 @@ sim_interesting_panels <- function(alphas = 10^seq(-2, 2, .05), c = m0/K, m0 = 1
 #' @importFrom tidyr crossing
 #' @import ggplot2
 #' @examples 
-#' alpha_from_data_lineup()
+#' estimate_alpha_visual()
 estimate_alpha_visual <- function(c = m0/K, m0 = 19, K = 30, alphas = 10^seq(-3, 2, .05), ...) {
   n <- z <- NULL
   
