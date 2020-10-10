@@ -31,12 +31,12 @@
 #' @param m number of panels in the lineup,
 #' @param alpha positive value, rate parameter of the flat Dirichlet distribution,
 #' @param scenario integer value.
-#' @param lower.tail defaults to TRUE, if TRUE probabilities are \eqn{P(X ≤ x)}, otherwise, \eqn{P(X ≥ x)}. 
+#' @param lower.tail defaults to TRUE, if TRUE probabilities are \eqn{P(X \leq x)}, otherwise, \eqn{P(X \geq x)}. 
 #' Note that the second probability is a deviation from R standard: usually \eqn{P(X > x)} is returned. 
-#' However, here, returning \eqn{P(X ≥ x)} is more useful in an inference setting, as it corresponds to the 
+#' However, here, returning \eqn{P(X \geq x)} is more useful in an inference setting, as it corresponds to the 
 #' p value.
 #' @importFrom stats dbinom pbinom qbinom
-#' @return The functions return (vector) of probabilities for \eqn{P(X = x)}, \eqn{P(X ≤ x)}, or quantiles.  
+#' @return The functions return (a vector of) quantiles or probabilities for \eqn{P(X = x)}, \eqn{P(X \leq x)}.  
 #' @export
 #' @references 
 #' Andreas Buja, Dianne Cook, Heike Hofmann, Michael Lawrence, Eun-Kyung Lee, Deborah F. Swayne and Hadley Wickham, Statistical inference for exploratory data analysis and model diagnostics.

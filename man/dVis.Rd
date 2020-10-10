@@ -23,15 +23,15 @@ qVis(p, K, m = 20, alpha, scenario = 3)
 
 \item{scenario}{integer value.}
 
-\item{lower.tail}{defaults to TRUE, if TRUE probabilities are \eqn{P(X ≤ x)}, otherwise, \eqn{P(X ≥ x)}. 
+\item{lower.tail}{defaults to TRUE, if TRUE probabilities are \eqn{P(X \leq x)}, otherwise, \eqn{P(X \geq x)}. 
 Note that the second probability is a deviation from R standard: usually \eqn{P(X > x)} is returned. 
-However, here, returning \eqn{P(X ≥ x)} is more useful in an inference setting, as it corresponds to the 
+However, here, returning \eqn{P(X \geq x)} is more useful in an inference setting, as it corresponds to the 
 p value.}
 
 \item{p}{(vector of) probabilities,}
 }
 \value{
-The functions return (vector) of probabilities for \eqn{P(X = x)}, \eqn{P(X ≤ x)}, or quantiles.
+The functions return (a vector of) quantiles or probabilities for \eqn{P(X = x)}, \eqn{P(X \leq x)}.
 }
 \description{
 Density, distribution function and quantiles for visual inference scenarios.
